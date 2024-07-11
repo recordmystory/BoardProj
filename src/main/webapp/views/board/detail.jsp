@@ -100,12 +100,15 @@
 	
     <script>
     	$(function(){
+    		
     		// 3초마다 select (ajax)
-    		setInterval(selectReply, 2000);
+    		setInterval(selectReply, 3000);
     	});
     	
     	// 댓글 등록
     	function insertReply(){
+    		let content = '';
+    		
     		$.ajax({
     			url: '${contextPath}/replyinsert.bo',
     			data: { no: ${b.no}, content: $('#reply-content').val() },
@@ -115,7 +118,11 @@
     					$('#reply-content').val(''); // textarea 초기화
     					selectReply(); // 갱신된 댓글 목록 조회해 화면에 뿌려주기
     				} else {
-    					alert('댓글 작성 실패');
+    					if(content == ''){
+    						alert('댓글 내용을 입력해주세요.');
+    					} else {
+    						alert('댓글 작성 실패');
+    					}
     				}
     			}, error: function(){
     				console.log('댓글 작성 ajax 통신 실패');
