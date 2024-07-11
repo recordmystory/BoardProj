@@ -10,13 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 import static com.jw.common.template.JDBCTemplate.*;
+
+import com.jw.board.controller.BoardListController;
 import com.jw.board.model.vo.Board;
 import com.jw.board.model.vo.PageInfo;
 import com.jw.board.model.vo.Reply;
 
 public class BoardDao {
 	private Properties prop = new Properties();
+	private static final Logger logger = Logger.getLogger(BoardListController.class);
 
 	public BoardDao() {
 		try {
@@ -35,7 +40,7 @@ public class BoardDao {
 	public List<Board> selectBoard(Connection conn, PageInfo page) {
 		List<Board> list = new ArrayList<>();
 		String sql = prop.getProperty("selectBoard");
-
+		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 	        
 	        int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
@@ -43,6 +48,7 @@ public class BoardDao {
 			pstmt.setInt(1, startRow);
 			pstmt.setInt(2, endRow);
 			
+			logger.debug("selectBoard query : " + sql);
 			try (ResultSet rset = pstmt.executeQuery()) {
 				while (rset.next()) {	 
 					Board b = new Board();

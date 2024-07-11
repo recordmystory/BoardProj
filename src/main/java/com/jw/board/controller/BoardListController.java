@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.jw.board.model.service.BoardService;
 import com.jw.board.model.vo.Board;
 import com.jw.board.model.vo.PageInfo;
@@ -21,6 +23,7 @@ import com.jw.common.util.PagingUtil;
 public class BoardListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final PagingUtil pagingUtil;
+	private static final Logger logger = Logger.getLogger(BoardListController.class);
 	
     public BoardListController() {
 		this.pagingUtil = new PagingUtil();
@@ -63,12 +66,16 @@ public class BoardListController extends HttpServlet {
 		
 		*/
 		
+		
+		
 		int listCount = new BoardService().selectBoardCount();
 		int currentPage = Integer.parseInt(request.getParameter("page"));
 		PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
 		
+		
 		List<Board> list = new BoardService().selectBoard(page);
 		
+		logger.info("listCount : " + listCount);
 		request.setAttribute("page", page);
 		request.setAttribute("list", list);
 		request.getRequestDispatcher("/views/board/list.jsp").forward(request, response);
