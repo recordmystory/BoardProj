@@ -1,8 +1,13 @@
 package com.jw.board.model.service;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
 
+import org.apache.log4j.Logger;
+
+import com.jw.board.controller.BoardListController;
 import com.jw.board.model.dao.BoardDao;
 import com.jw.board.model.vo.Board;
 import com.jw.board.model.vo.PageInfo;
@@ -14,7 +19,8 @@ import static com.jw.common.template.JDBCTemplate.*;
 public class BoardService {
 
 	private BoardDao bDao = new BoardDao();
-
+	Logger logger = Logger.getLogger(BoardService.class);
+	
 	/**
 	 * 게시글 목록 조회 및 페이징
 	 * 
@@ -24,10 +30,7 @@ public class BoardService {
 	 */
 
 	public List<Board> selectBoard(PageInfo page) {
-		Connection conn = getConnection(true);
-		List<Board> list = bDao.selectBoard(conn, page);
-
-		close(conn);
+		List<Board> list = bDao.selectBoard(page);
 
 		return list;
 	}
@@ -38,10 +41,7 @@ public class BoardService {
 	 * @return listCount : 총 게시글 개수
 	 */
 	public int selectBoardCount() {
-		Connection conn = getConnection(true);
-
-		int listCount = bDao.selectBoardCount(conn);
-		close(conn);
+		int listCount = bDao.selectBoardCount();
 
 		return listCount;
 	}
@@ -53,35 +53,20 @@ public class BoardService {
 	 * @return result
 	 */
 	public int insertBoard(Board b) {
-		Connection conn = getConnection();
-		int result = bDao.insertBoard(conn, b);
-
-		if (result > 0) {
-			commit(conn);
-		} else {
-			rollback(conn);
-		}
-		close(conn);
+		int result = bDao.insertBoard(b);
 
 		return result;
 	}
-
+	
 	/**
 	 * 조회수 증가
 	 * 
 	 * @param boardNo
 	 * @return
 	 */
+	
 	public int updateHit(int boardNo) {
-		Connection conn = getConnection();
-		int result = bDao.updateHit(conn, boardNo);
-
-		if (result > 0) {
-			commit(conn);
-		} else {
-			rollback(conn);
-		}
-		close(conn);
+		int result = bDao.updateHit(boardNo);
 
 		return result;
 	}
@@ -93,9 +78,8 @@ public class BoardService {
 	 * @return b
 	 */
 	public Board selectBoardDetail(int boardNo) {
-		Connection conn = getConnection(true);
-		Board b = bDao.selectBoardDetail(conn, boardNo);
-		close(conn);
+		Board b = bDao.selectBoardDetail(boardNo);
+		
 		return b;
 	}
 
@@ -106,15 +90,7 @@ public class BoardService {
 	 * @return result
 	 */
 	public int updateBoard(Board b) {
-		Connection conn = getConnection();
-		int result = bDao.updateBoard(conn, b);
-
-		if (result > 0) {
-			commit(conn);
-		} else {
-			rollback(conn);
-		}
-		close(conn);
+		int result = bDao.updateBoard(b);
 
 		return result;
 	}
@@ -127,15 +103,7 @@ public class BoardService {
 	 * @return result
 	 */
 	public int updateDelYn(int boardNo) {
-		Connection conn = getConnection();
-		int result = bDao.updateDelYn(conn, boardNo);
-
-		if (result > 0) {
-			commit(conn);
-		} else {
-			rollback(conn);
-		}
-		close(conn);
+		int result = bDao.updateDelYn(boardNo);
 
 		return result;
 	}
@@ -148,9 +116,7 @@ public class BoardService {
 	 * @return list
 	 */
 	public List<Board> selectSearch(String keyword) {
-		Connection conn = getConnection();
-		List<Board> list = bDao.selectSearch(conn, keyword);
-		close(conn);
+		List<Board> list = bDao.selectSearch(keyword);
 
 		return list;
 	}
@@ -162,9 +128,7 @@ public class BoardService {
 	 * @return list
 	 */
 	public List<Reply> selectReply(int boardNo) {
-		Connection conn = getConnection(true);
-		List<Reply> list = bDao.selectReply(conn, boardNo);
-		close(conn);
+		List<Reply> list = bDao.selectReply(boardNo);
 
 		return list;
 	}
@@ -176,16 +140,8 @@ public class BoardService {
 	 * @return result
 	 */
 	public int insertReply(Reply r) {
-		Connection conn = getConnection();
+		int result = bDao.insertReply(r);
 
-		int result = bDao.insertReply(conn, r);
-
-		if (result > 0) {
-			commit(conn);
-		} else {
-			rollback(conn);
-		}
-		close(conn);
 		return result;
 	}
 
