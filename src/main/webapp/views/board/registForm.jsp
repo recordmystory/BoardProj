@@ -38,8 +38,8 @@
 		</div>
 		<form action="${contextPath}/insert.bo" method="post">
 			<div>
-				제목 <input type="text" class="form-control" name="title" style="width: 800px; margin-bottom: 15px;">
-				내용 <textarea class="form-control" name="content" style="white-space: pre; resize: none; height: 500px;"></textarea>
+				제목 <input type="text" class="form-control" name="title" style="width: 800px; margin-bottom: 15px;" required>
+				내용 <textarea class="form-control" name="content" style="white-space: pre; resize: none; height: 500px;" required></textarea>
 				<div class="btnArea">
 					<button type="submit" class="btn btn-sm btn-primary">작성하기</button>			
 					<button type="reset" class="btn btn-sm btn-secondary">초기화</button>			

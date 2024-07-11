@@ -43,12 +43,12 @@
 				<table class="table">
 					<tr>
 						<th>제목</th>
-						<td><input type="text" class="form-control" value="${b.title}" name="title" style="width: 800px;"></td>
+						<td><input type="text" class="form-control" value="${b.title}" name="title" style="width: 800px;" required></td>
 					</tr>
 					<tr>
 						<th>내용</th>
 						<td>
-							<textarea class="form-control" rows="10" cols="5" name="content" style="white-space: pre; resize: none; height: 500px;">${b.content}</textarea>
+							<textarea class="form-control" rows="10" cols="5" name="content" style="white-space: pre; resize: none; height: 500px;" required>${b.content}</textarea>
 						</td>
 					</tr>
 					<tr>
@@ -63,5 +63,6 @@
 			</div>
 		</form>
 	</div>
+	
 </body>
 </html>

@@ -3,6 +3,7 @@ package com.jw.board.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,6 +23,11 @@ import com.jw.board.model.vo.Board;
 public class AjaxBoardSearchController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
+
+	public void init(ServletConfig config) throws ServletException {
+		System.out.println("init() 실행");
+	}
+	
     /**
      * @see HttpServlet#HttpServlet()
      */

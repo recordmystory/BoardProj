@@ -33,17 +33,27 @@ public class BoardListController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		int listCount = new BoardService().selectBoardCount();
-		int currentPage = Integer.parseInt(request.getParameter("page"));
-		PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
-		
-		
-		List<Board> list = new BoardService().selectBoard(page);
-		
-		request.setAttribute("page", page);
-		request.setAttribute("list", list);
-		request.getRequestDispatcher("/views/board/list.jsp").forward(request, response);
+		try {
+			int listCount = new BoardService().selectBoardCount();
+			int currentPage;
+
+			try {
+				currentPage = Integer.parseInt(request.getParameter("page"));
+			} catch (NumberFormatException e) {
+				currentPage = 1;
+			}
+
+			PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
+
+			List<Board> list = new BoardService().selectBoard(page);
+
+			request.setAttribute("page", page);
+			request.setAttribute("list", list);
+			request.getRequestDispatcher("/views/board/list.jsp").forward(request, response);
+		} catch (Exception e) {
+			logger.error("기타 오류 발생 : " + e.getMessage());
+			request.getSession().setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
+		}
 	}
 
 	/**

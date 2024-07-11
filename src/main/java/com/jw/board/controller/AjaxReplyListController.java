@@ -28,6 +28,13 @@ public class AjaxReplyListController extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		System.out.println("service() 실행");
+		super.service(request, response);
+	}
+
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
