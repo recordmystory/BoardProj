@@ -146,6 +146,12 @@
 			
 			// 검색 버튼 클릭시 ajax 
 			$('#searchBtn').click(function(){
+				
+				if($('#keyword').val().trim() == '') {
+					alert('검색어를 입력해주세요.');
+					return;
+				}
+				
 				$.ajax({
 					url: '${contextPath}/search.bo',
 					data: { page: 1, keyword: $('#keyword').val() },
@@ -159,14 +165,14 @@
 					   			value += '<tr>' 
 									  + '<td>' + list[i].no + '</td>'
 									  + '<td>' + list[i].title + '</td>'
-									  + '<td>' + list[i].Hit + '</td>'
+									  + '<td>' + list[i].hit + '</td>'
 									  + '<td>' + list[i].regId + '</td>'
 									  + '<td>' + list[i].regDate + '</td>'
 									  + '</tr>';
 							}
 							
-						}  else {
-							value += '<tr><td colspan="6" style="text-align: center;">존재하는 게시글이 없습니다.</td>';
+						}  else {				
+							value += '<tr><td colspan="6" style="text-align: center;">존재하는 게시글이 없습니다.</td></tr>';
 							$('.pagination').remove();
 						}
 						
