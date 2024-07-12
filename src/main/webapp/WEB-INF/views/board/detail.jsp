@@ -61,9 +61,9 @@
 		</table>
 		</div>
 		<div class="btn-area">
-			<a href="${contextPath}/list.bo?page=1" class="btn btn-primary btn-sm">글 목록</a>	
+			<a href="${contextPath}/front-controller/v2/board/list.bo" class="btn btn-primary btn-sm">글 목록</a>	
 			<a href="${contextPath}/updateForm.bo?no=${b.no}" class="btn btn-secondary btn-sm">수정</a>
-			<a href="${contextPath}/delete.bo?no=${b.no}" class="btn btn-danger btn-sm">삭제</a>
+			<a href="${contextPath}/front-controller/v2/board/delete.bo?no=${b.no}" class="btn btn-danger btn-sm">삭제</a>
 		</div>
 		<br><br>
 		

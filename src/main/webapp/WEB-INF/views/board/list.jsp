@@ -39,14 +39,14 @@
 <body>
 	<div class="container content-area">
 		<div class="content-title">
-			<h2 onclick="location.href='${contextPath}/list.bo?page=1';">게시판 목록</h2>
+			<h2 onclick="location.href='${contextPath}/front-controller/v2/board/list.bo?page=1';">게시판 목록</h2>
 		</div>
 		<div>
 			<div class="table-responsive-xl" style="text-align: right;">
 			  <div style="display: flex;" class="d-flex justify-content-end content-area-header">
 			  	<input type="text" class="form-control" id="keyword" placeholder="글 제목을 입력하세요.">
 			  	<button type="button" id="searchBtn" class="btn btn-primary btn-sm">검색</button>
-	  			<a href="${contextPath}/regist.bo" class="btn btn-info btn-sm">글작성</a>
+	  			<a href="${contextPath}/front-controller/v2/board/regist.bo" class="btn btn-info btn-sm">글작성</a>
 			  </div>
 			  <table class="table" id="boardList">
 			  	<thead class="table-active">
