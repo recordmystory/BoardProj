@@ -19,11 +19,14 @@ public class MyView {
 	    }
 	
 	public void render(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 RequestDispatcher dispatcher = request.getRequestDispatcher(viewPath);
-	        try {
-	            dispatcher.forward(request, response);
-	        } catch (Exception e) {
-	            throw new IOException(e);
-	        }
-	}
+		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPath);
+        if (dispatcher == null) {
+            throw new ServletException("Could not get RequestDispatcher for view path: " + viewPath);
+        }
+        try {
+            dispatcher.forward(request, response);
+        } catch (Exception e) {
+            throw new IOException("Failed to render view: " + viewPath, e);
+        }
+    }
 }
