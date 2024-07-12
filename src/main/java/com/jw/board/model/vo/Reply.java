@@ -1,7 +1,5 @@
 package com.jw.board.model.vo;
 
-import java.sql.Date;
-
 public class Reply {
 	
 	/**

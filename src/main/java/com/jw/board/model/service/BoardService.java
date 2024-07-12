@@ -1,26 +1,20 @@
 package com.jw.board.model.service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 
-import com.jw.board.controller.BoardListController;
 import com.jw.board.model.dao.BoardDao;
 import com.jw.board.model.vo.Board;
 import com.jw.board.model.vo.PageInfo;
 import com.jw.board.model.vo.Reply;
-import com.jw.common.template.JDBCTemplate;
 
-import static com.jw.common.template.JDBCTemplate.*;
 
 public class BoardService {
 
 	private BoardDao bDao = new BoardDao();
 	Logger logger = Logger.getLogger(BoardService.class);
-	
+
 	/**
 	 * 게시글 목록 조회 및 페이징
 	 * 
@@ -57,14 +51,14 @@ public class BoardService {
 
 		return result;
 	}
-	
+
 	/**
 	 * 조회수 증가
 	 * 
 	 * @param boardNo
 	 * @return
 	 */
-	
+
 	public int updateHit(int boardNo) {
 		int result = bDao.updateHit(boardNo);
 
@@ -79,7 +73,7 @@ public class BoardService {
 	 */
 	public Board selectBoardDetail(int boardNo) {
 		Board b = bDao.selectBoardDetail(boardNo);
-		
+
 		return b;
 	}
 

@@ -89,7 +89,7 @@
 				  		<li class="page-item disabled"><a class="page-link" href="#">&lt;&lt;</a></li>
 				  	</c:when>
 				  	<c:otherwise>
-				  		<li class="page-item"><a class="page-link" href="${contextPath}/list.bo?page=${page.currentPage -1}">&lt;&lt;</a></li>
+				  		<li class="page-item"><a class="page-link" href="${contextPath}/front-controller/v2/board/list.bo?page=${page.currentPage -1}">&lt;&lt;</a></li>
 				  	</c:otherwise>
 				  </c:choose>
 				  
@@ -99,7 +99,7 @@
 					  		<li class="page-item active"><a class="page-link" href="#">${p}</a></li>
 					  	</c:when>
 					  	<c:otherwise>
-					  		<li class="page-item"><a class="page-link" href="${contextPath}/list.bo?page=${p}">${p}</a></li>
+					  		<li class="page-item"><a class="page-link" href="${contextPath}/front-controller/v2/board/list.bo?page=${p}">${p}</a></li>
 					  	</c:otherwise>
 					  </c:choose>
 				  </c:forEach>
@@ -109,7 +109,7 @@
 					  	<li class="page-item disabled"><a class="page-link" href="#">&gt;&gt;</a></li>
 					  </c:when>
 					  <c:otherwise>
-					  	<li class="page-item"><a class="page-link" href="${contextPath}/list.bo?page=${page.currentPage + 1}">&gt;&gt;</a></li>
+					  	<li class="page-item"><a class="page-link" href="${contextPath}/front-controller/v2/board/list.bo?page=${page.currentPage + 1}">&gt;&gt;</a></li>
 					  </c:otherwise>
 				  </c:choose>
 			  </ul>
@@ -136,7 +136,7 @@
 		// 각 행 클릭시 상세 페이지 이동
 		function tableRowClick(){
 			$('#boardList>tbody>tr').on('click', function() {
-	            location.href = '${contextPath}/detail.bo?no=' + $(this).children().eq(0).text();
+	            location.href = '${contextPath}/front-controller/v2/board/detail.bo?no=' + $(this).children().eq(0).text();
 	        });
 		};
 		

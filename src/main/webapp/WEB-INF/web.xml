@@ -10,7 +10,13 @@
     <welcome-file>default.htm</welcome-file>
   </welcome-file-list>
   
-  <listener>
-        <listener-class>com.jw.board.listener.Log4jInitializer</listener-class>
-    </listener>
+   <servlet>
+        <servlet-name>frontControllerServletV2</servlet-name>
+        <servlet-class>com.jw.board.controller.FrontControllerServletV2</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>frontControllerServletV2</servlet-name>
+        <url-pattern>/front-controller/v2/*</url-pattern>
+    </servlet-mapping>
+  
 </web-app>

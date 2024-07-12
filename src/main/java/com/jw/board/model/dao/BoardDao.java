@@ -14,14 +14,13 @@ import org.apache.log4j.Logger;
 
 import static com.jw.common.template.JDBCTemplate.*;
 
-import com.jw.board.controller.BoardListController;
 import com.jw.board.model.vo.Board;
 import com.jw.board.model.vo.PageInfo;
 import com.jw.board.model.vo.Reply;
 
 public class BoardDao {
 	private Properties prop = new Properties();
-	private static final Logger logger = Logger.getLogger(BoardListController.class);
+	private static final Logger logger = Logger.getLogger(BoardDao.class);
 
 	public BoardDao() {
 		try {
