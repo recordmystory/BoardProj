@@ -96,6 +96,7 @@
 		UPDATE
                TB_BOARD
         SET DEL_YN = 'Y'
+          , MOD_DATE = SYSDATE
         WHERE B_NO = ?
 	</entry>
 	
