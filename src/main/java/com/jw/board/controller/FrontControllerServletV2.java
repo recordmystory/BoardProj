@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.jw.board.interfaces.ControllerV2;
-import com.jw.board.model.service.BoardService;
 import com.jw.board.model.vo.MyView;
 
 /**
@@ -33,6 +32,10 @@ public class FrontControllerServletV2 extends HttpServlet {
 	 public FrontControllerServletV2() {
 	        controllerMap.put("/front-controller/v2/board/list.bo", new BoardListControllerV2());
 	        controllerMap.put("/front-controller/v2/board/detail.bo", new BoardDetailControllerV2());
+	        controllerMap.put("/front-controller/v2/board/delete.bo", new BoardDeleteControllerV2());
+	        controllerMap.put("/front-controller/v2/board/regist.bo", new BoardRegistControllerV2());
+	        controllerMap.put("/front-controller/v2/board/insert.bo", new BoardInsertControllerV2());
+	        
 	 }
 	
 
@@ -56,6 +59,7 @@ public class FrontControllerServletV2 extends HttpServlet {
 		try {
 			MyView view = controller.process(request, response);
 			view.render(request, response);
+			return;
 		} catch (Exception e) {
 			logger.error("서비스 처리 중 오류 발생: " + e.getMessage());
 			throw new ServletException(e);
