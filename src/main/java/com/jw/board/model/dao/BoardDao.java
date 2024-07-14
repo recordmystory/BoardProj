@@ -1,7 +1,5 @@
 package com.jw.board.model.dao;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,21 +12,23 @@ import org.apache.log4j.Logger;
 
 import static com.jw.common.template.JDBCTemplate.*;
 
+import com.jw.board.controller.BoardController;
 import com.jw.board.model.vo.Board;
 import com.jw.board.model.vo.PageInfo;
 import com.jw.board.model.vo.Reply;
 
 public class BoardDao {
-	private Properties prop = new Properties();
+//	private Properties prop = new Properties();
+	private Properties prop;
 	private static final Logger logger = Logger.getLogger(BoardDao.class);
 
 	public BoardDao() {
-		try {
-			prop.loadFromXML(new FileInputStream(BoardDao.class.getResource("/db/mappers/board-mapper.xml").getPath()));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.prop = BoardController.getProperties();
 	}
+	
+	public Properties getProperties() {
+        return prop;
+    }
 
 	/** 게시글 목록 조회 및 페이징 
 	 * 

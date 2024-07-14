@@ -1,8 +1,11 @@
 package com.jw.board.controller;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
+import com.jw.board.model.dao.BoardDao;
 import com.jw.board.model.service.BoardService;
 import com.jw.board.model.vo.Board;
 import com.jw.board.model.vo.PageInfo;
@@ -27,14 +31,25 @@ import com.jw.common.util.PagingUtil;
 public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(BoardController.class);
+	private static Properties prop = new Properties();
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public BoardController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * mapper 파일 로드
+	 */
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		try {
+			logger.debug("init 메소드 실행");
+			prop.loadFromXML(new FileInputStream(BoardDao.class.getResource("/db/mappers/board-mapper.xml").getPath()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static Properties getProperties() {
+		return prop;
+	}
 
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
