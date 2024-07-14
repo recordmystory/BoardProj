@@ -69,7 +69,7 @@
 			  			
 			  			<c:otherwise>
 			  				<c:forEach var="b" items="${list}">
-			  					<tr onclick="tableRowClick();">
+			  					<tr>
 						   			<td>${b.no}</td>
 						   			<td>${b.title}</td>
 						   			<td>${b.hit}</td>
