@@ -23,8 +23,8 @@ public class BoardService {
 	 * @return list
 	 */
 
-	public List<Board> selectBoard(PageInfo page) {
-		List<Board> list = bDao.selectBoard(page);
+	public List<Board> listBoard(PageInfo page) {
+		List<Board> list = bDao.listBoard(page);
 
 		return list;
 	}
@@ -71,8 +71,8 @@ public class BoardService {
 	 * @param boardNo
 	 * @return b
 	 */
-	public Board selectBoardDetail(int boardNo) {
-		Board b = bDao.selectBoardDetail(boardNo);
+	public Board selectBoardDtl(int boardNo) {
+		Board b = bDao.selectBoardDtl(boardNo);
 
 		return b;
 	}
@@ -109,8 +109,8 @@ public class BoardService {
 	 * 
 	 * @return list
 	 */
-	public List<Board> selectSearch(PageInfo page, String keyword) {
-		List<Board> list = bDao.selectSearch(page, keyword);
+	public List<Board> listSearch(PageInfo page, String keyword) {
+		List<Board> list = bDao.listSearch(page, keyword);
 
 		return list;
 	}
@@ -128,8 +128,8 @@ public class BoardService {
 	 * @param boardNo
 	 * @return list
 	 */
-	public List<Reply> selectReply(int boardNo) {
-		List<Reply> list = bDao.selectReply(boardNo);
+	public List<Reply> listReply(int boardNo) {
+		List<Reply> list = bDao.listReply(boardNo);
 
 		return list;
 	}

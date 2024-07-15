@@ -34,10 +34,10 @@ public class BoardDao {
 	 * @param page
 	 * @return list
 	 */
-	public List<Board> selectBoard(PageInfo page) {
+	public List<Board> listBoard(PageInfo page) {
 		Connection conn = getConnection();
 		List<Board> list = new ArrayList<>();
-		String sql = prop.getProperty("selectBoard");
+		String sql = prop.getProperty("listBoard");
 
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -81,15 +81,23 @@ public class BoardDao {
 		int listCount = 0;
 
 		String sql = prop.getProperty("selectBoardCount");
+		logger.debug("selectBoardCount query : " + sql);
 
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			
-			logger.debug("selectBoardCount query : " + sql);
-			
-			try (ResultSet rset = pstmt.executeQuery()) {
-				if (rset.next()) {
-					listCount = rset.getInt("COUNT");
-				}
+//		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+//			
+//			logger.debug("selectBoardCount query : " + sql);
+//			
+//			try (ResultSet rset = pstmt.executeQuery()) {
+//				if (rset.next()) {
+//					listCount = rset.getInt("COUNT");
+//				}
+//			}
+//		} catch (SQLException e) {
+		
+		try (PreparedStatement pstmt = conn.prepareStatement(sql);
+				ResultSet rset = pstmt.executeQuery();) {
+			if (rset.next()) {
+				listCount = rset.getInt("COUNT");
 			}
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " + e.getMessage());
@@ -162,10 +170,10 @@ public class BoardDao {
 	 * @param boardNo
 	 * @return b
 	 */
-	public Board selectBoardDetail(int boardNo) {
+	public Board selectBoardDtl(int boardNo) {
 		Connection conn = getConnection(true);
 		Board b = new Board();
-		String sql = prop.getProperty("selectBoardDetail");
+		String sql = prop.getProperty("selectBoardDtl");
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, boardNo);
@@ -258,11 +266,11 @@ public class BoardDao {
 	 * @param keyword
 	 * @return list
 	 */
-	public List<Board> selectSearch(PageInfo page, String keyword) {
+	public List<Board> listSearch(PageInfo page, String keyword) {
 		Connection conn = getConnection(true);
 		List<Board> list = new ArrayList<>();
 		
-		String sql = prop.getProperty("selectSearch");
+		String sql = prop.getProperty("listSearch");
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)){
 			pstmt.setString(1, keyword);
@@ -331,11 +339,11 @@ public class BoardDao {
 	 * @param boardNo
 	 * @return list
 	 */
-	public List<Reply> selectReply(int boardNo) {
+	public List<Reply> listReply(int boardNo) {
 		Connection conn = getConnection(true);
 		List<Reply> list = new ArrayList<>();
 		
-		String sql = prop.getProperty("selectReply");
+		String sql = prop.getProperty("listReply");
 		
 		try(PreparedStatement pstmt = conn.prepareStatement(sql)){
 			pstmt.setInt(1, boardNo);

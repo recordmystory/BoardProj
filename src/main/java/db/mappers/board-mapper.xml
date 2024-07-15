@@ -2,7 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 	<!-- 글 목록 조회 -->
-	<entry key="selectBoard">
+	<entry key="listBoard">
 		 SELECT *
          FROM(
              SELECT ROWNUM RNUM, A.*
@@ -68,7 +68,7 @@
 	</entry>
 	
 	<!-- 게시글 상세 조회 -->
-	<entry key="selectBoardDetail">
+	<entry key="selectBoardDtl">
 		SELECT 
 				B_NO
 			  , B_TITLE
@@ -110,7 +110,7 @@
 	</entry>
 	
 	<!-- 게시글 검색 -->
-	<entry key="selectSearch">
+	<entry key="listSearch">
 		 SELECT *
          FROM(
              SELECT ROWNUM RNUM, A.*
@@ -132,7 +132,7 @@
 	</entry>
 	
 	<!-- 댓글 조회 -->
-	<entry key="selectReply">
+	<entry key="listReply">
 		SELECT REPLY_NO
 		     , REPLY_CONTENT
 		     , REG_ID

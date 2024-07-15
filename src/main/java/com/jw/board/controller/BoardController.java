@@ -61,13 +61,13 @@ public class BoardController extends HttpServlet {
 
         switch (action) {
             case "/list.bo":
-                list(request, response);
+            	listBoard(request, response);
                 break;
             case "/detail.bo":
-                detail(request, response);
+            	selectBoardDtl(request, response);
                 break; 
             case "/insert.bo":
-                insert(request, response);
+            	insertBoard(request, response);
                 break;
             case "/regist.bo":
         		request.getRequestDispatcher("views/board/registForm.jsp").forward(request, response);
@@ -76,19 +76,19 @@ public class BoardController extends HttpServlet {
         		showUpdateForm(request, response);
                 break;
             case "/update.bo":
-        		update(request, response);
+            	updateBoard(request, response);
                 break;
             case "/delete.bo":
-        		delete(request, response);
+            	updateDelYn(request, response);
                 break;
             case "/search.bo":
-        		ajaxSearch(request, response);
+            	listSearch(request, response);
                 break;
             case "/replyinsert.bo":
-            	ajaxReplyinsert(request, response);
+            	insertReply(request, response);
                 break;   
             case "/replylist.bo":
-            	ajaxReplylist(request, response);
+            	listReply(request, response);
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -102,7 +102,7 @@ public class BoardController extends HttpServlet {
 	 * @param response
 	 * @throws IOException
 	 */
-	private void detail(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void selectBoardDtl(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
 
 		try {
@@ -113,7 +113,7 @@ public class BoardController extends HttpServlet {
 			int result = bService.updateHit(boardNo);
 
 			if (result > 0) {
-				Board b = bService.selectBoardDetail(boardNo);
+				Board b = bService.selectBoardDtl(boardNo);
 
 				if (b != null) {
 					request.setAttribute("b", b);
@@ -145,10 +145,10 @@ public class BoardController extends HttpServlet {
 	 * @throws JsonIOException
 	 * @throws IOException
 	 */
-	private void ajaxReplylist(HttpServletRequest request, HttpServletResponse response) throws JsonIOException, IOException {
+	private void listReply(HttpServletRequest request, HttpServletResponse response) throws JsonIOException, IOException {
 		int boardNo = Integer.parseInt(request.getParameter("no"));
 
-		List<Reply> list = new BoardService().selectReply(boardNo);
+		List<Reply> list = new BoardService().listReply(boardNo);
 
 		response.setContentType("application/json; charset=utf-8");
 		new Gson().toJson(list, response.getWriter());
@@ -160,7 +160,7 @@ public class BoardController extends HttpServlet {
 	 * @param response
 	 * @throws IOException
 	 */
-	private void ajaxReplyinsert(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void insertReply(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		int boardNo = Integer.parseInt(request.getParameter("no"));
 		String replyContent = request.getParameter("content");
 
@@ -182,7 +182,7 @@ public class BoardController extends HttpServlet {
 	 * @throws JsonIOException
 	 * @throws IOException
 	 */
-	private void ajaxSearch(HttpServletRequest request, HttpServletResponse response) throws JsonIOException, IOException {
+	private void listSearch(HttpServletRequest request, HttpServletResponse response) throws JsonIOException, IOException {
 		String keyword = request.getParameter("keyword");
 
 		try {
@@ -196,7 +196,7 @@ public class BoardController extends HttpServlet {
 			}
 
 			PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
-			List<Board> list = new BoardService().selectSearch(page, keyword);
+			List<Board> list = new BoardService().listSearch(page, keyword);
 
 			Map<String, Object> resultMap = new HashMap<>();
 			resultMap.put("list", list);
@@ -218,7 +218,7 @@ public class BoardController extends HttpServlet {
 	 * @param response
 	 * @throws IOException
 	 */
-	private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void updateDelYn(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
 
 		try {
@@ -252,7 +252,7 @@ public class BoardController extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void listBoard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			int listCount = new BoardService().selectBoardCount();
 			int currentPage;
@@ -265,7 +265,7 @@ public class BoardController extends HttpServlet {
 
 			PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
 
-			List<Board> list = new BoardService().selectBoard(page);
+			List<Board> list = new BoardService().listBoard(page);
 
 			request.setAttribute("page", page);
 			request.setAttribute("list", list);
@@ -284,7 +284,7 @@ public class BoardController extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	private void insert(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void insertBoard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 
 		try {
@@ -328,7 +328,7 @@ public class BoardController extends HttpServlet {
 	private void showUpdateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int boardNo = Integer.parseInt(request.getParameter("no"));
 		
-		Board b = new BoardService().selectBoardDetail(boardNo);
+		Board b = new BoardService().selectBoardDtl(boardNo);
 		
 		request.setAttribute("b", b);
 		
@@ -342,7 +342,7 @@ public class BoardController extends HttpServlet {
 	 * @param response
 	 * @throws IOException
 	 */
-	private void update(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void updateBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
 			int boardNo = Integer.parseInt(request.getParameter("no"));
 			String title = request.getParameter("title");
