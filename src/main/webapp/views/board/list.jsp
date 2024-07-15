@@ -140,7 +140,42 @@
 	        });
 		};
 		
-		$(function(){
+
+	   // 월(한글) -> 월(영문)으로 변환
+       function convertKorMonthToEng(month) {
+           return monthMap[month];
+       }
+	   
+       // 리터럴에서 월과 일을 추출해 Date 객체로 변환
+       // 넘어오는 문자열 : ex) 7월 15일, 2024
+       function parseDate(dateString) {
+    	   var parts = dateString.split(' '); // ["7월", "15,", "2024"]
+           var month = convertKorMonthToEng(parts[0]); // 7월 -> July로 변환
+           var day = parseInt(parts[1].replace(',', '')) + 1;
+           var year = parseInt(parts[2]); 
+          
+           var dateString = month + ' ' + day + ', ' + year;
+          
+           var date = new Date(dateString);
+           return date;
+       }
+       
+       const monthMap = {
+           '1월': 'January',
+           '2월': 'February',
+           '3월': 'March',
+           '4월': 'April',
+           '5월': 'May',
+           '6월': 'June',
+           '7월': 'July',
+           '8월': 'August',
+           '9월': 'September',
+           '10월': 'October',
+           '11월': 'November',
+           '12월': 'December'
+       };
+		 
+	   $(function(){
 			
 			clickTableRow();
 			
@@ -162,12 +197,21 @@
 						
 						if(resultMap.list.length > 0){
 							for(let i=0; i<resultMap.list.length; i++){
+					            
+								let regDate = resultMap.list[i].regDate;
+								
+					            // 함수를 사용하여 Date 객체로 변환합니다
+					            let dateObject = parseDate(regDate);
+					            
+					            // YYYY-MM-DD 형식으로 변환
+					            let formatRegDate = dateObject.toISOString().split('T')[0];
+								
 					   			value += '<tr>' 
 									  + '<td>' + resultMap.list[i].no + '</td>'
 									  + '<td>' + resultMap.list[i].title + '</td>'
 									  + '<td>' + resultMap.list[i].hit + '</td>'
 									  + '<td>' + resultMap.list[i].regId + '</td>'
-									  + '<td>' + resultMap.list[i].regDate + '</td>'
+									  + '<td>' + formatRegDate + '</td>'
 									  + '</tr>';
 							}
 							
