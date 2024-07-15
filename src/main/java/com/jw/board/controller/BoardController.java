@@ -90,7 +90,8 @@ public class BoardController extends HttpServlet {
             	listReply(request, response);
                 break;
             default:
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            	request.getRequestDispatcher("views/board/errorPage.jsp").forward(request, response);
+//                response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
         }
 	}
