@@ -41,7 +41,7 @@ public class BoardController extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		try {
-			logger.debug("init 메소드 실행");
+//			logger.debug("init 메소드 실행");
 			prop.loadFromXML(new FileInputStream(BoardDao.class.getResource("/db/mappers/board-mapper.xml").getPath()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -287,11 +287,17 @@ public class BoardController extends HttpServlet {
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
 
-			if (title == null || title.trim().isEmpty() || content == null || content.trim().isEmpty()) {
-				request.setAttribute("alertMsg", "제목과 내용을 모두 입력해주세요.");
-				response.sendRedirect(request.getContextPath() + "/views/board/write.jsp");
+			if (title == null || title.isBlank()) {
+				request.setAttribute("alertMsg", "제목을 입력해주세요.");
+				response.sendRedirect(request.getContextPath() + "/views/board/registForm.jsp");
 				return;
-			}
+			} 
+			
+			if (content == null || content.isBlank()) {
+				request.setAttribute("alertMsg", "내용을 입력해주세요.");
+				response.sendRedirect(request.getContextPath() + "/views/board/registForm.jsp");
+				return;
+			} 
 
 			Board b = new Board();
 			b.setTitle(title);
@@ -303,12 +309,11 @@ public class BoardController extends HttpServlet {
 				request.setAttribute("alertMsg", "게시글 등록이 완료되었습니다.");
 				response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 			} else {
-				// 사용자가 입력했던 내용 session에 담아놓기
-				request.setAttribute("enteredTitle", title);
-				request.setAttribute("enteredContent", content);
+				request.getSession().setAttribute("enteredTitle", title);
+				request.getSession().setAttribute("enteredContent", content);
 				
 				request.setAttribute("alertMsg", "게시글 등록에 실패했습니다.");
-				response.sendRedirect(request.getContextPath() + "/views/board/registForm.jsp");
+				request.getRequestDispatcher("/views/board/registForm.jsp").forward(request, response);
 			}
 		} catch (Exception e) {
 			logger.error("기타 오류 발생 : " + e.getMessage());
