@@ -102,7 +102,7 @@
     	$(function(){
     		
     		// 2초마다 select (ajax)
-    		setInterval(selectReply, 2000);
+    		setInterval(selectReply, 3000);
     	});
     	
     	// 댓글 등록
@@ -137,7 +137,6 @@
     			url: '${contextPath}/replylist.bo',
     			data: { no: ${b.no} },
     			success: function(list){
-    				console.log(list);
     				
     				let value = '';
     				
