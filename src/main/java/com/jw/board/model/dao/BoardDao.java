@@ -129,6 +129,13 @@ public class BoardDao {
 //			logger.debug("insertBoard query : " + sql);
 			
 			result = pstmt.executeUpdate();
+			
+			if (result == 0) {
+				logger.debug("result : 0 (insert된 행의 개수 0)");
+			} else if (result == 1) {
+				logger.debug("result : 1 (insert 성공)");
+			}
+			
 			commit(conn);
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " +  e.getMessage());
@@ -161,6 +168,13 @@ public class BoardDao {
 //			logger.debug("updateHit query : " + sql);
 			
 			result = pstmt.executeUpdate();
+			
+			if (result == 0) {
+				logger.debug("result : 0 (update된 행의 개수 0)");
+			} else if (result == 1) {
+				logger.debug("result : 1 (update 성공)");
+			}
+			
 			commit(conn);
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " +  e.getMessage());
@@ -233,6 +247,13 @@ public class BoardDao {
 //			logger.debug("updateBoard query : " + sql);
 			
 			result = pstmt.executeUpdate();
+			
+			if (result == 0) {
+				logger.debug("result : 0 (update된 행의 개수 0)");
+			} else if (result == 1) {
+				logger.debug("result : 1 (update 성공)");
+			}
+			
 			commit(conn);
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " +  e.getMessage());
@@ -264,6 +285,12 @@ public class BoardDao {
 //			logger.debug("updateDelYn query : " + sql);
 			
 			result = pstmt.executeUpdate();
+			
+			if (result == 0) {
+				logger.debug("result : 0 (update된 행의 개수 0)");
+			} else if (result == 1) {
+				logger.debug("result : 1 (update 성공)");
+			}
 			
 			commit(conn);
 		} catch (SQLException e) {
@@ -419,9 +446,14 @@ public class BoardDao {
 			pstmt.setString(1, r.getContent());
 			pstmt.setInt(2, r.getbNo());
 			
-//			logger.debug("insertReply query : " + sql);
-			
 			result = pstmt.executeUpdate();
+
+			if (result == 0) {
+				logger.debug("result : 0 (insert된 행의 개수 0)");
+			} else if (result == 1) {
+				logger.debug("result : 1 (insert 성공)");
+			}
+			
 			commit(conn);
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " +  e.getMessage());
