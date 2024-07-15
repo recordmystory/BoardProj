@@ -96,6 +96,12 @@ public class BoardController extends HttpServlet {
         }
 	}
 
+	/** 게시글 상세 조회
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	private void detail(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
 
@@ -132,6 +138,13 @@ public class BoardController extends HttpServlet {
 		}
 	}
 
+	/** 댓글 조회 (ajax)
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws JsonIOException
+	 * @throws IOException
+	 */
 	private void ajaxReplylist(HttpServletRequest request, HttpServletResponse response) throws JsonIOException, IOException {
 		int boardNo = Integer.parseInt(request.getParameter("no"));
 
@@ -141,6 +154,12 @@ public class BoardController extends HttpServlet {
 		new Gson().toJson(list, response.getWriter());
 	}
 
+	/** 댓글 등록 (ajax)
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	private void ajaxReplyinsert(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		int boardNo = Integer.parseInt(request.getParameter("no"));
 		String replyContent = request.getParameter("content");
@@ -156,6 +175,13 @@ public class BoardController extends HttpServlet {
 		response.getWriter().print(result);
 	}
 
+	/** 게시물 검색 (ajax)
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws JsonIOException
+	 * @throws IOException
+	 */
 	private void ajaxSearch(HttpServletRequest request, HttpServletResponse response) throws JsonIOException, IOException {
 		String keyword = request.getParameter("keyword");
 
@@ -186,6 +212,12 @@ public class BoardController extends HttpServlet {
 	
 	}
 
+	/** 게시물 삭제
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
 
@@ -213,6 +245,13 @@ public class BoardController extends HttpServlet {
 		}
 	}
 
+	/** 게시글 목록 조회
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			int listCount = new BoardService().selectBoardCount();
@@ -238,6 +277,13 @@ public class BoardController extends HttpServlet {
 	}
 	
 	
+	/** 게시글 등록
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void insert(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 
@@ -272,6 +318,13 @@ public class BoardController extends HttpServlet {
 
 	}
 	
+	/** 게시글 수정 시 게시글 제목 및 내용 조회 
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void showUpdateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int boardNo = Integer.parseInt(request.getParameter("no"));
 		
@@ -283,6 +336,12 @@ public class BoardController extends HttpServlet {
 	}
 	
 	
+	/** 게시글 수정
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	private void update(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
 			int boardNo = Integer.parseInt(request.getParameter("no"));

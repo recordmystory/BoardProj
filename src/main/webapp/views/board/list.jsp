@@ -134,7 +134,7 @@
     
 	<script>
 		// 각 행 클릭시 상세 페이지 이동
-		function tableRowClick(){
+		function clickTableRow(){
 			$('#boardList>tbody>tr').on('click', function() {
 	            location.href = '${contextPath}/detail.bo?no=' + $(this).children().eq(0).text();
 	        });
@@ -142,7 +142,7 @@
 		
 		$(function(){
 			
-			tableRowClick();
+			clickTableRow();
 			
 			// 검색 버튼 클릭시 ajax 
 			$('#searchBtn').click(function(){
