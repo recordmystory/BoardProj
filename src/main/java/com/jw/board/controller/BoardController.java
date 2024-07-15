@@ -13,7 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
@@ -103,7 +102,6 @@ public class BoardController extends HttpServlet {
 	 * @throws IOException
 	 */
 	private void selectBoardDtl(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		HttpSession session = request.getSession();
 
 		try {
 			int boardNo = Integer.parseInt(request.getParameter("no"));
@@ -119,21 +117,21 @@ public class BoardController extends HttpServlet {
 					request.setAttribute("b", b);
 					request.getRequestDispatcher("/views/board/detail.jsp").forward(request, response);
 				} else {
-					session.setAttribute("alertMsg", "해당 게시글을 찾을 수 없습니다.");
+					request.setAttribute("alertMsg", "해당 게시글을 찾을 수 없습니다.");
 					response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 				}
 			} else {
-				session.setAttribute("alertMsg", "게시글 조회에 실패했습니다.");
+				request.setAttribute("alertMsg", "게시글 조회에 실패했습니다.");
 				response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 			}
 
 		} catch (NumberFormatException e) {
 			logger.error("NumberFormatException 발생 : " + e.getMessage());
-			session.setAttribute("alertMsg", "올바른 게시글 번호가 아닙니다.");
+			request.setAttribute("alertMsg", "올바른 게시글 번호가 아닙니다.");
 			response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 		} catch (Exception e) {
 			logger.error("기타 오류 발생 : " + e.getMessage());
-			session.setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
+			request.setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
 			response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 		}
 	}
@@ -206,7 +204,7 @@ public class BoardController extends HttpServlet {
 			new Gson().toJson(resultMap, response.getWriter());
 		} catch (Exception e) {
 			logger.error("기타 오류 발생 : " + e.getMessage());
-			request.getSession().setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
+			request.setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
 		}
 		
 	
@@ -219,7 +217,6 @@ public class BoardController extends HttpServlet {
 	 * @throws IOException
 	 */
 	private void updateDelYn(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		HttpSession session = request.getSession();
 
 		try {
 			int boardNo = Integer.parseInt(request.getParameter("no"));
@@ -227,20 +224,20 @@ public class BoardController extends HttpServlet {
 			int result = new BoardService().updateDelYn(boardNo);
 
 			if (result > 0) {
-				session.setAttribute("alertMsg", "성공적으로 삭제되었습니다.");
+				request.setAttribute("alertMsg", "성공적으로 삭제되었습니다.");
 				response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 			} else {
-				session.setAttribute("alertMsg", "삭제에 실패했습니다.");
+				request.setAttribute("alertMsg", "삭제에 실패했습니다.");
 				response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 			}
 
 		} catch (NumberFormatException e) {
 			logger.error("NumberFormatException 발생 : " + e.getMessage());
-			session.setAttribute("alertMsg", "게시글 번호가 올바르지 않습니다.");
+			request.setAttribute("alertMsg", "게시글 번호가 올바르지 않습니다.");
 			response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 		} catch (Exception e) {
 			logger.error("기타 오류 발생 : " + e.getMessage());
-			session.setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
+			request.setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
 			response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 		}
 	}
@@ -272,7 +269,7 @@ public class BoardController extends HttpServlet {
 			request.getRequestDispatcher("/views/board/list.jsp").forward(request, response);
 		} catch (Exception e) {
 			logger.error("기타 오류 발생 : " + e.getMessage());
-			request.getSession().setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
+			request.setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
 		}
 	}
 	
@@ -285,14 +282,13 @@ public class BoardController extends HttpServlet {
 	 * @throws IOException
 	 */
 	private void insertBoard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
 
 		try {
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
 
 			if (title == null || title.trim().isEmpty() || content == null || content.trim().isEmpty()) {
-				session.setAttribute("alertMsg", "제목과 내용을 모두 입력해주세요.");
+				request.setAttribute("alertMsg", "제목과 내용을 모두 입력해주세요.");
 				response.sendRedirect(request.getContextPath() + "/views/board/write.jsp");
 				return;
 			}
@@ -304,19 +300,19 @@ public class BoardController extends HttpServlet {
 			int result = new BoardService().insertBoard(b);
 			
 			if (result > 0) {
-				session.setAttribute("alertMsg", "게시글 등록이 완료되었습니다.");
+				request.setAttribute("alertMsg", "게시글 등록이 완료되었습니다.");
 				response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 			} else {
 				// 사용자가 입력했던 내용 session에 담아놓기
-				session.setAttribute("enteredTitle", title);
-				session.setAttribute("enteredContent", content);
+				request.setAttribute("enteredTitle", title);
+				request.setAttribute("enteredContent", content);
 				
-				session.setAttribute("alertMsg", "게시글 등록에 실패했습니다.");
+				request.setAttribute("alertMsg", "게시글 등록에 실패했습니다.");
 				response.sendRedirect(request.getContextPath() + "/views/board/registForm.jsp");
 			}
 		} catch (Exception e) {
 			logger.error("기타 오류 발생 : " + e.getMessage());
-			session.setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
+			request.setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
 			response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 		}
 
@@ -347,7 +343,6 @@ public class BoardController extends HttpServlet {
 	 * @throws IOException
 	 */
 	private void updateBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		HttpSession session = request.getSession();
 		
 		try {
 			int boardNo = Integer.parseInt(request.getParameter("no"));
@@ -362,20 +357,20 @@ public class BoardController extends HttpServlet {
 			int result = new BoardService().updateBoard(b);
 
 			if (result > 0) {
-				session.setAttribute("alertMsg", "성공적으로 수정되었습니다.");
+				request.setAttribute("alertMsg", "성공적으로 수정되었습니다.");
 				response.sendRedirect(request.getContextPath() + "/detail.bo?no=" + boardNo);
 			} else {
-				session.setAttribute("alertMsg", "수정에 실패했습니다.");
+				request.setAttribute("alertMsg", "수정에 실패했습니다.");
 				response.sendRedirect(request.getContextPath() + "/detail.bo?no=" + boardNo);
 			}
 
 		} catch (NumberFormatException e) {
 			logger.error("NumberFormatException 발생 : " + e.getMessage());
-			session.setAttribute("alertMsg", "게시글 번호가 올바르지 않습니다.");
+			request.setAttribute("alertMsg", "게시글 번호가 올바르지 않습니다.");
 			response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 		} catch (Exception e) {
 			logger.error("기타 오류 발생 : " + e.getMessage());
-			session.setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
+			request.setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
 			response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
 		}
 

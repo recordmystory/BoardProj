@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-<c:set var="alertMsg" value="${sessionScope.alertMsg}" />
+<c:set var="alertMsg" value="${requestScope.alertMsg}" />
 
 <!DOCTYPE html>
 <html>
@@ -123,13 +123,13 @@
 	
 	 -->
 	 
-	 <c:if test="${sessionScope.alertMsg ne null}">
+	 <c:if test="${requestScope.alertMsg ne null}">
 		<script>
 	    	alert('${alertMsg}');
 	    </script>
 	</c:if>
 	
-	<c:remove var="alertMsg" scope="session" />
+	<c:remove var="alertMsg" scope="request" />
     
     
 	<script>
