@@ -36,35 +36,41 @@ public class BoardDao {
 	 */
 	public List<Board> listBoard(PageInfo page) {
 		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
 		List<Board> list = new ArrayList<>();
+		
 		String sql = prop.getProperty("listBoard");
 
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try {
+			pstmt = conn.prepareStatement(sql);
 
 			int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
 			int endRow = startRow + page.getBoardLimit() - 1;
 			pstmt.setInt(1, startRow);
 			pstmt.setInt(2, endRow);
 
-			logger.debug("selectBoard query : " + sql);
+			// logger.debug("selectBoard query : " + sql);
 
-			try (ResultSet rset = pstmt.executeQuery()) {
-				while (rset.next()) {
-					Board b = new Board();
+			rset = pstmt.executeQuery();
 
-					b.setNo(rset.getInt("B_NO"));
-					b.setTitle(rset.getString("B_TITLE"));
-					b.setContent(rset.getString("B_CONTENT"));
-					b.setHit(rset.getInt("B_HIT"));
-					b.setRegId(rset.getString("REG_ID"));
-					b.setRegDate(rset.getDate("REG_DATE"));
+			while (rset.next()) {
+				Board b = new Board();
 
-					list.add(b);
-				}
+				b.setNo(rset.getInt("B_NO"));
+				b.setTitle(rset.getString("B_TITLE"));
+				b.setContent(rset.getString("B_CONTENT"));
+				b.setHit(rset.getInt("B_HIT"));
+				b.setRegId(rset.getString("REG_ID"));
+				b.setRegDate(rset.getDate("REG_DATE"));
+
+				list.add(b);
 			}
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " + e.getMessage());
 		} finally {
+			close(rset);
+			close(pstmt);
 			close(conn);
 		}
 
@@ -78,30 +84,26 @@ public class BoardDao {
 	 */
 	public int selectBoardCount() {
 		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
 		int listCount = 0;
 
 		String sql = prop.getProperty("selectBoardCount");
-		logger.debug("selectBoardCount query : " + sql);
-
-//		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//			
-//			logger.debug("selectBoardCount query : " + sql);
-//			
-//			try (ResultSet rset = pstmt.executeQuery()) {
-//				if (rset.next()) {
-//					listCount = rset.getInt("COUNT");
-//				}
-//			}
-//		} catch (SQLException e) {
+//		logger.debug("selectBoardCount query : " + sql);
 		
-		try (PreparedStatement pstmt = conn.prepareStatement(sql);
-				ResultSet rset = pstmt.executeQuery();) {
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rset = pstmt.executeQuery();
+
 			if (rset.next()) {
 				listCount = rset.getInt("COUNT");
 			}
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " + e.getMessage());
 		} finally {
+			close(rset);
+			close(pstmt);
 			close(conn);
 		}
 		
@@ -115,14 +117,16 @@ public class BoardDao {
 	 */
 	public int insertBoard(Board b) {
 		Connection conn = getConnection();	
+		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql = prop.getProperty("insertBoard");
 
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try {
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, b.getTitle());
 			pstmt.setString(2, b.getContent());
 			
-			logger.debug("insertBoard query : " + sql);
+//			logger.debug("insertBoard query : " + sql);
 			
 			result = pstmt.executeUpdate();
 			commit(conn);
@@ -130,6 +134,7 @@ public class BoardDao {
 			logger.error("SQLException 발생 : " +  e.getMessage());
 			rollback(conn);
 		} finally {
+			close(pstmt);
 			close(conn);
 		}
 
@@ -144,13 +149,16 @@ public class BoardDao {
 	 */
 	public int updateHit(int boardNo) {
 		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql = prop.getProperty("updateHit");
 		
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
 			pstmt.setInt(1, boardNo);
 			
-			logger.debug("updateHit query : " + sql);
+//			logger.debug("updateHit query : " + sql);
 			
 			result = pstmt.executeUpdate();
 			commit(conn);
@@ -158,6 +166,7 @@ public class BoardDao {
 			logger.error("SQLException 발생 : " +  e.getMessage());
 			rollback(conn);
 		} finally {
+			close(pstmt);
 			close(conn);
 		}
 		
@@ -172,28 +181,31 @@ public class BoardDao {
 	 */
 	public Board selectBoardDtl(int boardNo) {
 		Connection conn = getConnection(true);
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
 		Board b = new Board();
 		String sql = prop.getProperty("selectBoardDtl");
-		
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, boardNo);
-			
-			logger.debug("selectBoardDetail query : " + sql);
 
-			try (ResultSet rset = pstmt.executeQuery()) {
-				if (rset.next()) {
-					b.setNo(rset.getInt("B_NO"));
-					b.setTitle(rset.getString("B_TITLE"));
-					b.setContent(rset.getString("B_CONTENT"));
-					b.setHit(rset.getInt("B_HIT"));
-					b.setRegDate(rset.getDate("REG_DATE"));
-					b.setModDate(rset.getDate("MOD_DATE"));
-				}
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardNo);
+
+//			logger.debug("selectBoardDetail query : " + sql);
+			rset = pstmt.executeQuery();
+
+			if (rset.next()) {
+				b.setNo(rset.getInt("B_NO"));
+				b.setTitle(rset.getString("B_TITLE"));
+				b.setContent(rset.getString("B_CONTENT"));
+				b.setHit(rset.getInt("B_HIT"));
+				b.setRegDate(rset.getDate("REG_DATE"));
+				b.setModDate(rset.getDate("MOD_DATE"));
 			}
 
 		} catch (SQLException e) {
-			logger.error("SQLException 발생 : " +  e.getMessage());
+			logger.error("SQLException 발생 : " + e.getMessage());
 		} finally {
+			close(pstmt);
 			close(conn);
 		}
 
@@ -208,23 +220,25 @@ public class BoardDao {
 	 */
 	public int updateBoard(Board b) {
 		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql = prop.getProperty("updateBoard");
 		
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)){
+		try {
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, b.getTitle());
 			pstmt.setString(2, b.getContent());
 			pstmt.setInt(3, b.getNo());
 			
-			logger.debug("updateBoard query : " + sql);
+//			logger.debug("updateBoard query : " + sql);
 			
 			result = pstmt.executeUpdate();
-			
 			commit(conn);
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " +  e.getMessage());
 			rollback(conn);
 		} finally {
+			close(pstmt);
 			close(conn);
 		}
 		
@@ -239,13 +253,15 @@ public class BoardDao {
 	 */
 	public int updateDelYn(int boardNo) {
 		Connection conn = getConnection(true);
+		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql = prop.getProperty("updateDelYn");
 		
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try {
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardNo);
 			
-			logger.debug("updateDelYn query : " + sql);
+//			logger.debug("updateDelYn query : " + sql);
 			
 			result = pstmt.executeUpdate();
 			
@@ -254,6 +270,7 @@ public class BoardDao {
 			logger.error("SQLException 발생 : " +  e.getMessage());
 			rollback(conn);
 		} finally {
+			close(pstmt);
 			close(conn);
 		}
 		
@@ -268,20 +285,23 @@ public class BoardDao {
 	 */
 	public List<Board> listSearch(PageInfo page, String keyword) {
 		Connection conn = getConnection(true);
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
 		List<Board> list = new ArrayList<>();
 		
 		String sql = prop.getProperty("listSearch");
 		
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)){
+		try {
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, keyword);
 			int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
 			int endRow = startRow + page.getBoardLimit() - 1;
 			pstmt.setInt(2, startRow);
 			pstmt.setInt(3, endRow);
 			
-			logger.debug("selectSearch query : " + sql);
+//			logger.debug("selectSearch query : " + sql);
 
-			try (ResultSet rset = pstmt.executeQuery()) {
+				rset = pstmt.executeQuery();
 				while(rset.next()) {
 					Board b = new Board();
 					
@@ -293,15 +313,16 @@ public class BoardDao {
 					b.setRegDate(rset.getDate("REG_DATE"));
 					
 					list.add(b);
-			     }
 			}
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " +  e.getMessage());
 		} finally {
+			close(pstmt);
 			close(conn);
 		}
 		
 		return list;
+		
 	}
 	
 	/** 검색된 게시물 count
@@ -311,23 +332,26 @@ public class BoardDao {
 	 */
 	public int selectSearchCount(String keyword) {
 		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
 		int listCount = 0;
 
 		String sql = prop.getProperty("selectSearchCount");
 
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try {
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, keyword);
-			
-			logger.debug("selectSearchCount query : " + sql);
-			
-			try (ResultSet rset = pstmt.executeQuery()) {
-				if (rset.next()) {
-					listCount = rset.getInt("COUNT");
-				}
+
+//			logger.debug("selectSearchCount query : " + sql);
+			rset = pstmt.executeQuery();
+			if (rset.next()) {
+				listCount = rset.getInt("COUNT");
 			}
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " + e.getMessage());
 		} finally {
+			close(rset);
+			close(pstmt);
 			close(conn);
 		}
 		
@@ -341,33 +365,38 @@ public class BoardDao {
 	 */
 	public List<Reply> listReply(int boardNo) {
 		Connection conn = getConnection(true);
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
 		List<Reply> list = new ArrayList<>();
-		
+
 		String sql = prop.getProperty("listReply");
-		
-		try(PreparedStatement pstmt = conn.prepareStatement(sql)){
+
+		try {
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardNo);
-			
-			logger.debug("selectReply query : " + sql);
-			
-			try (ResultSet rset = pstmt.executeQuery()) {
-				while(rset.next()) {
-					Reply r = new Reply();
-					
-					r.setrNo(rset.getInt("REPLY_NO"));
-					r.setContent(rset.getString("REPLY_CONTENT"));
-					r.setRegId(rset.getString("REG_ID"));
-					r.setRegDate(rset.getString("REG_DATE"));
-					r.setDelYn(rset.getString("DEL_YN"));
-					r.setbNo(rset.getInt("B_NO"));
-					
-					list.add(r);
-				}
+
+//			logger.debug("selectReply query : " + sql);
+			rset = pstmt.executeQuery();
+
+			while (rset.next()) {
+				Reply r = new Reply();
+
+				r.setrNo(rset.getInt("REPLY_NO"));
+				r.setContent(rset.getString("REPLY_CONTENT"));
+				r.setRegId(rset.getString("REG_ID"));
+				r.setRegDate(rset.getString("REG_DATE"));
+				r.setDelYn(rset.getString("DEL_YN"));
+				r.setbNo(rset.getInt("B_NO"));
+
+				list.add(r);
 			}
 		} catch (SQLException e) {
-			logger.error("SQLException 발생 : " +  e.getMessage());
+			logger.error("SQLException 발생 : " + e.getMessage());
 		} finally {
+			close(rset);
+			close(pstmt);
 			close(conn);
+			
 		}
 		
 		return list;
@@ -380,15 +409,17 @@ public class BoardDao {
 	 */
 	public int insertReply(Reply r) {
 		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
 
 		int result = 0;
 		String sql = prop.getProperty("insertReply");
 		
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try {
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, r.getContent());
 			pstmt.setInt(2, r.getbNo());
 			
-			logger.debug("insertReply query : " + sql);
+//			logger.debug("insertReply query : " + sql);
 			
 			result = pstmt.executeUpdate();
 			commit(conn);
@@ -396,6 +427,7 @@ public class BoardDao {
 			logger.error("SQLException 발생 : " +  e.getMessage());
 			rollback(conn);
 		} finally {
+			close(pstmt);
 			close(conn);
 		}
 		
@@ -403,5 +435,4 @@ public class BoardDao {
 	}
 
 	
-
 }
