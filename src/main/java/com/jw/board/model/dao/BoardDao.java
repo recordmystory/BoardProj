@@ -18,7 +18,6 @@ import com.jw.board.model.vo.PageInfo;
 import com.jw.board.model.vo.Reply;
 
 public class BoardDao {
-//	private Properties prop = new Properties();
 	private Properties prop;
 	private static final Logger logger = Logger.getLogger(BoardDao.class);
 
@@ -297,6 +296,11 @@ public class BoardDao {
 		return list;
 	}
 	
+	/** 검색된 게시물 count
+	 * 
+	 * @param keyword
+	 * @return listCount
+	 */
 	public int selectSearchCount(String keyword) {
 		Connection conn = getConnection();
 		int listCount = 0;
@@ -322,6 +326,11 @@ public class BoardDao {
 		return listCount;
 	}
 
+	/** 댓글 조회
+	 * 
+	 * @param boardNo
+	 * @return list
+	 */
 	public List<Reply> selectReply(int boardNo) {
 		Connection conn = getConnection(true);
 		List<Reply> list = new ArrayList<>();
@@ -356,6 +365,11 @@ public class BoardDao {
 		return list;
 	}
 
+	/** 댓글 등록
+	 * 
+	 * @param r
+	 * @return result
+	 */
 	public int insertReply(Reply r) {
 		Connection conn = getConnection();
 
