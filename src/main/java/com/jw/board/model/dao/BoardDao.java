@@ -259,7 +259,7 @@ public class BoardDao {
 	 * @param keyword
 	 * @return list
 	 */
-	public List<Board> selectSearch(String keyword) {
+	public List<Board> selectSearch(PageInfo page, String keyword) {
 		Connection conn = getConnection(true);
 		List<Board> list = new ArrayList<>();
 		
@@ -267,6 +267,10 @@ public class BoardDao {
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)){
 			pstmt.setString(1, keyword);
+			int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
+			int endRow = startRow + page.getBoardLimit() - 1;
+			pstmt.setInt(2, startRow);
+			pstmt.setInt(3, endRow);
 			
 			logger.debug("selectSearch query : " + sql);
 
@@ -291,6 +295,31 @@ public class BoardDao {
 		}
 		
 		return list;
+	}
+	
+	public int selectSearchCount(String keyword) {
+		Connection conn = getConnection();
+		int listCount = 0;
+
+		String sql = prop.getProperty("selectSearchCount");
+
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, keyword);
+			
+			logger.debug("selectSearchCount query : " + sql);
+			
+			try (ResultSet rset = pstmt.executeQuery()) {
+				if (rset.next()) {
+					listCount = rset.getInt("COUNT");
+				}
+			}
+		} catch (SQLException e) {
+			logger.error("SQLException 발생 : " + e.getMessage());
+		} finally {
+			close(conn);
+		}
+		
+		return listCount;
 	}
 
 	public List<Reply> selectReply(int boardNo) {
@@ -350,5 +379,7 @@ public class BoardDao {
 		
 		return result;
 	}
+
+	
 
 }

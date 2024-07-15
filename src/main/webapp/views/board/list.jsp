@@ -155,19 +155,19 @@
 				$.ajax({
 					url: '${contextPath}/search.bo',
 					data: { page: 1, keyword: $('#keyword').val() },
-					success: function(list){
-						console.log(list);
+					success: function(resultMap){
+						console.log(resultMap);
 						
 						let value = '';
 						
-						if(list.length > 0){
-							for(let i=0; i<list.length; i++){
+						if(resultMap.list.length > 0){
+							for(let i=0; i<resultMap.list.length; i++){
 					   			value += '<tr>' 
-									  + '<td>' + list[i].no + '</td>'
-									  + '<td>' + list[i].title + '</td>'
-									  + '<td>' + list[i].hit + '</td>'
-									  + '<td>' + list[i].regId + '</td>'
-									  + '<td>' + list[i].regDate + '</td>'
+									  + '<td>' + resultMap.list[i].no + '</td>'
+									  + '<td>' + resultMap.list[i].title + '</td>'
+									  + '<td>' + resultMap.list[i].hit + '</td>'
+									  + '<td>' + resultMap.list[i].regId + '</td>'
+									  + '<td>' + resultMap.list[i].regDate + '</td>'
 									  + '</tr>';
 							}
 							
@@ -177,6 +177,35 @@
 						}
 						
 						$('#boardList tbody').html(value);
+						
+						let pagination = '';
+			            if (resultMap.page) {
+			                let page = resultMap.page;
+			                
+			                // 이전 페이지 버튼
+			                if(page.currentPage == 1){
+			                    pagination += '<li class="page-item disabled"><a class="page-link" href="#">&lt;&lt;</a></li>';
+			                } else {
+			                    pagination += '<li class="page-item"><a class="page-link" href="${contextPath}/list.bo?page=' + (page.currentPage - 1) + '">&lt;&lt;</a></li>';
+			                }
+
+			                for(let p = page.startPage; p <= page.endPage; p++) {
+			                    if(p == page.currentPage){
+			                        pagination += '<li class="page-item active"><a class="page-link" href="#">' + p + '</a></li>';
+			                    } else {
+			                        pagination += '<li class="page-item"><a class="page-link" href="${contextPath}/list.bo?page=' + p + '">' + p + '</a></li>';
+			                    }
+			                }
+
+			                // 다음 페이지 버튼
+			                if(page.currentPage == page.maxPage){
+			                    pagination += '<li class="page-item disabled"><a class="page-link" href="#">&gt;&gt;</a></li>';
+			                } else {
+			                    pagination += '<li class="page-item"><a class="page-link" href="${contextPath}/list.bo?page=' + (page.currentPage + 1) + '">&gt;&gt;</a></li>';
+			                }
+			            }
+
+			            $('.pagination').html(pagination);
 						
 					},
 					error: function(){

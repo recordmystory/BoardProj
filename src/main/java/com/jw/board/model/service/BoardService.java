@@ -109,11 +109,18 @@ public class BoardService {
 	 * 
 	 * @return list
 	 */
-	public List<Board> selectSearch(String keyword) {
-		List<Board> list = bDao.selectSearch(keyword);
+	public List<Board> selectSearch(PageInfo page, String keyword) {
+		List<Board> list = bDao.selectSearch(page, keyword);
 
 		return list;
 	}
+	
+	public int selectSearchCount(String keyword) {
+		int result = bDao.selectSearchCount(keyword);
+		
+		return result;
+	}
+	
 
 	/**
 	 * 댓글 조회 (ajax)
@@ -138,5 +145,7 @@ public class BoardService {
 
 		return result;
 	}
+
+
 
 }

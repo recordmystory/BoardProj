@@ -29,6 +29,7 @@
         WHERE DEL_YN = 'N'
 	</entry>
 	
+	
 	<!-- 글 등록 -->
 	<entry key="insertBoard">
 		INSERT INTO TB_BOARD
@@ -100,18 +101,33 @@
         WHERE B_NO = ?
 	</entry>
 	
+	<entry key="selectSearchCount">
+		SELECT COUNT(*) AS COUNT
+        FROM TB_BOARD
+        WHERE DEL_YN = 'N'
+            AND B_TITLE LIKE '%' || ? || '%'
+	</entry>
+	
 	<!-- 게시글 검색 -->
 	<entry key="selectSearch">
-		   SELECT B_NO
-	            , B_TITLE
-	            , B_CONTENT
-	            , B_HIT
-	            , REG_ID
-	            , TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS REG_DATE
-	       FROM TB_BOARD
-	       WHERE DEL_YN = 'N'
-	           AND B_TITLE LIKE '%' || ? || '%'
-	       ORDER BY B_NO DESC
+		 SELECT *
+         FROM(
+             SELECT ROWNUM RNUM, A.*
+             FROM (
+                     SELECT B_NO
+                     
+                          , B_TITLE
+                          , B_CONTENT
+                          , B_HIT
+                          , REG_ID
+                          , TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS REG_DATE
+                     FROM TB_BOARD
+                     WHERE DEL_YN = 'N'
+                         AND B_TITLE LIKE '%' || ? || '%'
+                     ORDER BY B_NO DESC
+             ) A
+         )
+         WHERE RNUM BETWEEN ? AND ?
 	</entry>
 	
 	<!-- 댓글 조회 -->
