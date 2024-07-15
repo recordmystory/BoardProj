@@ -131,9 +131,9 @@ public class BoardDao {
 			result = pstmt.executeUpdate();
 			
 			if (result == 0) {
-				logger.debug("result : 0 (insert된 행의 개수 0)");
+				logger.debug("result : 0 (insert된 행의 개수 0 ==> 글 등록)");
 			} else if (result == 1) {
-				logger.debug("result : 1 (insert 성공)");
+				logger.debug("result : 1 (insert 성공 ==> 글 등록)");
 			}
 			
 			commit(conn);
@@ -170,9 +170,9 @@ public class BoardDao {
 			result = pstmt.executeUpdate();
 			
 			if (result == 0) {
-				logger.debug("result : 0 (update된 행의 개수 0)");
+				logger.debug("result : 0 (update된 행의 개수 0 ==> 조회수 업데이트 실패)");
 			} else if (result == 1) {
-				logger.debug("result : 1 (update 성공)");
+				logger.debug("result : 1 (update 성공 ==> 조회수 업데이트)");
 			}
 			
 			commit(conn);
@@ -249,9 +249,9 @@ public class BoardDao {
 			result = pstmt.executeUpdate();
 			
 			if (result == 0) {
-				logger.debug("result : 0 (update된 행의 개수 0)");
+				logger.debug("result : 0 (update된 행의 개수 0 ==> 글 수정 실패)");
 			} else if (result == 1) {
-				logger.debug("result : 1 (update 성공)");
+				logger.debug("result : 1 (update 성공 ==> 글 수정)");
 			}
 			
 			commit(conn);
@@ -287,9 +287,9 @@ public class BoardDao {
 			result = pstmt.executeUpdate();
 			
 			if (result == 0) {
-				logger.debug("result : 0 (update된 행의 개수 0)");
+				logger.debug("result : 0 (update된 행의 개수 0 ==> 글 삭제 실패)");
 			} else if (result == 1) {
-				logger.debug("result : 1 (update 성공)");
+				logger.debug("result : 1 (update 성공 ==> 글 삭제)");
 			}
 			
 			commit(conn);
@@ -449,9 +449,9 @@ public class BoardDao {
 			result = pstmt.executeUpdate();
 
 			if (result == 0) {
-				logger.debug("result : 0 (insert된 행의 개수 0)");
+				logger.debug("result : 0 (insert된 행의 개수 0 ==> 댓글 등록 실패)");
 			} else if (result == 1) {
-				logger.debug("result : 1 (insert 성공)");
+				logger.debug("result : 1 (insert 성공 ==> 댓글 등록)");
 			}
 			
 			commit(conn);
