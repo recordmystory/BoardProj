@@ -135,6 +135,8 @@
 	<script>
 		// 각 행 클릭시 상세 페이지 이동
 		function clickTableRow(){
+			$('#boardList>tbody>tr').off('click');
+			
 			$('#boardList>tbody>tr').on('click', function() {
 	            location.href = '${contextPath}/detail.bo?no=' + $(this).children().eq(0).text();
 	        });
@@ -176,8 +178,8 @@
        };
 		 
 	   $(function(){
-			
-			clickTableRow();
+		   
+		   clickTableRow();
 			
 			// 검색 버튼 클릭시 ajax 
 			$('#searchBtn').click(function(){
@@ -191,7 +193,7 @@
 					url: '${contextPath}/search.bo',
 					data: { page: 1, keyword: $('#keyword').val() },
 					success: function(resultMap){
-						console.log(resultMap);
+						$('#boardList tbody').empty();
 						
 						let value = '';
 						
@@ -217,10 +219,12 @@
 							
 						}  else {				
 							value += '<tr><td colspan="6" style="text-align: center;">존재하는 게시글이 없습니다.</td></tr>';
-							$('.pagination').remove();
+							$('.pagination').empty();
 						}
 						
-						$('#boardList tbody').html(value);
+						$('#boardList tbody').append(value);
+
+						clickTableRow();
 						
 						let pagination = '';
 			            if (resultMap.page) {
