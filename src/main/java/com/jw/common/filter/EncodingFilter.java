@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Servlet Filter implementation class EncodingFilter
  */
-@SuppressWarnings("serial")
 @WebFilter(filterName="encodingFilter", urlPatterns="/*")
 public class EncodingFilter extends HttpFilter implements Filter {
        
