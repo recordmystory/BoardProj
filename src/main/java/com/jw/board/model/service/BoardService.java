@@ -1,32 +1,39 @@
 package com.jw.board.model.service;
 
+import java.util.HashMap;
 import java.util.List;
-
-import org.apache.log4j.Logger;
+import java.util.Map;
 
 import com.jw.board.model.dao.BoardDao;
 import com.jw.board.model.vo.Board;
 import com.jw.board.model.vo.PageInfo;
 import com.jw.board.model.vo.Reply;
+import com.jw.common.util.PagingUtil;
 
 
 public class BoardService {
 
 	private BoardDao bDao = new BoardDao();
-	Logger logger = Logger.getLogger(BoardService.class);
 
 	/**
 	 * 게시글 목록 조회 및 페이징
 	 * 
 	 * @param page
 	 * 
-	 * @return list
+	 * @return resultMap
 	 */
 
-	public List<Board> listBoard(PageInfo page) {
+	public Map<String, Object> listBoard(int currentPage) {
+		int listCount = selectBoardCount();
+		PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
+		
 		List<Board> list = bDao.listBoard(page);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("list", list);
+		resultMap.put("page", page);
 
-		return list;
+		return resultMap;
 	}
 
 	/**
@@ -56,7 +63,7 @@ public class BoardService {
 	 * 조회수 증가
 	 * 
 	 * @param boardNo
-	 * @return
+	 * @return result
 	 */
 
 	public int updateHit(int boardNo) {
@@ -90,7 +97,7 @@ public class BoardService {
 	}
 
 	/**
-	 * 게시글 삭제 (delete가 아닌 del_yn 컬럼 업데이트)
+	 * 게시글 삭제 (delete문이 아닌 del_yn 컬럼 update)
 	 * 
 	 * @param boardNo
 	 * 
@@ -107,12 +114,19 @@ public class BoardService {
 	 * 
 	 * @param keyword
 	 * 
-	 * @return list
+	 * @return resultMap
 	 */
-	public List<Board> listSearch(PageInfo page, String keyword) {
+	public Map<String, Object> listSearch(int currentPage, String keyword) {
+		int listCount = selectSearchCount(keyword);
+		PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
+		
 		List<Board> list = bDao.listSearch(page, keyword);
-
-		return list;
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("list", list);
+		resultMap.put("page", page);
+		
+		return resultMap;
 	}
 	
 	public int selectSearchCount(String keyword) {

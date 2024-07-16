@@ -2,7 +2,6 @@ package com.jw.board.controller;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -21,18 +20,17 @@ import com.google.gson.JsonIOException;
 import com.jw.board.model.dao.BoardDao;
 import com.jw.board.model.service.BoardService;
 import com.jw.board.model.vo.Board;
-import com.jw.board.model.vo.PageInfo;
 import com.jw.board.model.vo.Reply;
-import com.jw.common.util.PagingUtil;
 
 /**
- * Servlet implementation class BoardController
+ * .bo로 끝나는 모든 요청을 받는 Controller
  */
 @WebServlet("*.bo")
 public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(BoardController.class);
 	private static Properties prop = new Properties();
+	private static BoardService bService = new BoardService();
 
 	/**
 	 * mapper 파일 로드
@@ -107,14 +105,12 @@ public class BoardController extends HttpServlet {
 		try {
 			int boardNo = Integer.parseInt(request.getParameter("no"));
 
-			BoardService bService = new BoardService();
-
 			int result = bService.updateHit(boardNo);
 
 			if (result > 0) {
 				Board b = bService.selectBoardDtl(boardNo);
 
-				if (b != null) {
+				if (b != null) { // Board 객체가 null이 아닐 때 request 영역에 담은 후 detail 페이지로 forward
 					request.setAttribute("b", b);
 					request.getRequestDispatcher("/views/board/detail.jsp").forward(request, response);
 				} else {
@@ -145,12 +141,18 @@ public class BoardController extends HttpServlet {
 	 * @throws IOException
 	 */
 	private void listReply(HttpServletRequest request, HttpServletResponse response) throws JsonIOException, IOException {
-		int boardNo = Integer.parseInt(request.getParameter("no"));
+		try {
+			int boardNo = Integer.parseInt(request.getParameter("no"));
+			
+			List<Reply> list = bService.listReply(boardNo);
 
-		List<Reply> list = new BoardService().listReply(boardNo);
+			response.setContentType("application/json; charset=utf-8");
+			new Gson().toJson(list, response.getWriter());
+		} catch (NumberFormatException e) {
+			logger.error("NumberFormatException 발생 : " + e.getMessage());
+		}
 
-		response.setContentType("application/json; charset=utf-8");
-		new Gson().toJson(list, response.getWriter());
+		
 	}
 
 	/** 댓글 등록 (ajax)
@@ -160,18 +162,22 @@ public class BoardController extends HttpServlet {
 	 * @throws IOException
 	 */
 	private void insertReply(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		int boardNo = Integer.parseInt(request.getParameter("no"));
-		String replyContent = request.getParameter("content");
-
-		Reply r = new Reply();
-
-		r.setbNo(boardNo);
-		r.setContent(replyContent);
-
-		int result = new BoardService().insertReply(r);
-
-		// ajax 요청이 온곳 : success function으로 데이터 전달
-		response.getWriter().print(result);
+		try {
+			int boardNo = Integer.parseInt(request.getParameter("no"));
+			String replyContent = request.getParameter("content");
+	
+			Reply r = new Reply();
+	
+			r.setBNo(boardNo);
+			r.setContent(replyContent);
+	
+			int result = bService.insertReply(r);
+	
+			// ajax 요청이 온곳 : success function으로 데이터 전달
+			response.getWriter().print(result);
+		} catch(NumberFormatException e) {
+			logger.error("NumberFormatException 발생 : " + e.getMessage());
+		}
 	}
 
 	/** 게시물 검색 (ajax)
@@ -185,7 +191,6 @@ public class BoardController extends HttpServlet {
 		String keyword = request.getParameter("keyword");
 
 		try {
-			int listCount = new BoardService().selectSearchCount(keyword);
 			int currentPage;
 
 			try {
@@ -194,20 +199,14 @@ public class BoardController extends HttpServlet {
 				currentPage = 1;
 			}
 
-			PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
-			List<Board> list = new BoardService().listSearch(page, keyword);
-
-			Map<String, Object> resultMap = new HashMap<>();
-			resultMap.put("list", list);
-			resultMap.put("page", page);
-
+			Map<String, Object> resultMap = bService.listSearch(currentPage, keyword);
+			
 			response.setContentType("application/json; charset=utf-8");
 			new Gson().toJson(resultMap, response.getWriter());
 		} catch (Exception e) {
 			logger.error("기타 오류 발생 : " + e.getMessage());
 			request.setAttribute("alertMsg", "기타 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
 		}
-		
 	
 	}
 
@@ -222,7 +221,7 @@ public class BoardController extends HttpServlet {
 		try {
 			int boardNo = Integer.parseInt(request.getParameter("no"));
 
-			int result = new BoardService().updateDelYn(boardNo);
+			int result = bService.updateDelYn(boardNo);
 
 			if (result > 0) {
 				request.setAttribute("alertMsg", "성공적으로 삭제되었습니다.");
@@ -252,21 +251,17 @@ public class BoardController extends HttpServlet {
 	 */
 	private void listBoard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			int listCount = new BoardService().selectBoardCount();
 			int currentPage;
-
 			try {
 				currentPage = Integer.parseInt(request.getParameter("page"));
 			} catch (NumberFormatException e) {
 				currentPage = 1;
 			}
+			
+			Map<String, Object> resultMap = bService.listBoard(currentPage);
 
-			PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
-
-			List<Board> list = new BoardService().listBoard(page);
-
-			request.setAttribute("page", page);
-			request.setAttribute("list", list);
+			request.setAttribute("list", resultMap.get("list"));
+			request.setAttribute("page", resultMap.get("page"));
 			request.getRequestDispatcher("/views/board/list.jsp").forward(request, response);
 		} catch (Exception e) {
 			logger.error("기타 오류 발생 : " + e.getMessage());
@@ -287,24 +282,25 @@ public class BoardController extends HttpServlet {
 		try {
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
-
-			if (title == null || title.isBlank()) {
+			
+			// title 및 content값 비어있는지 체크
+			if (title.trim().isEmpty()) {
 				request.setAttribute("alertMsg", "제목을 입력해주세요.");
 				response.sendRedirect(request.getContextPath() + "/views/board/registForm.jsp");
 				return;
 			} 
 			
-			if (content == null || content.isBlank()) {
+			if (content.trim().isEmpty()) {
 				request.setAttribute("alertMsg", "내용을 입력해주세요.");
 				response.sendRedirect(request.getContextPath() + "/views/board/registForm.jsp");
 				return;
 			} 
-
+			
 			Board b = new Board();
 			b.setTitle(title);
 			b.setContent(content);
 
-			int result = new BoardService().insertBoard(b);
+			int result = bService.insertBoard(b);
 			
 			if (result > 0) {
 				request.setAttribute("alertMsg", "게시글 등록이 완료되었습니다.");
@@ -334,7 +330,7 @@ public class BoardController extends HttpServlet {
 	private void showUpdateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int boardNo = Integer.parseInt(request.getParameter("no"));
 		
-		Board b = new BoardService().selectBoardDtl(boardNo);
+		Board b = bService.selectBoardDtl(boardNo);
 		
 		request.setAttribute("b", b);
 		
@@ -360,7 +356,7 @@ public class BoardController extends HttpServlet {
 			b.setTitle(title);
 			b.setContent(content);
 
-			int result = new BoardService().updateBoard(b);
+			int result = bService.updateBoard(b);
 
 			if (result > 0) {
 				request.setAttribute("alertMsg", "성공적으로 수정되었습니다.");

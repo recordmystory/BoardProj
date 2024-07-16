@@ -101,7 +101,7 @@
     <script>
     	$(function(){
     		
-    		// 2초마다 select (ajax)
+    		// 3초마다 select (ajax)
     		setInterval(selectReply, 3000);
     	});
     	
@@ -125,7 +125,7 @@
     					}
     				}
     			}, error: function(){
-    				console.log('댓글 작성 ajax 통신 실패');
+    				alert('댓글 작성에 실패했습니다. 잠시후 다시 시도해주세요.');
     			}
     			
     		});
@@ -157,7 +157,7 @@
     				$('#reply-table tbody').html(value);
     			},
     			error: function(){
-    				console.log('댓글 조회 ajax 통신 실패');
+    				alert('댓글 조회에 실패했습니다. 잠시 후 시도해주세요.');
     			}
     			
     		});

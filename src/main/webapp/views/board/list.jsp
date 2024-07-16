@@ -119,7 +119,7 @@
 	
 	<!-- 
 		alert 문구가 담겨있을 경우 -> alert 메시지 출력
-					없을 경우 -> session에서 삭제
+					없을 경우 -> request 영역에서 삭제
 	
 	 -->
 	 
@@ -142,7 +142,21 @@
 	        });
 		};
 		
-
+		 const monthMap = {
+		           '1월': 'January',
+		           '2월': 'February',
+		           '3월': 'March',
+		           '4월': 'April',
+		           '5월': 'May',
+		           '6월': 'June',
+		           '7월': 'July',
+		           '8월': 'August',
+		           '9월': 'September',
+		           '10월': 'October',
+		           '11월': 'November',
+		           '12월': 'December'
+		       };
+				 
 	   // 월(한글) -> 월(영문)으로 변환
        function convertKorMonthToEng(month) {
            return monthMap[month];
@@ -153,35 +167,19 @@
        function parseDate(dateString) {
     	   var parts = dateString.split(' '); // ["7월", "15,", "2024"]
            var month = convertKorMonthToEng(parts[0]); // 7월 -> July로 변환
-           var day = parseInt(parts[1].replace(',', '')) + 1;
-           var year = parseInt(parts[2]); 
+           var day = parseInt(parts[1].replace(',', '')) + 1; // 날짜에서 쉼표 제거 후 정수형으로 변환
+           var year = parseInt(parts[2]); // 년도 정수형으로 변환
           
-           var dateString = month + ' ' + day + ', ' + year;
+           var dateString = month + ' ' + day + ', ' + year; // Date형식으로 넣을 수 있게 변환
           
            var date = new Date(dateString);
            return date;
        }
        
-       const monthMap = {
-           '1월': 'January',
-           '2월': 'February',
-           '3월': 'March',
-           '4월': 'April',
-           '5월': 'May',
-           '6월': 'June',
-           '7월': 'July',
-           '8월': 'August',
-           '9월': 'September',
-           '10월': 'October',
-           '11월': 'November',
-           '12월': 'December'
-       };
-		 
 	   $(function(){
 		   
 		   clickTableRow();
 			
-			// 검색 버튼 클릭시 ajax 
 			$('#searchBtn').click(function(){
 				
 				if($('#keyword').val().trim() == '') {
@@ -189,6 +187,7 @@
 					return;
 				}
 				
+				// 검색 버튼 클릭시 ajax 
 				$.ajax({
 					url: '${contextPath}/search.bo',
 					data: { page: 1, keyword: $('#keyword').val() },
@@ -197,16 +196,11 @@
 						
 						let value = '';
 						
-						if(resultMap.list.length > 0){
+						if(resultMap.list.length > 0){ // resultMap.list 길이가 0 이상 : 즉, 존재할 때
 							for(let i=0; i<resultMap.list.length; i++){
 					            
-								let regDate = resultMap.list[i].regDate;
-								
-					            // 함수를 사용하여 Date 객체로 변환합니다
-					            let dateObject = parseDate(regDate);
-					            
 					            // YYYY-MM-DD 형식으로 변환
-					            let formatRegDate = dateObject.toISOString().split('T')[0];
+					            let formatRegDate = parseDate(resultMap.list[i].regDate).toISOString().split('T')[0];
 								
 					   			value += '<tr>' 
 									  + '<td>' + resultMap.list[i].no + '</td>'
@@ -226,38 +220,39 @@
 
 						clickTableRow();
 						
-						let pagination = '';
+						// page 영역 다시 그리기
+						let pageArea = '';
 			            if (resultMap.page) {
 			                let page = resultMap.page;
 			                
 			                // 이전 페이지 버튼
-			                if(page.currentPage == 1){
-			                    pagination += '<li class="page-item disabled"><a class="page-link" href="#">&lt;&lt;</a></li>';
-			                } else {
-			                    pagination += '<li class="page-item"><a class="page-link" href="${contextPath}/list.bo?page=' + (page.currentPage - 1) + '">&lt;&lt;</a></li>';
+			                if(page.currentPage == 1){ // 현재 사용자가 보고 있는 페이지가 1페이지일때
+			                    pageArea += '<li class="page-item disabled"><a class="page-link" href="#">&lt;&lt;</a></li>';
+			                } else { // 현재 사용자가 보고 있는 페이지가 1페이지가 아닐 때
+			                    pageArea += '<li class="page-item"><a class="page-link" href="${contextPath}/list.bo?page=' + (page.currentPage - 1) + '">&lt;&lt;</a></li>';
 			                }
 
 			                for(let p = page.startPage; p <= page.endPage; p++) {
 			                    if(p == page.currentPage){
-			                        pagination += '<li class="page-item active"><a class="page-link" href="#">' + p + '</a></li>';
+			                        pageArea += '<li class="page-item active"><a class="page-link" href="#">' + p + '</a></li>';
 			                    } else {
-			                        pagination += '<li class="page-item"><a class="page-link" href="${contextPath}/list.bo?page=' + p + '">' + p + '</a></li>';
+			                        pageArea += '<li class="page-item"><a class="page-link" href="${contextPath}/list.bo?page=' + p + '">' + p + '</a></li>';
 			                    }
 			                }
 
 			                // 다음 페이지 버튼
-			                if(page.currentPage == page.maxPage){
-			                    pagination += '<li class="page-item disabled"><a class="page-link" href="#">&gt;&gt;</a></li>';
+			                if(page.currentPage == page.maxPage){ // 현재 사용자가 보고 있는 페이지의 값과 가장 마지막 페이지의 값이 일치할 때
+			                    pageArea += '<li class="page-item disabled"><a class="page-link" href="#">&gt;&gt;</a></li>';
 			                } else {
-			                    pagination += '<li class="page-item"><a class="page-link" href="${contextPath}/list.bo?page=' + (page.currentPage + 1) + '">&gt;&gt;</a></li>';
+			                    pageArea += '<li class="page-item"><a class="page-link" href="${contextPath}/list.bo?page=' + (page.currentPage + 1) + '">&gt;&gt;</a></li>';
 			                }
 			            }
 
-			            $('.pagination').html(pagination);
+			            $('.pagination').html(pageArea);
 						
 					},
 					error: function(){
-						console.log('ajax 통신 실패');
+						alert('검색에 실패했습니다. 잠시후 다시 시도해주세요.');
 					}
 					
 				});

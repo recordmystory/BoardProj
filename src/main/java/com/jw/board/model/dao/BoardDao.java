@@ -50,19 +50,26 @@ public class BoardDao {
 			pstmt.setInt(1, startRow);
 			pstmt.setInt(2, endRow);
 
-			// logger.debug("selectBoard query : " + sql);
-
 			rset = pstmt.executeQuery();
 
 			while (rset.next()) {
-				Board b = new Board();
-
-				b.setNo(rset.getInt("B_NO"));
-				b.setTitle(rset.getString("B_TITLE"));
-				b.setContent(rset.getString("B_CONTENT"));
-				b.setHit(rset.getInt("B_HIT"));
-				b.setRegId(rset.getString("REG_ID"));
-				b.setRegDate(rset.getDate("REG_DATE"));
+				Board b = Board.builder()
+							   .no(rset.getInt("B_NO"))
+							   .title(rset.getString("B_TITLE"))
+							   .content(rset.getString("B_CONTENT"))
+							   .hit(rset.getInt("B_HIT"))
+							   .regId(rset.getString("REG_ID"))
+							   .regDate(rset.getDate("REG_DATE"))
+							   .build();
+				
+//				Board b = new Board();
+//
+//				b.setNo(rset.getInt("B_NO"));
+//				b.setTitle(rset.getString("B_TITLE"));
+//				b.setContent(rset.getString("B_CONTENT"));
+//				b.setHit(rset.getInt("B_HIT"));
+//				b.setRegId(rset.getString("REG_ID"));
+//				b.setRegDate(rset.getDate("REG_DATE"));
 
 				list.add(b);
 			}
@@ -90,7 +97,6 @@ public class BoardDao {
 		int listCount = 0;
 
 		String sql = prop.getProperty("selectBoardCount");
-//		logger.debug("selectBoardCount query : " + sql);
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -125,9 +131,7 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, b.getTitle());
 			pstmt.setString(2, b.getContent());
-			
-//			logger.debug("insertBoard query : " + sql);
-			
+						
 			result = pstmt.executeUpdate();
 			
 			if (result == 0) {
@@ -164,8 +168,6 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setInt(1, boardNo);
-			
-//			logger.debug("updateHit query : " + sql);
 			
 			result = pstmt.executeUpdate();
 			
@@ -204,16 +206,24 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardNo);
 
-//			logger.debug("selectBoardDetail query : " + sql);
 			rset = pstmt.executeQuery();
 
 			if (rset.next()) {
-				b.setNo(rset.getInt("B_NO"));
-				b.setTitle(rset.getString("B_TITLE"));
-				b.setContent(rset.getString("B_CONTENT"));
-				b.setHit(rset.getInt("B_HIT"));
-				b.setRegDate(rset.getDate("REG_DATE"));
-				b.setModDate(rset.getDate("MOD_DATE"));
+				b = Board.builder()
+						 .no(rset.getInt("B_NO"))
+						 .title(rset.getString("B_TITLE"))
+						 .content(rset.getString("B_CONTENT"))
+						 .hit(rset.getInt("B_HIT"))
+						 .regDate(rset.getDate("REG_DATE"))
+						 .modDate(rset.getDate("MOD_DATE"))
+						 .build();
+				
+//				b.setNo(rset.getInt("B_NO"));
+//				b.setTitle(rset.getString("B_TITLE"));
+//				b.setContent(rset.getString("B_CONTENT"));
+//				b.setHit(rset.getInt("B_HIT"));
+//				b.setRegDate(rset.getDate("REG_DATE"));
+//				b.setModDate(rset.getDate("MOD_DATE"));
 			}
 
 		} catch (SQLException e) {
@@ -243,8 +253,6 @@ public class BoardDao {
 			pstmt.setString(1, b.getTitle());
 			pstmt.setString(2, b.getContent());
 			pstmt.setInt(3, b.getNo());
-			
-//			logger.debug("updateBoard query : " + sql);
 			
 			result = pstmt.executeUpdate();
 			
@@ -281,8 +289,6 @@ public class BoardDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardNo);
-			
-//			logger.debug("updateDelYn query : " + sql);
 			
 			result = pstmt.executeUpdate();
 			
@@ -326,18 +332,23 @@ public class BoardDao {
 			pstmt.setInt(2, startRow);
 			pstmt.setInt(3, endRow);
 			
-//			logger.debug("selectSearch query : " + sql);
-
 				rset = pstmt.executeQuery();
 				while(rset.next()) {
-					Board b = new Board();
+					Board b = Board.builder()
+								   .no(rset.getInt("B_NO"))
+								   .title(rset.getString("B_TITLE"))
+								   .content(rset.getString("B_CONTENT"))
+								   .hit(rset.getInt("B_HIT"))
+								   .regId(rset.getString("REG_ID"))
+								   .regDate(rset.getDate("REG_DATE"))
+								   .build();
 					
-					b.setNo(rset.getInt("B_NO"));
-					b.setTitle(rset.getString("B_TITLE"));
-					b.setContent(rset.getString("B_CONTENT"));
-					b.setHit(rset.getInt("B_HIT"));
-					b.setRegId(rset.getString("REG_ID"));
-					b.setRegDate(rset.getDate("REG_DATE"));
+//					b.setNo(rset.getInt("B_NO"));
+//					b.setTitle(rset.getString("B_TITLE"));
+//					b.setContent(rset.getString("B_CONTENT"));
+//					b.setHit(rset.getInt("B_HIT"));
+//					b.setRegId(rset.getString("REG_ID"));
+//					b.setRegDate(rset.getDate("REG_DATE"));
 					
 					list.add(b);
 			}
@@ -369,8 +380,8 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, keyword);
 
-//			logger.debug("selectSearchCount query : " + sql);
 			rset = pstmt.executeQuery();
+			
 			if (rset.next()) {
 				listCount = rset.getInt("COUNT");
 			}
@@ -402,18 +413,24 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardNo);
 
-//			logger.debug("selectReply query : " + sql);
 			rset = pstmt.executeQuery();
 
 			while (rset.next()) {
-				Reply r = new Reply();
-
-				r.setrNo(rset.getInt("REPLY_NO"));
-				r.setContent(rset.getString("REPLY_CONTENT"));
-				r.setRegId(rset.getString("REG_ID"));
-				r.setRegDate(rset.getString("REG_DATE"));
-				r.setDelYn(rset.getString("DEL_YN"));
-				r.setbNo(rset.getInt("B_NO"));
+				Reply r = Reply.builder()
+							   .rNo(rset.getInt("REPLY_NO"))
+							   .content(rset.getString("REPLY_CONTENT"))
+							   .regId(rset.getString("REG_ID"))
+							   .regDate(rset.getString("REG_DATE"))
+							   .delYn(rset.getString("DEL_YN"))
+							   .bNo(rset.getInt("B_NO"))
+							   .build();
+				
+//				r.setRNo(rset.getInt("REPLY_NO"));
+//				r.setContent(rset.getString("REPLY_CONTENT"));
+//				r.setRegId(rset.getString("REG_ID"));
+//				r.setRegDate(rset.getString("REG_DATE"));
+//				r.setDelYn(rset.getString("DEL_YN"));
+//				r.setbNo(rset.getInt("B_NO"));
 
 				list.add(r);
 			}
@@ -444,7 +461,7 @@ public class BoardDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, r.getContent());
-			pstmt.setInt(2, r.getbNo());
+			pstmt.setInt(2, r.getBNo());
 			
 			result = pstmt.executeUpdate();
 
