@@ -18,14 +18,16 @@ import com.jw.board.model.vo.PageInfo;
 import com.jw.board.model.vo.Reply;
 
 public class BoardDao {
-	private Properties prop;
+	private static Properties prop;
 	private static final Logger logger = Logger.getLogger(BoardDao.class);
 
-	public BoardDao() {
-		this.prop = BoardController.getProperties();
+	public BoardDao() { }
+	
+	static { // 클래스 최초 로드 시만 getProperties() 메서드 호출
+		prop = BoardController.getProperties();
 	}
 	
-	public Properties getProperties() {
+	public static Properties getProperties() {
         return prop;
     }
 
