@@ -86,16 +86,16 @@ public class JDBCTemplate {
 	}
 
 	/**
-	 * Connection close
+	 * resource close
 	 * 
-	 * @param conn
+	 * @param resources : connection || Statement || ResultSet 
 	 */
 	public static void close(AutoCloseable... resources) {
 		for (AutoCloseable resource : resources) {
 			if(resource != null) {
 				try {
 					resource.close();
-					logger.debug(resource.getClass() + " close 실행");
+//					logger.debug(resource.getClass() + " close 실행");
 				} catch (Exception e) {
 					logger.error("close 실패 ==> " + resource);
 					logger.error("에러 메시지 : " + e.getMessage());
@@ -104,44 +104,5 @@ public class JDBCTemplate {
 		}
 	}
 	
-//	public static void close(Connection conn) {
-//		try {
-//			if (conn != null && !conn.isClosed()) {
-//				conn.close();
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-	/**
-	 * Statement close
-	 * 
-	 * @param stmt
-	 */
-//	public static void close(Statement stmt) {
-//		try {
-//			if (stmt != null && !stmt.isClosed()) {
-//				stmt.close();
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-	/**
-	 * ResultSet close
-	 * 
-	 * @param rset
-	 */
-//	public static void close(ResultSet rset) {
-//		try {
-//			if (rset != null && !rset.isClosed()) {
-//				rset.close();
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 }
