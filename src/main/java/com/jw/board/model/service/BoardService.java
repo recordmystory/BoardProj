@@ -29,23 +29,23 @@ public class BoardService {
 	 * @throws IOException
 	 */
 	public void listBoard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	        try {
-	            String nowPage = request.getParameter("page");
-	            if (nowPage == null || nowPage.trim().isEmpty()) nowPage = "1"; 
-	            int currentPage = Integer.parseInt(nowPage);
-	            int listCount = bDao.selectBoardCount();
-	            
-	            PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
-	            List<Board> list = bDao.listBoard(page);
-	            
-	            request.setAttribute("list", list);
-	            request.setAttribute("page", page);
-	            request.getRequestDispatcher("/views/board/list.jsp").forward(request, response);
-	        } catch (Exception e) {
-	            request.setAttribute("alertMsg", "처리에 실패했습니다.");
-	            request.getRequestDispatcher("views/board/errorPage.jsp").forward(request, response);
-	        }
-	    }
+		try {
+			String nowPage = request.getParameter("page");
+			if (nowPage == null || nowPage.trim().isEmpty()) nowPage = "1";
+			int currentPage = Integer.parseInt(nowPage);
+			int listCount = bDao.selectBoardCount();
+
+			PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
+			List<Board> list = bDao.listBoard(page);
+
+			request.setAttribute("list", list);
+			request.setAttribute("page", page);
+			request.getRequestDispatcher("/views/board/list.jsp").forward(request, response);
+		} catch (Exception e) {
+			request.setAttribute("alertMsg", "처리에 실패했습니다.");
+			request.getRequestDispatcher("views/board/errorPage.jsp").forward(request, response);
+		}
+	}
 
 	/** 게시글 등록
 	 * @param request
@@ -105,17 +105,17 @@ public class BoardService {
 	 * @throws IOException
 	 */
 	public void selectBoardDtl(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 try {
-	            int boardNo = Integer.parseInt(request.getParameter("no"));
-	            Board b = bDao.selectBoardDtl(boardNo);
-	            bDao.updateHit(boardNo);
-	            request.setAttribute("b", b);
-	            request.getRequestDispatcher("/views/board/detail.jsp").forward(request, response);
-	        } catch (Exception e) {
-	            request.setAttribute("alertMsg", "조회에 실패했습니다.");
-	            request.getRequestDispatcher("views/board/errorPage.jsp").forward(request, response);
-	        }
-	    }
+		try {
+			int boardNo = Integer.parseInt(request.getParameter("no"));
+			Board b = bDao.selectBoardDtl(boardNo);
+			bDao.updateHit(boardNo);
+			request.setAttribute("b", b);
+			request.getRequestDispatcher("/views/board/detail.jsp").forward(request, response);
+		} catch (Exception e) {
+			request.setAttribute("alertMsg", "조회에 실패했습니다.");
+			request.getRequestDispatcher("views/board/errorPage.jsp").forward(request, response);
+		}
+	}
 	
 	/**
 	 * 게시글 수정
@@ -126,15 +126,15 @@ public class BoardService {
 	 * @throws IOException
 	 */
 	public void updateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	        try {
-	            Board b = bDao.selectBoardDtl(Integer.parseInt(request.getParameter("no")));
-	            request.setAttribute("b", b);
-	            request.getRequestDispatcher("/views/board/updateForm.jsp").forward(request, response);
-	        } catch (Exception e) {
-	            request.setAttribute("alertMsg", e.getMessage());
-	            request.getRequestDispatcher("views/board/errorPage.jsp").forward(request, response);
-	        }
-	    }
+		try {
+			Board b = bDao.selectBoardDtl(Integer.parseInt(request.getParameter("no")));
+			request.setAttribute("b", b);
+			request.getRequestDispatcher("/views/board/updateForm.jsp").forward(request, response);
+		} catch (Exception e) {
+			request.setAttribute("alertMsg", e.getMessage());
+			request.getRequestDispatcher("views/board/errorPage.jsp").forward(request, response);
+		}
+	}
 	 
 	 /** 게시글 수정
 	  * 
@@ -144,21 +144,21 @@ public class BoardService {
 	 * @throws IOException
 	 */
 	public void updateBoard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	        try {
-	            int boardNo = Integer.parseInt(request.getParameter("no"));
+		try {
+			int boardNo = Integer.parseInt(request.getParameter("no"));
 
-	            Board b = new Board();
-	            b.setNo(boardNo);
-	            b.setTitle(request.getParameter(request.getParameter("title")));
-	            b.setContent(request.getParameter(request.getParameter("content")));
+			Board b = new Board();
+			b.setNo(boardNo);
+			b.setTitle(request.getParameter(request.getParameter("title")));
+			b.setContent(request.getParameter(request.getParameter("content")));
 
-	            bDao.updateBoard(b);
-	            response.sendRedirect(request.getContextPath() + "/detail.bo?no=" + boardNo);
-	        } catch (Exception e) {
-	            request.setAttribute("alertMsg", "처리에 실패했습니다.");
-	            request.getRequestDispatcher("views/board/errorPage.jsp").forward(request, response);
-	        }
-	    }
+			bDao.updateBoard(b);
+			response.sendRedirect(request.getContextPath() + "/detail.bo?no=" + boardNo);
+		} catch (Exception e) {
+			request.setAttribute("alertMsg", "처리에 실패했습니다.");
+			request.getRequestDispatcher("views/board/errorPage.jsp").forward(request, response);
+		}
+	}
 
 	/** 게시글 삭제 (delete문이 아닌 del_yn 컬럼 update)
 	 * @param request
@@ -168,12 +168,12 @@ public class BoardService {
 	 */
 	public void updateDelYn(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-            bDao.updateDelYn(Integer.parseInt(request.getParameter("no")));
-            response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
-        } catch (Exception e) {
-            request.setAttribute("alertMsg", "처리에 실패했습니다.");
-            request.getRequestDispatcher("views/board/errorPage.jsp").forward(request, response);
-        }
+			bDao.updateDelYn(Integer.parseInt(request.getParameter("no")));
+			response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
+		} catch (Exception e) {
+			request.setAttribute("alertMsg", "처리에 실패했습니다.");
+			request.getRequestDispatcher("views/board/errorPage.jsp").forward(request, response);
+		}
 	}
 	
 	 /** 검색 (ajax)
@@ -183,25 +183,26 @@ public class BoardService {
 	 * @throws IOException
 	 */
 	public void listSearch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		  try {
-	            String nowPage = request.getParameter("page");
-	            String keyword = request.getParameter("keyword");
-	            if (nowPage == null || nowPage.trim().isEmpty()) nowPage = "1"; 
-	            int currentPage = Integer.parseInt(nowPage);
-	            int listCount = bDao.selectSearchCount(keyword);
-	            
-	            PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
-	            List<Board> list = bDao.listSearch(page, keyword);
-	            
-	            Map<String, Object> resultMap = new HashMap<>();
-	            resultMap.put("list", list);
-	            resultMap.put("page", page);
-	            
-	            response.setContentType("application/json; charset=utf-8");
-	            new Gson().toJson(resultMap, response.getWriter());
-	        } catch (Exception e) {
-	            request.setAttribute("alertMsg", "처리에 실패했습니다.");
-	        }
+		try {
+			String nowPage = request.getParameter("page");
+			String keyword = request.getParameter("keyword");
+			if (nowPage == null || nowPage.trim().isEmpty())
+				nowPage = "1";
+			int currentPage = Integer.parseInt(nowPage);
+			int listCount = bDao.selectSearchCount(keyword);
+
+			PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
+			List<Board> list = bDao.listSearch(page, keyword);
+
+			Map<String, Object> resultMap = new HashMap<>();
+			resultMap.put("list", list);
+			resultMap.put("page", page);
+
+			response.setContentType("application/json; charset=utf-8");
+			new Gson().toJson(resultMap, response.getWriter());
+		} catch (Exception e) {
+			request.setAttribute("alertMsg", "처리에 실패했습니다.");
+		}
 	}
 	
 	/** 댓글 조회 (ajax)
@@ -211,15 +212,15 @@ public class BoardService {
 	 * @throws IOException
 	 */
 	public void listReply(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            int boardNo = Integer.parseInt(request.getParameter("no"));
-            List<Reply> list = bDao.listReply(boardNo);
-            response.setContentType("application/json; charset=utf-8");
-            new Gson().toJson(list, response.getWriter());
-        } catch (Exception e) {
-            request.setAttribute("alertMsg", "처리에 실패했습니다.");
-        }
-    }
+		try {
+			int boardNo = Integer.parseInt(request.getParameter("no"));
+			List<Reply> list = bDao.listReply(boardNo);
+			response.setContentType("application/json; charset=utf-8");
+			new Gson().toJson(list, response.getWriter());
+		} catch (Exception e) {
+			request.setAttribute("alertMsg", "처리에 실패했습니다.");
+		}
+	}
 	
 	/** 댓글 등록 (ajax)
 	 * 
