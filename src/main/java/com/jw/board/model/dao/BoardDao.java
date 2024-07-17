@@ -55,23 +55,23 @@ public class BoardDao {
 			rset = pstmt.executeQuery();
 
 			while (rset.next()) {
-				Board b = Board.builder()
-							   .no(rset.getInt("B_NO"))
-							   .title(rset.getString("B_TITLE"))
-							   .content(rset.getString("B_CONTENT"))
-							   .hit(rset.getInt("B_HIT"))
-							   .regId(rset.getString("REG_ID"))
-							   .regDate(rset.getDate("REG_DATE"))
-							   .build();
+//				Board b = Board.builder()
+//							   .no(rset.getInt("B_NO"))
+//							   .title(rset.getString("B_TITLE"))
+//							   .content(rset.getString("B_CONTENT"))
+//							   .hit(rset.getInt("B_HIT"))
+//							   .regId(rset.getString("REG_ID"))
+//							   .regDate(rset.getDate("REG_DATE"))
+//							   .build();
 				
-//				Board b = new Board();
-//
-//				b.setNo(rset.getInt("B_NO"));
-//				b.setTitle(rset.getString("B_TITLE"));
-//				b.setContent(rset.getString("B_CONTENT"));
-//				b.setHit(rset.getInt("B_HIT"));
-//				b.setRegId(rset.getString("REG_ID"));
-//				b.setRegDate(rset.getDate("REG_DATE"));
+				Board b = new Board();
+
+				b.setNo(rset.getInt("B_NO"));
+				b.setTitle(rset.getString("B_TITLE"));
+				b.setContent(rset.getString("B_CONTENT"));
+				b.setHit(rset.getInt("B_HIT"));
+				b.setRegId(rset.getString("REG_ID"));
+				b.setRegDate(rset.getDate("REG_DATE"));
 
 				list.add(b);
 			}
