@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>    
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,12 +79,18 @@
 				<div class="col-lg-6 offset-lg-3 col-12">
 					<!-- Error Inner -->
 					<div class="error-inner">
-						<h1>404<span>요청하신 주소의 페이지가 없습니다.</span></h1>
+						<h1>처리 실패<span></span></h1>
 					</div>
 					<!--/ End Error Inner -->
 				</div>
 			</div>
 		</div>
 	</section>
+	
+	<c:if test="${requestScope.alertMsg ne null}">
+		<script>
+	    	alert('${alertMsg}');
+	    </script>
+	</c:if>
 </body>
 </html>
