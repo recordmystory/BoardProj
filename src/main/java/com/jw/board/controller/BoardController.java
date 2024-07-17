@@ -50,10 +50,13 @@ public class BoardController extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		try {
-			prop.loadFromXML(new FileInputStream(BoardDao.class.getResource("/db/mappers/board-mapper.xml").getPath()));
-
+			String filePath = BoardDao.class.getResource("/db/mappers/board-mapper.xml").getPath();
+			if (filePath == null) {
+				throw new IOException("filePath == null");
+			}
+			prop.loadFromXML(new FileInputStream(filePath));
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("IOException 발생 ==> board-mapper.xml 파일 로드 실패" + e.getMessage());
 		}
 
 	}
@@ -74,7 +77,7 @@ public class BoardController extends HttpServlet {
                 Method method = BoardService.class.getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
                 method.invoke(bService, request, response);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                logger.error("리플렉션을 통한 메서드 호출 실패: " + e.getMessage());
+                logger.error("리플렉션을 통한 메서드 호출 실패 ==> " + e.getMessage());
                 request.getRequestDispatcher("views/board/errorPage.jsp").forward(request, response);
             }
         } else {
