@@ -61,9 +61,9 @@
 		</table>
 		</div>
 		<div class="btn-area">
-			<a href="${contextPath}/list.bo" class="btn btn-primary btn-sm">글 목록</a>	
-			<a href="${contextPath}/updateForm.bo?no=${b.no}" class="btn btn-secondary btn-sm">수정</a>
-			<a href="${contextPath}/delete.bo?no=${b.no}" class="btn btn-danger btn-sm">삭제</a>
+			<a href="${contextPath}/board/list.bo" class="btn btn-primary btn-sm">글 목록</a>	
+			<a href="${contextPath}/board/updateForm.bo?no=${b.no}" class="btn btn-secondary btn-sm">수정</a>
+			<a href="${contextPath}/board/delete.bo?no=${b.no}" class="btn btn-danger btn-sm">삭제</a>
 		</div>
 		<br><br>
 		
@@ -110,7 +110,7 @@
     		let content = '';
     		
     		$.ajax({
-    			url: '${contextPath}/replyinsert.bo',
+    			url: '${contextPath}/reply/insert.bo',
     			data: { no: ${b.no}, content: $('#reply-content').val() },
     			method: 'post',
     			success: function(result) {
@@ -134,7 +134,7 @@
     	// 댓글 조회
     	function selectReply(){
     		$.ajax({
-    			url: '${contextPath}/replylist.bo',
+    			url: '${contextPath}/reply/list.bo',
     			data: { no: ${b.no} },
     			success: function(list){
     				

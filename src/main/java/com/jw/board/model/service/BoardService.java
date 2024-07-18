@@ -9,10 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
-
 import com.google.gson.Gson;
-import com.jw.board.controller.BoardController;
 import com.jw.board.model.dao.BoardDao;
 import com.jw.board.model.vo.Board;
 import com.jw.board.model.vo.PageInfo;
@@ -22,7 +19,6 @@ import com.jw.common.util.PagingUtil;
 public class BoardService {
 
 	private static BoardDao bDao = new BoardDao();
-	private static final Logger logger = Logger.getLogger(BoardController.class);
 
 	/**
 	 * 게시글 목록 조회 및 페이징
@@ -76,7 +72,8 @@ public class BoardService {
 			throw new Exception("처리에 실패했습니다.");
 		}
 		
-		response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
+		request.setAttribute("alertMsg", "등록 되었습니다.");
+		response.sendRedirect("/board/list.bo?page=1");
 	}
 
 	/**
@@ -87,8 +84,8 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void registForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		request.getRequestDispatcher("views/board/registForm.jsp").forward(request, response);
+	public void registBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.getRequestDispatcher("/views/board/registForm.jsp").forward(request, response);
 	}
 
 	/**
@@ -99,9 +96,9 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void selectBoardDtl(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void detailBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		int boardNo = Integer.parseInt(request.getParameter("no"));
-		Board b = bDao.selectBoardDtl(boardNo);
+		Board b = bDao.detailBoard(boardNo);
 		bDao.updateHit(boardNo);
 		request.setAttribute("b", b);
 		request.getRequestDispatcher("/views/board/detail.jsp").forward(request, response);
@@ -115,11 +112,10 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void updateForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Board b = bDao.selectBoardDtl(Integer.parseInt(request.getParameter("no")));
+	public void updateFormBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Board b = bDao.detailBoard(Integer.parseInt(request.getParameter("no")));
 		request.setAttribute("b", b);
 		request.getRequestDispatcher("/views/board/updateForm.jsp").forward(request, response);
-
 	}
 
 	/**
@@ -140,10 +136,9 @@ public class BoardService {
 
 		bDao.updateBoard(b);
 		request.setAttribute("alertMsg", "수정되었습니다.");
-		request.setAttribute("no", boardNo);
-		selectBoardDtl(request, response);
-		request.getRequestDispatcher("views/board/detail.jsp").forward(request, response);
+		response.sendRedirect(request.getContextPath() + "/board/detail.bo?no=" + boardNo);
 	}
+	
 
 	/**
 	 * 게시글 삭제 (delete문이 아닌 del_yn 컬럼 update)
@@ -153,10 +148,10 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void updateDelYn(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		bDao.updateDelYn(Integer.parseInt(request.getParameter("no")));
+	public void deleteBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		bDao.deleteBoard(Integer.parseInt(request.getParameter("no")));
 		request.setAttribute("alertMsg", "삭제되었습니다.");
-		response.sendRedirect(request.getContextPath() + "/list.bo?page=1");
+		response.sendRedirect(request.getContextPath() + "/board/list.bo?page=1");
 	}
 
 	/**
@@ -167,7 +162,7 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void listSearch(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void listSearchBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String nowPage = request.getParameter("page");
 		String keyword = request.getParameter("keyword");
 		if (nowPage == null || nowPage.trim().isEmpty())
@@ -176,7 +171,7 @@ public class BoardService {
 		int listCount = bDao.selectSearchCount(keyword);
 
 		PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
-		List<Board> list = bDao.listSearch(page, keyword);
+		List<Board> list = bDao.listSearchBoard(page, keyword);
 
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("list", list);
