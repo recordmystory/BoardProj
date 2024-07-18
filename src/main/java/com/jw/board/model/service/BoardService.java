@@ -36,7 +36,9 @@ public class BoardService {
 		int listCount = bDao.selectBoardCount();
 
 		PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
-		List<Board> list = bDao.listBoard(page);
+		int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
+		int endRow = startRow + page.getBoardLimit() - 1;
+		List<Board> list = bDao.listBoard(startRow, endRow);
 
 		request.setAttribute("list", list);
 		request.setAttribute("page", page);
@@ -66,7 +68,7 @@ public class BoardService {
 		b.setTitle(title);
 		b.setContent(content);
 
-		int result = bDao.insertBoard(b);
+		int result = bDao.insertBoard(title, content);
 
 		if (result <= 0) {
 			throw new Exception("처리에 실패했습니다.");
@@ -128,13 +130,15 @@ public class BoardService {
 	 */
 	public void updateBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		int boardNo = Integer.parseInt(request.getParameter("no"));
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		
+		/*		Board b = new Board();
+				b.setNo(boardNo);
+				b.setTitle(request.getParameter("title"));
+				b.setContent(request.getParameter("content"));*/
 
-		Board b = new Board();
-		b.setNo(boardNo);
-		b.setTitle(request.getParameter("title"));
-		b.setContent(request.getParameter("content"));
-
-		bDao.updateBoard(b);
+		bDao.updateBoard(title, content, boardNo);
 		request.setAttribute("alertMsg", "수정되었습니다.");
 		response.sendRedirect(request.getContextPath() + "/board/detail.bo?no=" + boardNo);
 	}
@@ -206,11 +210,7 @@ public class BoardService {
 	 * @throws IOException
 	 */
 	public void insertReply(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Reply r = new Reply();
-		r.setBNo(Integer.parseInt(request.getParameter("no")));
-		r.setContent(request.getParameter("content"));
-
-		int result = bDao.insertReply(r);
+		int result = bDao.insertReply(request.getParameter("content"), request.getParameter("no"));
 		response.getWriter().print(result);
 	}
 }

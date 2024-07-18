@@ -1,7 +1,5 @@
 package com.jw.board.model.vo;
 
-import java.sql.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,7 +30,7 @@ public class Reply {
 	/**
 	 * 작성일
 	 */
-	private Date regDate;
+	private String regDate;
 	/**
 	 * 삭제여부
 	 */

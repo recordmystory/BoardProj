@@ -117,7 +117,7 @@ public class BoardController extends HttpServlet {
         String contextPath = request.getContextPath();
         String action = uri.substring(contextPath.length());
         
-        logger.info("Received action: " + action);
+        logger.info("요청 url : " + action);
         
         //List에 url 담아 두고 리스트에 action이 있는지 검사 
         if (urlList.contains(action)) {

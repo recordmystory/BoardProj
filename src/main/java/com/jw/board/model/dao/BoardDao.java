@@ -39,7 +39,7 @@ public class BoardDao {
 	 * @param page
 	 * @return list
 	 */
-	public List<Board> listBoard(PageInfo page) {
+	public List<Board> listBoard(Object... params) {
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -50,11 +50,13 @@ public class BoardDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 
-			int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
-			int endRow = startRow + page.getBoardLimit() - 1;
-			pstmt.setInt(1, startRow);
-			pstmt.setInt(2, endRow);
-
+//			int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
+//			int endRow = startRow + page.getBoardLimit() - 1;
+//			pstmt.setInt(1, startRow);
+//			pstmt.setInt(2, endRow);
+			for (int i = 0; i < params.length; i++) {
+				pstmt.setObject(i + 1, params[i]);
+			}
 			rset = pstmt.executeQuery();
 
 			while (rset.next()) {
@@ -168,7 +170,7 @@ public class BoardDao {
 	 * @param b
 	 * @return result
 	 */
-	public int insertBoard(Board b) {
+	public int insertBoard(Object... params) {
 		Connection conn = getConnection();	
 		PreparedStatement pstmt = null;
 		int result = 0;
@@ -176,8 +178,10 @@ public class BoardDao {
 
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, b.getTitle());
-			pstmt.setString(2, b.getContent());
+			
+			for (int i = 0; i < params.length; i++) {
+				pstmt.setObject(i + 1, params[i]);
+			}
 						
 			result = pstmt.executeUpdate();
 			
@@ -188,8 +192,8 @@ public class BoardDao {
 			}
 			
 			commit(conn);
-		} catch (SQLException e) {
-			logger.error("SQLException 발생 : " +  e.getMessage());
+		} catch (SQLException | IllegalArgumentException e) {
+			logger.error(e.getClass().getName() + "발생 : " +  e.getMessage());
 			rollback(conn);
 		} finally {
 			close(pstmt);
@@ -215,7 +219,6 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setInt(1, boardNo);
-			
 			
 			result = pstmt.executeUpdate();
 			
@@ -291,7 +294,7 @@ public class BoardDao {
 	 * @param b
 	 * @return result
 	 */
-	public int updateBoard(Board b) {
+	public int updateBoard(Object... params) {
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		int result = 0;
@@ -300,9 +303,13 @@ public class BoardDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, b.getTitle());
+			for (int i = 0; i < params.length; i++) {
+				pstmt.setObject(i + 1, params[i]);
+			}
+			
+			/*pstmt.setString(1, b.getTitle());
 			pstmt.setString(2, b.getContent());
-			pstmt.setInt(3, b.getNo());
+			pstmt.setInt(3, b.getNo());*/
 			
 			result = pstmt.executeUpdate();
 			
@@ -482,7 +489,7 @@ public class BoardDao {
 				r.setRNo(rset.getInt("RNO"));
 				r.setContent(rset.getString("CONTENT"));
 				r.setRegId(rset.getString("REGID"));
-				r.setRegDate(rset.getDate("REGDATE"));
+				r.setRegDate(rset.getString("REGDATE"));
 				r.setDelYn(rset.getString("DELYN"));
 				r.setBNo(rset.getInt("BNO"));
 
@@ -505,7 +512,7 @@ public class BoardDao {
 	 * @param r
 	 * @return result
 	 */
-	public int insertReply(Reply r) {
+	public int insertReply(Object... params) {
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 
@@ -514,8 +521,11 @@ public class BoardDao {
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, r.getContent());
-			pstmt.setInt(2, r.getBNo());
+			// pstmt.setString(1, r.getContent());
+			// pstmt.setInt(2, r.getBNo());
+			for (int i = 0; i < params.length; i++) {
+				pstmt.setObject(i + 1, params[i]);
+			}
 			
 			result = pstmt.executeUpdate();
 
