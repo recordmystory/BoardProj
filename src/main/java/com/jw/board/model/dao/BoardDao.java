@@ -64,11 +64,11 @@ public class BoardDao {
 
 			commit(conn);
 		} catch (SQLException | IllegalArgumentException e) {
+			e.printStackTrace();
 			logger.error(e.getClass().getName() + "발생 : " + e.getMessage());
 			rollback(conn);
 		} finally {
-			close(pstmt);
-			close(conn);
+			close(pstmt, conn);
 		}
 
 		return result;
@@ -114,9 +114,7 @@ public class BoardDao {
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " + e.getMessage());
 		} finally {
-			close(rset);
-			close(pstmt);
-			close(conn);
+			close(rset, pstmt, conn);
 		}
 
 		return list;
@@ -145,9 +143,7 @@ public class BoardDao {
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " + e.getMessage());
 		} finally {
-			close(rset);
-			close(pstmt);
-			close(conn);
+			close(rset, pstmt, conn);
 		}
 		
 		return listCount;
@@ -193,8 +189,7 @@ public class BoardDao {
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " + e.getMessage());
 		} finally {
-			close(pstmt);
-			close(conn);
+			close(pstmt, conn);
 		}
 
 		return b;
@@ -246,8 +241,7 @@ public class BoardDao {
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " +  e.getMessage());
 		} finally {
-			close(pstmt);
-			close(conn);
+			close(pstmt, conn);
 		}
 		
 		return list;
@@ -279,9 +273,7 @@ public class BoardDao {
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " + e.getMessage());
 		} finally {
-			close(rset);
-			close(pstmt);
-			close(conn);
+			close(rset, pstmt, conn);
 		}
 		
 		return listCount;
@@ -329,9 +321,7 @@ public class BoardDao {
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " + e.getMessage());
 		} finally {
-			close(rset);
-			close(pstmt);
-			close(conn);
+			close(rset, pstmt, conn);
 			
 		}
 		
