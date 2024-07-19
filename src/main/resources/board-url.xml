@@ -11,3 +11,12 @@
     <url>ajax/reply/insert.bo</url>
     <url>ajax/reply/list.bo</url>
 </urlCollection>
+
+<!-- 
+	
+	board/list : {
+					viewName : boardList.jsp
+					type:	   for
+					} 
+				
+-->

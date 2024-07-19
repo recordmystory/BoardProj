@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
@@ -48,6 +49,7 @@ public class BoardController extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
+		initUrlList();
 
 	}
 
@@ -66,6 +68,22 @@ public class BoardController extends HttpServlet {
             try {
                 Method method = BoardService.class.getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
                 method.invoke(bService, request, response);
+                
+                // 모든 파라미터 쿼리 스트링으로 변환
+                String queryString = "";
+                Enumeration<String> paramsNames = request.getParameterNames();
+                while(paramsNames.hasMoreElements()) {
+                	String name = (String)paramsNames.nextElement();
+                	String value = request.getParameter(name);
+                	queryString += name + "=" + value + "&";
+                	
+                	if (!queryString.isEmpty()) {
+                        queryString = queryString.substring(0, queryString.length() - 1);
+                    }
+                	
+                logger.info("queryString : " + queryString);
+                }
+                
                 //리턴값도 받을수잇어 
                 
                 //여기서 리퀘스트로 설정 

@@ -201,7 +201,6 @@ public class BoardService {
 		List<Reply> list = bDao.listReply(boardNo);
 		response.setContentType("application/json; charset=utf-8");
 		new Gson().toJson(list, response.getWriter());
-
 	}
 
 	/**
