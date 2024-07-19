@@ -169,14 +169,6 @@ public class BoardDao {
 			rset = pstmt.executeQuery();
 
 			if (rset.next()) {
-//				b = Board.builder()
-//						 .no(rset.getInt("B_NO"))
-//						 .title(rset.getString("B_TITLE"))
-//						 .content(rset.getString("B_CONTENT"))
-//						 .hit(rset.getInt("B_HIT"))
-//						 .regDate(rset.getDate("REG_DATE"))
-//						 .modDate(rset.getDate("MOD_DATE"))
-//						 .build();
 				
 				b.setNo(rset.getInt("NO"));
 				b.setTitle(rset.getString("TITLE"));
@@ -220,14 +212,6 @@ public class BoardDao {
 			
 				rset = pstmt.executeQuery();
 				while(rset.next()) {
-//					Board b = Board.builder()
-//								   .no(rset.getInt("B_NO"))
-//								   .title(rset.getString("B_TITLE"))
-//								   .content(rset.getString("B_CONTENT"))
-//								   .hit(rset.getInt("B_"))
-//								   .regId(rset.getString("REG_ID"))
-//								   .regDate(rset.getDate("REG_DATE"))
-//								   .build();
 					
 					b.setNo(rset.getInt("NO"));
 					b.setTitle(rset.getString("TITLE"));
@@ -300,14 +284,6 @@ public class BoardDao {
 			rset = pstmt.executeQuery();
 
 			while (rset.next()) {
-//				Reply r = Reply.builder()
-//							   .rNo(rset.getInt("REPLY_NO"))
-//							   .content(rset.getString("REPLY_CONTENT"))
-//							   .regId(rset.getString("REG_ID"))
-//							   .regDate(rset.getString("REG_DATE"))
-//							   .delYn(rset.getString("DEL_YN"))
-//							   .bNo(rset.getInt("B_NO"))
-//							   .build();
 				
 				r.setRNo(rset.getInt("RNO"));
 				r.setContent(rset.getString("CONTENT"));

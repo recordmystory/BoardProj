@@ -28,35 +28,9 @@ public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(BoardController.class);
 	
-//	private Properties prop = new Properties();
 	private BoardService bService = new BoardService();
-//    private Map<String, String> urlMap = new HashMap<>();
     private List<String> urlList = new ArrayList<>();
    
-    
-	/*    static {
-	    urlMap.put("/list.bo", "listBoard");
-	    urlMap.put("/detail.bo", "selectBoardDtl");
-	    urlMap.put("/insert.bo", "insertBoard");
-	    urlMap.put("/regist.bo", "registForm");
-	    urlMap.put("/updateForm.bo", "updateForm");
-	    urlMap.put("/update.bo", "updateBoard");
-	    urlMap.put("/delete.bo", "updateDelYn");
-	    urlMap.put("/search.bo", "listSearch");
-	    urlMap.put("/replyinsert.bo", "insertReply");
-	    urlMap.put("/replylist.bo", "listReply");
-	}   */
-	/*
-	private void addUrlMapping(String url) {
-	    String methodName = getMethodNameFromAction(url);
-	    if (methodName != null) {
-	        urlMap.put(url, methodName);
-	        logger.info("Mapped URL " + url + " to method " + methodName);
-	    } else {
-	        logger.warn("Failed to map URL " + url);
-	    }
-	
-	    }*/
     
     private void initUrlList() {
         urlList.add("/board/list.bo");
@@ -70,46 +44,12 @@ public class BoardController extends HttpServlet {
         urlList.add("/reply/insert.bo");
         urlList.add("/reply/list.bo");
     }
-	/*
-		private void initUrlMap() {
-			addUrlMapping("/board/list.bo");
-			addUrlMapping("/board/detail.bo");
-			addUrlMapping("/board/insert.bo");
-			addUrlMapping("/board/regist.bo");
-			addUrlMapping("/board/updateForm.bo");
-			addUrlMapping("/board/update.bo");
-			addUrlMapping("/board/delete.bo");
-			addUrlMapping("/board/listSearch.bo");
-			addUrlMapping("/reply/insert.bo");
-			addUrlMapping("/reply/list.bo");
-		}
-	*/
     
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		initUrlList();
-		//initUrlMap();
-		
-		/*try {
-			String filePath = BoardDao.class.getResource("/db/mappers/board-mapper.xml").getPath();
-			if (filePath == null) {
-				throw new IOException("filePath == null");
-			}
-			prop.loadFromXML(new FileInputStream(filePath));
-		} catch (IOException e) {
-			logger.error("IOException 발생 ==> board-mapper.xml 파일 로드 실패" + e.getMessage());
-		}*/
-		
 
 	}
-	
-	/*
-		public Properties getProperties() {
-			return prop;
-		}
-		
-		*/
 
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
