@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlCollection>
+    <url>/board/list.bo</url>
+    <url>/board/detail.bo</url>
+    <url>/board/insert.bo</url>
+    <url>/board/regist.bo</url>
+    <url>/board/updateForm.bo</url>
+    <url>/board/update.bo</url>
+    <url>/board/delete.bo</url>
+    <url>/board/listSearch.bo</url>
+    <url>/reply/insert.bo</url>
+    <url>/reply/list.bo</url>
+</urlCollection>
