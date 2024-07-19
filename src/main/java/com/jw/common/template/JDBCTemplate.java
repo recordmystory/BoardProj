@@ -95,10 +95,9 @@ public class JDBCTemplate {
 			if(resource != null) {
 				try {
 					resource.close();
-//					logger.debug(resource.getClass() + " close 실행");
 				} catch (Exception e) {
 					logger.error("close 실패 ==> " + resource);
-					logger.error("에러 메시지 : " + e.getMessage());
+					logger.error("에러 메시지 : " + e.getClass().getName() + e.getMessage());
 				}
 			}
 		}

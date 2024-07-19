@@ -40,6 +40,8 @@ public class BoardService {
 		int endRow = startRow + page.getBoardLimit() - 1;
 		List<Board> list = bDao.listBoard(startRow, endRow);
 
+		
+		// map list ,page
 		request.setAttribute("list", list);
 		request.setAttribute("page", page);
 		request.getRequestDispatcher("/views/board/list.jsp").forward(request, response);
@@ -68,7 +70,7 @@ public class BoardService {
 		b.setTitle(title);
 		b.setContent(content);
 
-		int result = bDao.insertBoard(title, content);
+		int result = bDao.executeUpdate("insertBoard", title, content);
 
 		if (result <= 0) {
 			throw new Exception("처리에 실패했습니다.");
@@ -101,7 +103,7 @@ public class BoardService {
 	public void detailBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		int boardNo = Integer.parseInt(request.getParameter("no"));
 		Board b = bDao.detailBoard(boardNo);
-		bDao.updateHit(boardNo);
+		bDao.executeUpdate("updateHit", boardNo);
 		request.setAttribute("b", b);
 		request.getRequestDispatcher("/views/board/detail.jsp").forward(request, response);
 	}
@@ -138,7 +140,7 @@ public class BoardService {
 				b.setTitle(request.getParameter("title"));
 				b.setContent(request.getParameter("content"));*/
 
-		bDao.updateBoard(title, content, boardNo);
+		bDao.executeUpdate("updateBoard", title, content, boardNo);
 		request.setAttribute("alertMsg", "수정되었습니다.");
 		response.sendRedirect(request.getContextPath() + "/board/detail.bo?no=" + boardNo);
 	}
@@ -153,7 +155,7 @@ public class BoardService {
 	 * @throws IOException
 	 */
 	public void deleteBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		bDao.deleteBoard(Integer.parseInt(request.getParameter("no")));
+		bDao.executeUpdate("deleteBoard", Integer.parseInt(request.getParameter("no")));
 		request.setAttribute("alertMsg", "삭제되었습니다.");
 		response.sendRedirect(request.getContextPath() + "/board/list.bo?page=1");
 	}
@@ -180,7 +182,8 @@ public class BoardService {
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("list", list);
 		resultMap.put("page", page);
-
+		
+		
 		response.setContentType("application/json; charset=utf-8");
 		new Gson().toJson(resultMap, response.getWriter());
 	}
@@ -210,7 +213,7 @@ public class BoardService {
 	 * @throws IOException
 	 */
 	public void insertReply(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		int result = bDao.insertReply(request.getParameter("content"), request.getParameter("no"));
+		int result = bDao.executeUpdate("insertReply", request.getParameter("content"), request.getParameter("no"));
 		response.getWriter().print(result);
 	}
 }

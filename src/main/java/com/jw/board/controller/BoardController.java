@@ -22,6 +22,8 @@ import com.jw.common.util.UrlMappingUtil;
  * .bo로 끝나는 모든 요청을 받는 Controller
  */
 @WebServlet("*.bo")
+//@WebInI
+
 public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(BoardController.class);
@@ -82,9 +84,7 @@ public class BoardController extends HttpServlet {
 			addUrlMapping("/reply/list.bo");
 		}
 	*/
-	/**
-	 * mapper 파일 로드
-	 */
+    
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -113,6 +113,7 @@ public class BoardController extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	 
         String uri = request.getRequestURI();
         String contextPath = request.getContextPath();
         String action = uri.substring(contextPath.length());
@@ -125,6 +126,11 @@ public class BoardController extends HttpServlet {
             try {
                 Method method = BoardService.class.getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
                 method.invoke(bService, request, response);
+                //리턴값도 받을수잇어 
+                
+                //여기서 리퀘스트로 설정 
+                // 해당 viewName 를 리스톤스 
+                // 여기서 리다이렉ㅌ인지 그냥일반포워드인지 json인지 구분해서 분
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 logger.error("리플렉션을 통한 메서드 호출 실패 ==> " + e.getMessage());
                 e.printStackTrace();
@@ -134,10 +140,9 @@ public class BoardController extends HttpServlet {
                     request.getRequestDispatcher("/views/board/errorPage.jsp").forward(request, response);
                 }
             }
+            
+            //switch문 mav, re, ajax
         } 
     }
-	
-	
-
 	
 }
