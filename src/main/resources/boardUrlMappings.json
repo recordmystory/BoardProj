@@ -1,0 +1,53 @@
+{
+	"urls" : [
+		{
+			"url" : "mav/board/list.bo",
+			"type" : "forward"
+		},
+		
+		{
+			"url" : "mav/board/detail.bo",
+			"type" : "forward"
+		},
+		
+		{
+			"url" : "re/board/insert.bo",
+			"type" : "redirect"
+		},
+		
+		{
+			"url" : "mav/board/regist.bo",
+			"type" : "forward"
+		},
+		
+		{
+			"url" : "mav/board/updateForm.bo",
+			"type" : "forward"
+		},
+		
+		{
+			"url" : "re/board/update.bo",
+			"type" : "redirect"
+		},
+		
+		{
+			"url" : "re/board/delete.bo",
+			"type" : "redirect"
+		},
+		
+		{
+			"url" : "ajax/board/listSearch.bo",
+			"type" : "ajax"
+		},
+		
+		{
+			"url" : "ajax/reply/insert.bo",
+			"type" : "ajax"
+		},
+		
+		{
+			"url" : "ajax/reply/list.bo",
+			"type" : "ajax"
+		}
+	]
+}
