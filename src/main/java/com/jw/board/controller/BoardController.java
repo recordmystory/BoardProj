@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,14 +18,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.jw.board.model.service.BoardService;
+import com.jw.board.model.vo.UrlMapping;
+import com.jw.common.util.ConfigUtil;
 import com.jw.common.util.UrlMappingUtil;
 
 /**
  * .bo로 끝나는 모든 요청을 받는 Controller
  */
-@WebServlet("*.bo")
-//@WebInI
-
+@WebServlet( 
+		urlPatterns = "*.bo",
+		initParams = {
+				@WebInitParam(name="config", value="/WEB-INF/boardUrlMappings.json")
+			}
+		)
 public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(BoardController.class);
@@ -33,23 +39,31 @@ public class BoardController extends HttpServlet {
     private List<String> urlList = new ArrayList<>();
    
     
-    private void initUrlList() {
-        urlList.add("/board/list.bo");
-        urlList.add("/board/detail.bo");
-        urlList.add("/board/insert.bo");
-        urlList.add("/board/regist.bo");
-        urlList.add("/board/updateForm.bo");
-        urlList.add("/board/update.bo");
-        urlList.add("/board/delete.bo");
-        urlList.add("/board/listSearch.bo");
-        urlList.add("/reply/insert.bo");
-        urlList.add("/reply/list.bo");
-    }
+	/*private void initUrlList() {
+	    urlList.add("/board/list.bo");
+	    urlList.add("/board/detail.bo");
+	    urlList.add("/board/insert.bo");
+	    urlList.add("/board/regist.bo");
+	    urlList.add("/board/updateForm.bo");
+	    urlList.add("/board/update.bo");
+	    urlList.add("/board/delete.bo");
+	    urlList.add("/board/listSearch.bo");
+	    urlList.add("/reply/insert.bo");
+	    urlList.add("/reply/list.bo");
+	}*/
     
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		initUrlList();
+
+        String configFilePath = config.getServletContext().getRealPath(config.getInitParameter("config"));
+        if (configFilePath != null) {
+            ConfigUtil.getInstance().loadUrlMappings();
+            urlList = ConfigUtil.getInstance().getUrlList();
+        } else {
+            throw new ServletException("Config file path not provided in init parameters.");
+        }
+//		initUrlList();
 
 	}
 
@@ -64,6 +78,7 @@ public class BoardController extends HttpServlet {
         
         //List에 url 담아 두고 리스트에 action이 있는지 검사 
         if (urlList.contains(action)) {
+        	UrlMapping mapping = ConfigUtil.getInstance().getUrlMappings();
         	String methodName = UrlMappingUtil.getMethodNameFromAction(action);
             try {
                 Method method = BoardService.class.getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
