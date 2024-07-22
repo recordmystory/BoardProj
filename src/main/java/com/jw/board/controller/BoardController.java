@@ -86,7 +86,7 @@ public class BoardController extends HttpServlet {
 //                Method method = Class.forName(UrlMappingUtil.getServiceClassNameFromAction(action)).getMethod(methodName, Map.class);
 			    
 				Method method = serviceClass.getMethod(methodName, Map.class);
-
+				
 				Map<String, String> paramMap = new HashMap<>();
 				Enumeration<String> paramsNames = request.getParameterNames();
 				while (paramsNames.hasMoreElements()) {
@@ -99,7 +99,7 @@ public class BoardController extends HttpServlet {
 	                    return;
 	                }
 
-	                if (!ParameterUtil.isNumber(request, name)) {
+	                if (isNumberParameter(name) && !ParameterUtil.isNumber(request, name)) {
 	                    ExceptionHandler.processException(request, response, "숫자 파라미터가 유효하지 않습니다: " + name, new IllegalArgumentException("IllegalArgumentException 발생 : " + name));
 	                    return;
 	                }
@@ -136,7 +136,7 @@ public class BoardController extends HttpServlet {
 		} else {
 			request.getRequestDispatcher("/views/board/errorPage.jsp").forward(request, response);
 		}
-			
+		
 			/*catch (NoSuchMethodException e) {
 				handleException(request, response, "해당 메서드를 찾을 수 없습니다: " + e.getMessage(), e);
 			} catch (IllegalAccessException e) {
@@ -148,6 +148,11 @@ public class BoardController extends HttpServlet {
 			} catch (ServletException e) {
 				handleException(request, response, "서블릿 오류: " + e.getMessage(), e);*/
 		
+	}
+	
+
+	private boolean isNumberParameter(String paramName) {
+		return "numberParam".equals(paramName);
 	}
 	
 	/*@Override
