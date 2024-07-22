@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -24,7 +25,13 @@ public class BoardDao {
 	private Properties prop;
 	private static final Logger logger = Logger.getLogger(BoardDao.class);
 
-	public BoardDao() { this.prop = ConfigUtil.getInstance().getProperties(); }
+	public BoardDao() { 
+		ConfigUtil configUtil = ConfigUtil.getInstance();
+        configUtil.loadXmlFile();
+
+        this.prop = configUtil.getProperties();
+		
+	}
 	
 	/*	static { // 클래스 최초 로드 시만 getProperties() 메서드 호출
 			prop = BoardController.getProperties();
@@ -41,10 +48,12 @@ public class BoardDao {
 	 * @param params : 쿼리 파라미터
 	 * @return result : 업데이트된 행 개수
 	 */
-	public int executeUpdate(String sql, Object... params) {
+	public int executeUpdate(String sqlKey, Object... params) {
+//		logger.info("params : " + params.length);
 		
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
+		String sql = prop.getProperty(sqlKey);
 		int result = 0;
 		try {
 
@@ -59,10 +68,11 @@ public class BoardDao {
 			if (result == 0) {
 				logger.debug("result : 0 (insert || update || delete 된 행의 개수 0)");
 			} else if (result == 1) {
-				logger.debug("result : 1 (insert || update || delete 성공 ==> 글 등록)");
+				logger.debug("result : 1 (insert || update || delete 성공)");
 			}
 
 			commit(conn);
+
 		} catch (SQLException | IllegalArgumentException e) {
 			e.printStackTrace();
 			logger.error(e.getClass().getName() + "발생 : " + e.getMessage());
@@ -177,11 +187,11 @@ public class BoardDao {
 				b.setRegDate(rset.getDate("REGDATE"));
 				b.setModDate(rset.getDate("MODDATE"));
 			}
-
+			
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " + e.getMessage());
 		} finally {
-			close(pstmt, conn);
+			close(pstmt, conn, rset);
 		}
 
 		return b;
@@ -196,7 +206,6 @@ public class BoardDao {
 	public List<Board> listSearchBoard(PageInfo page, String keyword) {
 		Connection conn = getConnection(true);
 		PreparedStatement pstmt = null;
-		Board b = new Board();
 		ResultSet rset = null;
 		List<Board> list = new ArrayList<>();
 		
@@ -212,6 +221,7 @@ public class BoardDao {
 			
 				rset = pstmt.executeQuery();
 				while(rset.next()) {
+					Board b = new Board();
 					
 					b.setNo(rset.getInt("NO"));
 					b.setTitle(rset.getString("TITLE"));
@@ -225,7 +235,7 @@ public class BoardDao {
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " +  e.getMessage());
 		} finally {
-			close(pstmt, conn);
+			close(rset, pstmt, conn);
 		}
 		
 		return list;
@@ -270,7 +280,6 @@ public class BoardDao {
 	 */
 	public List<Reply> listReply(int boardNo) {
 		Connection conn = getConnection(true);
-		Reply r = new Reply();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		List<Reply> list = new ArrayList<>();
@@ -284,6 +293,7 @@ public class BoardDao {
 			rset = pstmt.executeQuery();
 
 			while (rset.next()) {
+				Reply r = new Reply();
 				
 				r.setRNo(rset.getInt("RNO"));
 				r.setContent(rset.getString("CONTENT"));

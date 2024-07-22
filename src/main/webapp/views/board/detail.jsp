@@ -61,9 +61,9 @@
 		</table>
 		</div>
 		<div class="btn-area">
-			<a href="${contextPath}/board/list.bo" class="btn btn-primary btn-sm">글 목록</a>	
-			<a href="${contextPath}/board/updateForm.bo?no=${b.no}" class="btn btn-secondary btn-sm">수정</a>
-			<a href="${contextPath}/board/delete.bo?no=${b.no}" class="btn btn-danger btn-sm">삭제</a>
+			<a href="${contextPath}/mav/board/list.bo" class="btn btn-primary btn-sm">글 목록</a>	
+			<a href="${contextPath}/mav/board/updateForm.bo?no=${b.no}" class="btn btn-secondary btn-sm">수정</a>
+			<a href="${contextPath}/re/board/delete.bo?no=${b.no}" class="btn btn-danger btn-sm">삭제</a>
 		</div>
 		<br><br>
 		
@@ -110,15 +110,16 @@
     		let content = '';
     		
     		$.ajax({
-    			url: '${contextPath}/reply/insert.bo',
+    			url: '${contextPath}/ajax/reply/insert.bo',
     			data: { no: ${b.no}, content: $('#reply-content').val() },
     			method: 'post',
     			success: function(result) {
-    				if(result > 0){
+    				if(result.flag == 'success'){
+    					console.log('ss');
     					$('#reply-content').val(''); // textarea 초기화
     					selectReply(); // 갱신된 댓글 목록 조회해 화면에 뿌려주기
     				} else {
-    					if(content == ''){
+    					if($('#reply-content').val().trim() == ''){
     						alert('댓글 내용을 입력해주세요.');
     					} else {
     						alert('댓글 작성 실패');
@@ -134,18 +135,18 @@
     	// 댓글 조회
     	function selectReply(){
     		$.ajax({
-    			url: '${contextPath}/reply/list.bo',
+    			url: '${contextPath}/ajax/reply/list.bo',
     			data: { no: ${b.no} },
-    			success: function(list){
-    				
+    			success: function(result){
+    				console.log(result);
     				let value = '';
     				
-    				if(list.length > 0){
-    					for(let i=0; i<list.length; i++){
+    				if(result.list.length > 0){
+    					for(let i=0; i<result.list.length; i++){
     						value += '<tr>'
-    							  + '<td>' + list[i].regId + '</td>'
-    							  + '<td>' + list[i].content + '</td>'
-    							  + '<td>' + list[i].regDate + '</td>'
+    							  + '<td>' + result.list[i].regId + '</td>'
+    							  + '<td>' + result.list[i].content + '</td>'
+    							  + '<td>' + result.list[i].regDate + '</td>'
     							  + '<tr>';
     							  
     					}

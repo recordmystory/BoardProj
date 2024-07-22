@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.google.gson.Gson;
 import com.jw.board.model.dao.BoardDao;
 import com.jw.board.model.vo.Board;
@@ -17,6 +19,7 @@ import com.jw.board.model.vo.Reply;
 import com.jw.common.util.PagingUtil;
 
 public class BoardService {
+	private static final Logger logger = Logger.getLogger(BoardService.class);
 
 	private static BoardDao bDao = new BoardDao();
 
@@ -28,8 +31,8 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void listBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String nowPage = request.getParameter("page");
+	public Map<String, Object> listBoard(Map<String, String> paramMap) throws Exception {
+		String nowPage = paramMap.get("page");
 		if (nowPage == null || nowPage.trim().isEmpty())
 			nowPage = "1";
 		int currentPage = Integer.parseInt(nowPage);
@@ -42,9 +45,12 @@ public class BoardService {
 
 		
 		// map list ,page
-		request.setAttribute("list", list);
-		request.setAttribute("page", page);
-		request.getRequestDispatcher("/views/board/list.jsp").forward(request, response);
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("list", list);
+		resultMap.put("page", page);
+		
+		return resultMap;
+//		request.getRequestDispatcher("/views/board/list.jsp").forward(request, response);
 	}
 
 	/**
@@ -55,9 +61,9 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void insertBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String title = request.getParameter("title");
-		String content = request.getParameter("content");
+	public Map<String, Object> insertBoard(Map<String, String> paramMap) throws Exception {
+		String title = paramMap.get("title");
+		String content = paramMap.get("content");
 		if (title == null || title.trim().isEmpty()) {
 			throw new IllegalArgumentException("제목을 입력해주세요.");
 		}
@@ -72,12 +78,16 @@ public class BoardService {
 
 		int result = bDao.executeUpdate("insertBoard", title, content);
 
-		if (result <= 0) {
-			throw new Exception("처리에 실패했습니다.");
-		}
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("result", result > 0 ? "success" : "fail");
 		
-		request.setAttribute("alertMsg", "등록 되었습니다.");
-		response.sendRedirect("/board/list.bo?page=1");
+		return resultMap;
+//		return "/mav/board/list.bo?page=1";
+		
+		/*
+		 * request.setAttribute("alertMsg", "등록 되었습니다.");
+		 * response.sendRedirect("/board/list.bo?page=1");
+		 */
 	}
 
 	/**
@@ -88,8 +98,9 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void registBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		request.getRequestDispatcher("/views/board/registForm.jsp").forward(request, response);
+	public Map<String, Object> registBoard(Map<String, String> paramMap) throws Exception {
+		return new HashMap<>();
+//		request.getRequestDispatcher("/views/board/registForm.jsp").forward(request, response);
 	}
 
 	/**
@@ -100,12 +111,18 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void detailBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		int boardNo = Integer.parseInt(request.getParameter("no"));
+	public Map<String, Object> detailBoard(Map<String, String> paramMap) throws Exception {
+		int boardNo = Integer.parseInt(paramMap.get("no"));
+		logger.info("boardNo : " + boardNo);
 		Board b = bDao.detailBoard(boardNo);
 		bDao.executeUpdate("updateHit", boardNo);
-		request.setAttribute("b", b);
-		request.getRequestDispatcher("/views/board/detail.jsp").forward(request, response);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("b", b);
+		
+		return resultMap;
+		/*request.setAttribute("b", b);
+		request.getRequestDispatcher("/views/board/detail.jsp").forward(request, response);*/
 	}
 
 	/**
@@ -116,10 +133,13 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void updateFormBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Board b = bDao.detailBoard(Integer.parseInt(request.getParameter("no")));
-		request.setAttribute("b", b);
-		request.getRequestDispatcher("/views/board/updateForm.jsp").forward(request, response);
+	public Map<String, Object> updateFormBoard(Map<String, String> paramMap) throws Exception {
+		Board b = bDao.detailBoard(Integer.parseInt(paramMap.get("no")));
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("b", b);
+		
+		return resultMap;
+//		request.getRequestDispatcher("/views/board/updateForm.jsp").forward(request, response);
 	}
 
 	/**
@@ -130,19 +150,24 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void updateBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		int boardNo = Integer.parseInt(request.getParameter("no"));
-		String title = request.getParameter("title");
-		String content = request.getParameter("content");
+	public Map<String, Object> updateBoard(Map<String, String> paramMap) throws Exception {
+		int boardNo = Integer.parseInt(paramMap.get("no"));
+		String title = paramMap.get("title");
+		String content = paramMap.get("content");
 		
 		/*		Board b = new Board();
 				b.setNo(boardNo);
 				b.setTitle(request.getParameter("title"));
 				b.setContent(request.getParameter("content"));*/
 
-		bDao.executeUpdate("updateBoard", title, content, boardNo);
-		request.setAttribute("alertMsg", "수정되었습니다.");
-		response.sendRedirect(request.getContextPath() + "/board/detail.bo?no=" + boardNo);
+		int result = bDao.executeUpdate("updateBoard", title, content, boardNo);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("result", result > 0 ? "success" : "fail");
+		
+		return resultMap;
+		/*request.setAttribute("alertMsg", "수정되었습니다.");
+		response.sendRedirect(request.getContextPath() + "/board/detail.bo?no=" + boardNo);*/
 	}
 	
 
@@ -154,10 +179,16 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void deleteBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		bDao.executeUpdate("deleteBoard", Integer.parseInt(request.getParameter("no")));
-		request.setAttribute("alertMsg", "삭제되었습니다.");
-		response.sendRedirect(request.getContextPath() + "/board/list.bo?page=1");
+	public Map<String, Object> deleteBoard(Map<String, String> paramMap) throws Exception {
+		int result = bDao.executeUpdate("deleteBoard", Integer.parseInt(paramMap.get("no")));
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("result", result > 0 ? "success" : "fail");
+		
+		return resultMap;
+		
+//		return "/mav/board/list.bo?page=1";
+//		request.setAttribute("alertMsg", "삭제되었습니다.");
+//		response.sendRedirect(request.getContextPath() + "/board/list.bo?page=1");
 	}
 
 	/**
@@ -168,9 +199,9 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void listSearchBoard(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String nowPage = request.getParameter("page");
-		String keyword = request.getParameter("keyword");
+	public Map<String, Object> listSearchBoard(Map<String, String> paramMap) throws Exception {
+		String nowPage = paramMap.get("page");
+		String keyword = paramMap.get("keyword");
 		if (nowPage == null || nowPage.trim().isEmpty())
 			nowPage = "1";
 		int currentPage = Integer.parseInt(nowPage);
@@ -182,10 +213,11 @@ public class BoardService {
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("list", list);
 		resultMap.put("page", page);
+//		resultMap.put("ajaxData", new Gson().toJson(resultMap));
 		
-		
-		response.setContentType("application/json; charset=utf-8");
-		new Gson().toJson(resultMap, response.getWriter());
+		return resultMap;
+//		response.setContentType("application/json; charset=utf-8");
+//		return new Gson().toJson(resultMap);
 	}
 
 	/**
@@ -196,11 +228,17 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void listReply(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		int boardNo = Integer.parseInt(request.getParameter("no"));
+	public Map<String, Object> listReply(Map<String, String> paramMap) throws Exception {
+		int boardNo = Integer.parseInt(paramMap.get("no"));
 		List<Reply> list = bDao.listReply(boardNo);
-		response.setContentType("application/json; charset=utf-8");
-		new Gson().toJson(list, response.getWriter());
+
+		Map<String, Object> resultMap = new HashMap<>();
+	    resultMap.put("list", list);
+//		resultMap.put("ajaxData", new Gson().toJson(list));
+		
+		return resultMap;
+//		response.setContentType("application/json; charset=utf-8");
+//		return new Gson().toJson(list);
 	}
 
 	/**
@@ -211,8 +249,11 @@ public class BoardService {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	public void insertReply(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		int result = bDao.executeUpdate("insertReply", request.getParameter("content"), request.getParameter("no"));
-		response.getWriter().print(result);
+	public Map<String, Object> insertReply(Map<String, String> paramMap) throws Exception {
+		int result = bDao.executeUpdate("insertReply", paramMap.get("content"), Integer.parseInt(paramMap.get("no")));
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("flag", result > 0 ? "success" : "fail");
+	    return resultMap;
 	}
 }

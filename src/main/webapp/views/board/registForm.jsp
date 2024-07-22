@@ -36,7 +36,7 @@
 		<div class="content-title">
 			<h2>글 작성</h2>
 		</div>
-		<form action="${contextPath}/board/insert.bo" method="post">
+		<form action="${contextPath}/re/board/insert.bo" method="post">
 			<div>
 				제목 <input type="text" class="form-control" name="title" style="width: 800px; margin-bottom: 15px;" value="${not empty sessionScope.enteredTitle ? sessionScope.enteredTitle : ''}" required>
 				내용 <textarea class="form-control" name="content" style="white-space: pre; resize: none; height: 500px;" required>${not empty sessionScope.enteredContent ? sessionScope.enteredContent : ''}</textarea>

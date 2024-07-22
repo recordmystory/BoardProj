@@ -1,53 +1,55 @@
 {
-	"urls" : [
-		{
-			"url" : "mav/board/list.bo",
-			"type" : "forward"
-		},
+	"urls" : {
+	
+			"/mav/board/list.bo" : {
+				"viewName" : "/board/list.jsp",
+				"type" : "forward"
+			}, 
 		
-		{
-			"url" : "mav/board/detail.bo",
-			"type" : "forward"
-		},
-		
-		{
-			"url" : "re/board/insert.bo",
-			"type" : "redirect"
-		},
-		
-		{
-			"url" : "mav/board/regist.bo",
-			"type" : "forward"
-		},
-		
-		{
-			"url" : "mav/board/updateForm.bo",
-			"type" : "forward"
-		},
-		
-		{
-			"url" : "re/board/update.bo",
-			"type" : "redirect"
-		},
-		
-		{
-			"url" : "re/board/delete.bo",
-			"type" : "redirect"
-		},
-		
-		{
-			"url" : "ajax/board/listSearch.bo",
-			"type" : "ajax"
-		},
-		
-		{
-			"url" : "ajax/reply/insert.bo",
-			"type" : "ajax"
-		},
-		
-		{
-			"url" : "ajax/reply/list.bo",
-			"type" : "ajax"
+			"/mav/board/detail.bo" : {
+				"viewName" : "/board/detail.jsp",
+				"type" : "forward"
+			},
+			
+			 "/re/board/insert.bo" : {
+			 	"viewName" : "/mav/board/list.bo?page=1",	
+				"type" : "redirect"
+			},
+			
+			"/mav/board/regist.bo" : {
+				"viewName" : "/board/registForm.jsp",	
+				"type" : "forward"
+			
+			},
+			
+			"/mav/board/updateForm.bo" : {
+				"viewName" : "/board/updateForm.jsp",
+				"type" : "forward"
+			},
+			
+			"/re/board/update.bo" : {
+				"viewName" : "/mav/board/list.bo?page=1",
+				"type" : "redirect"
+			
+			},
+			
+			"/re/board/delete.bo" : {
+				"viewName" : "/mav/board/list.bo?page=1",
+				"type" : "redirect"
+			},
+			
+			"/ajax/board/listSearch.bo" : {
+				"type" : "ajax"			
+			},
+			
+			"/ajax/reply/insert.bo" : {
+				"type" : "ajax"
+			},
+			
+			"/ajax/reply/list.bo" : {
+				"type" : "ajax"
+			
+			}
 		}
-	]
+	
 }

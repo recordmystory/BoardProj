@@ -38,7 +38,7 @@
 		<div class="content-title">
 			<h2>게시글 수정</h2>
 		</div>
-		<form action="${contextPath}/board/update.bo?no=${b.no}" method="post">
+		<form action="${contextPath}/re/board/update.bo?no=${b.no}" method="post">
 			<div class="table-area">
 				<table class="table">
 					<tr>
