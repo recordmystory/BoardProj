@@ -24,13 +24,12 @@ import com.jw.common.util.UrlMappingUtil;
  * .bo로 끝나는 모든 요청을 받는 Controller
  */
 @WebServlet("*.bo")
-//@WebInI
-
 public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(BoardController.class);
 	
 	private BoardService bService = new BoardService();
+//	private static UrlMappingUtil urlMapping = new UrlMappingUtil();;
 //    private List<String> urlList = new ArrayList<>();
    
     
@@ -67,10 +66,27 @@ public class BoardController extends HttpServlet {
 	    String viewName = UrlMappingUtil.getViewName(action);
 
 		if (urlType != null) {
+			
 			String methodName = UrlMappingUtil.getMethodNameFromAction(action);
-//			logger.debug("methodName : " + methodName);
+//			String serviceClassName = UrlMappingUtil.getServiceClassNameFromAction(action);
+			
 			try {
-				Method method = BoardService.class.getMethod(methodName, Map.class);
+				
+				String serviceClassName = UrlMappingUtil.getServiceClassNameFromAction(action);
+			    
+			    Class<?> serviceClass = Class.forName(serviceClassName);
+			    Object serviceInstance = serviceClass.getDeclaredConstructor().newInstance();
+			    
+//				 Class<?> serviceClass = Class.forName("com.jw.board.model.service.BoardService");
+
+//				Class<?> serviceClass = Class.forName(serviceClassName);
+				
+//				Object serviceInstance = Class.forName("com.jw.board.model.service.BoardService").getDeclaredConstructor().newInstance();
+				// 클래스안에 메서드-> 반환값 
+//				Object serviceInstance = Class.forName(UrlMappingUtil.getServiceClassNameFromAction(action)).getDeclaredConstructor().newInstance();
+//                Method method = Class.forName(UrlMappingUtil.getServiceClassNameFromAction(action)).getMethod(methodName, Map.class);
+			    
+				Method method = serviceClass.getMethod(methodName, Map.class);
 
 				Map<String, String> paramMap = new HashMap<>();
 				Enumeration<String> paramsNames = request.getParameterNames();
@@ -79,9 +95,8 @@ public class BoardController extends HttpServlet {
 					String value = request.getParameter(name);
 					paramMap.put(name, value);
 				}
-
 				// 서비스 메서드 호출
-				Map<String, Object> result = (Map<String, Object>) method.invoke(bService, paramMap);
+				Map<String, Object> result = (Map<String, Object>) method.invoke(serviceInstance, paramMap);
 
 //				logger.info("Service result: " + result);
 

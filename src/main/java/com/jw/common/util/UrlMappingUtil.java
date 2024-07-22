@@ -3,7 +3,7 @@ package com.jw.common.util;
 import java.util.Map;
 
 /**
- * 
+ * URL 매핑 관련 Util
  */
 public class UrlMappingUtil {
 	
@@ -64,6 +64,21 @@ public class UrlMappingUtil {
         Map<String, String> mappingInfo = urlMappings.get(url);
         return mappingInfo != null ? mappingInfo.get("viewName") : null;
     }
+
+	/** url을 서비스 클래스명으로 변환
+	 * 
+	 * @param action
+	 * @return
+	 */
+	public static String getServiceClassNameFromAction(String action) {
+		String[] parts = action.split("/");
+		if(parts.length < 3) {
+			return null;
+		}
+		
+//		String convertServiceName = convertUrl(parts[2]);
+		return "com.jw." + parts[2] + ".model.service." + convertUrl(parts[2]) + "Service";
+	}
 	
 	
 }

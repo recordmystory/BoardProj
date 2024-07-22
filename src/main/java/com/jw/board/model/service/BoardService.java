@@ -204,18 +204,18 @@ public class BoardService {
 	 * @return resultMap
 	 * @throws Exception
 	 */
-	public Map<String, Object> listReply(Map<String, String> paramMap) throws Exception {
+	/*public Map<String, Object> listReply(Map<String, String> paramMap) throws Exception {
 		int boardNo = Integer.parseInt(paramMap.get("no"));
 		List<Reply> list = bDao.listReply(boardNo);
-
+	
 		Map<String, Object> resultMap = new HashMap<>();
 	    resultMap.put("list", list);
-//		resultMap.put("ajaxData", new Gson().toJson(list));
+	//		resultMap.put("ajaxData", new Gson().toJson(list));
 		
 		return resultMap;
-//		response.setContentType("application/json; charset=utf-8");
-//		return new Gson().toJson(list);
-	}
+	//		response.setContentType("application/json; charset=utf-8");
+	//		return new Gson().toJson(list);
+	}*/
 
 	/** 댓글 등록 (ajax)
 	 * 
@@ -223,11 +223,11 @@ public class BoardService {
 	 * @return resultMap
 	 * @throws Exception
 	 */
-	public Map<String, Object> insertReply(Map<String, String> paramMap) throws Exception {
+	/*public Map<String, Object> insertReply(Map<String, String> paramMap) throws Exception {
 		int result = bDao.executeUpdate("insertReply", paramMap.get("content"), Integer.parseInt(paramMap.get("no")));
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("flag", result > 0 ? "success" : "fail");
 	    return resultMap;
-	}
+	}*/
 }
