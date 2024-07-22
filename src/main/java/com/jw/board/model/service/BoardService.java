@@ -23,13 +23,10 @@ public class BoardService {
 
 	private static BoardDao bDao = new BoardDao();
 
-	/**
-	 * 게시글 목록 조회 및 페이징
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
+	/** 게시글 목록 조회 및 페이징
+	 * @param paramMap
+	 * @return resultMap
+	 * @throws Exception
 	 */
 	public Map<String, Object> listBoard(Map<String, String> paramMap) throws Exception {
 		String nowPage = paramMap.get("page");
@@ -53,13 +50,10 @@ public class BoardService {
 //		request.getRequestDispatcher("/views/board/list.jsp").forward(request, response);
 	}
 
-	/**
-	 * 게시글 등록
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
+	/** 게시글 등록
+	 * @param paramMap
+	 * @return resultMap
+	 * @throws Exception
 	 */
 	public Map<String, Object> insertBoard(Map<String, String> paramMap) throws Exception {
 		String title = paramMap.get("title");
@@ -90,26 +84,20 @@ public class BoardService {
 		 */
 	}
 
-	/**
-	 * 글 작성 페이지 포워딩
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
+	/** 글 작성 페이지 포워딩
+	 * @param paramMap
+	 * @return 
+	 * @throws Exception
 	 */
 	public Map<String, Object> registBoard(Map<String, String> paramMap) throws Exception {
 		return new HashMap<>();
 //		request.getRequestDispatcher("/views/board/registForm.jsp").forward(request, response);
 	}
 
-	/**
-	 * 게시글 상세 조회
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
+	/** 게시글 상세 조회
+	 * @param paramMap
+	 * @return resultMap
+	 * @throws Exception
 	 */
 	public Map<String, Object> detailBoard(Map<String, String> paramMap) throws Exception {
 		int boardNo = Integer.parseInt(paramMap.get("no"));
@@ -125,13 +113,11 @@ public class BoardService {
 		request.getRequestDispatcher("/views/board/detail.jsp").forward(request, response);*/
 	}
 
-	/**
-	 * 게시글 수정
+	/** 게시글 수정
 	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
+	 * @param paramMap
+	 * @return resultMap
+	 * @throws Exception
 	 */
 	public Map<String, Object> updateFormBoard(Map<String, String> paramMap) throws Exception {
 		Board b = bDao.detailBoard(Integer.parseInt(paramMap.get("no")));
@@ -142,13 +128,10 @@ public class BoardService {
 //		request.getRequestDispatcher("/views/board/updateForm.jsp").forward(request, response);
 	}
 
-	/**
-	 * 게시글 수정
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
+	/** 게시글 수정
+	 * @param paramMap
+	 * @return resultMap
+	 * @throws Exception
 	 */
 	public Map<String, Object> updateBoard(Map<String, String> paramMap) throws Exception {
 		int boardNo = Integer.parseInt(paramMap.get("no"));
@@ -170,14 +153,11 @@ public class BoardService {
 		response.sendRedirect(request.getContextPath() + "/board/detail.bo?no=" + boardNo);*/
 	}
 	
-
-	/**
-	 * 게시글 삭제 (delete문이 아닌 del_yn 컬럼 update)
+	/** 게시글 삭제 (delete문이 아닌 del_yn 컬럼 update)
 	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
+	 * @param paramMap
+	 * @return resultMap
+	 * @throws Exception
 	 */
 	public Map<String, Object> deleteBoard(Map<String, String> paramMap) throws Exception {
 		int result = bDao.executeUpdate("deleteBoard", Integer.parseInt(paramMap.get("no")));
@@ -191,13 +171,11 @@ public class BoardService {
 //		response.sendRedirect(request.getContextPath() + "/board/list.bo?page=1");
 	}
 
-	/**
-	 * 검색 (ajax)
+	/** 검색 (ajax)
 	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
+	 * @param paramMap
+	 * @return resultMap
+	 * @throws Exception
 	 */
 	public Map<String, Object> listSearchBoard(Map<String, String> paramMap) throws Exception {
 		String nowPage = paramMap.get("page");
@@ -220,13 +198,11 @@ public class BoardService {
 //		return new Gson().toJson(resultMap);
 	}
 
-	/**
-	 * 댓글 조회 (ajax)
+	/** 댓글 조회 (ajax)
 	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
+	 * @param paramMap
+	 * @return resultMap
+	 * @throws Exception
 	 */
 	public Map<String, Object> listReply(Map<String, String> paramMap) throws Exception {
 		int boardNo = Integer.parseInt(paramMap.get("no"));
@@ -241,13 +217,11 @@ public class BoardService {
 //		return new Gson().toJson(list);
 	}
 
-	/**
-	 * 댓글 등록 (ajax)
+	/** 댓글 등록 (ajax)
 	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
+	 * @param paramMap
+	 * @return resultMap
+	 * @throws Exception
 	 */
 	public Map<String, Object> insertReply(Map<String, String> paramMap) throws Exception {
 		int result = bDao.executeUpdate("insertReply", paramMap.get("content"), Integer.parseInt(paramMap.get("no")));
