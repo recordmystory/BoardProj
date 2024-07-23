@@ -93,7 +93,7 @@ public class BoardService {
 	 */
 	public Map<String, Object> detailBoard(Map<String, String> paramMap) throws Exception {
 		int boardNo = Integer.parseInt(paramMap.get("no"));
-		logger.info("boardNo : " + boardNo);
+//		logger.info("boardNo : " + boardNo);
 		Board b = bDao.detailBoard(boardNo);
 		bDao.updateExecute("updateHit", boardNo);
 		
