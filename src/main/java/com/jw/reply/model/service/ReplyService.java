@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jw.board.model.dao.BoardDao;
 import com.jw.board.model.vo.Reply;
+import com.jw.reply.model.dao.ReplyDao;
 
 public class ReplyService {
-	private static BoardDao bDao = new BoardDao();
+	private static ReplyDao rDao = new ReplyDao();
 
 	
 	/** 댓글 조회 (ajax)
@@ -19,7 +19,7 @@ public class ReplyService {
 	 */
 	public Map<String, Object> listReply(Map<String, String> paramMap) throws Exception {
 		int boardNo = Integer.parseInt(paramMap.get("no"));
-		List<Reply> list = bDao.listReply(boardNo);
+		List<Reply> list = rDao.listReply(boardNo);
 
 		Map<String, Object> resultMap = new HashMap<>();
 	    resultMap.put("list", list);
@@ -34,7 +34,7 @@ public class ReplyService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> insertReply(Map<String, String> paramMap) throws Exception {
-		int result = bDao.updateExecute("insertReply", paramMap.get("content"), Integer.parseInt(paramMap.get("no")));
+		int result = rDao.updateExecute("insertReply", paramMap.get("content"), Integer.parseInt(paramMap.get("no")));
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("flag", result > 0 ? "success" : "fail");

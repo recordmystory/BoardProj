@@ -72,8 +72,7 @@ public class ReplyDao {
 		return list;
 	}
 	
-	public int executeUpdate(String sqlKey, Object... params) {
-//		logger.info("params : " + params.length);
+	public int updateExecute(String sqlKey, Object... params) {
 		
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;

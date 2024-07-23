@@ -1,10 +1,13 @@
 package com.jw.board.controller;
 
+import static com.jw.common.template.JDBCTemplate.close;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -131,6 +134,8 @@ public class BoardController extends HttpServlet {
 			} catch (Exception e) {
 				// 예외처리 util 호출
 				ExceptionHandler.handleException(request, response, e);
+			} finally {
+				close(response.getWriter());
 			}
 		} else {
 			request.getSession().setAttribute("alertMsg", "요청하신 페이지가 없습니다.");

@@ -16,8 +16,6 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 import com.jw.board.model.vo.Board;
-import com.jw.board.model.vo.PageInfo;
-import com.jw.board.model.vo.Reply;
 import com.jw.common.util.ConfigUtil;
 
 public class BoardDao {
@@ -31,7 +29,6 @@ public class BoardDao {
         this.prop = configUtil.getProperties();
         
 //        logger.info("prop : " + prop.toString());
-		
 	}
 	
 	/*	static { // 클래스 최초 로드 시만 getProperties() 메서드 호출
@@ -42,6 +39,45 @@ public class BoardDao {
 	    return prop;
 	}*/
 	
+
+	@FunctionalInterface
+	public interface ResultSetHandler<T> {
+	    T handle(ResultSet rset) throws SQLException;
+	}
+
+	/** select 메서드 통합
+	 * 
+	 * @param <T>
+	 * @param sqlKey
+	 * @param handler
+	 * @param params
+	 * @return result
+	 */
+	public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params){
+		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		T result = null;
+		
+		String sql = prop.getProperty(sqlKey);
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+
+			for (int i = 0; i < params.length; i++) {
+				pstmt.setObject(i + 1, params[i]);
+			}
+			rset = pstmt.executeQuery();
+			result = handler.handle(rset);
+		} catch (SQLException e) {
+			
+		} finally {
+			close(rset, pstmt, conn);
+		}
+		
+		return result;
+		
+	}
 	
 	/** SQL 실행 (INSERT, UPDATE, DELETE문)
 	 * 
@@ -68,9 +104,9 @@ public class BoardDao {
 			if (result == 0) {
 	            logger.debug("result : 0 (insert || update || delete 된 행의 개수 0)");
 	        } else if (result == -1) {
-	            logger.debug("result : -1 (비정상적 업데이트 결과)");
+	            logger.debug("result : -1 (비정상 결과)");
 	        } else if (result >= 1) {
-	            logger.debug("result : " + result + " (insert || update || delete 성공, 업데이트된 행의 개수)");
+	            logger.debug("result : " + result + " (insert || update || delete 성공)");
 	        }
 			
 			commit(conn);
@@ -92,6 +128,103 @@ public class BoardDao {
 	 * @return list
 	 */
 	public List<Board> listBoard(Object... params) {
+		return selectExecute("listBoard", rset -> {
+			List<Board> list = new ArrayList<>();
+	        while (rset.next()) {
+	            Board b = new Board();
+	            b.setNo(rset.getInt("NO"));
+	            b.setTitle(rset.getString("TITLE"));
+	            b.setContent(rset.getString("CONTENT"));
+	            b.setHit(rset.getInt("HIT"));
+	            b.setRegId(rset.getString("REGID"));
+	            b.setRegDate(rset.getDate("REGDATE"));
+	            list.add(b);
+	        }
+	        return list;
+		}, params);
+	}
+	
+	/** 게시글 목록 조회 및 페이징 
+	 * 
+	 * @return listCount
+	 */
+	public int selectBoardCount() {
+		return selectExecute("selectBoardCount", rset -> {
+			if(rset.next()) {
+				return rset.getInt("COUNT");
+			}
+			return 1;
+		});
+	}
+	
+	
+	/** 게시글 상세 조회
+	 * 
+	 * @param conn
+	 * @param boardNo
+	 * @return b
+	 */
+	public Board detailBoard(int boardNo) {
+		return selectExecute("detailBoard", rset -> {
+			Board b = new Board();
+			
+			if (rset.next()) {
+				
+				b.setNo(rset.getInt("NO"));
+				b.setTitle(rset.getString("TITLE"));
+				b.setContent(rset.getString("CONTENT"));
+				b.setHit(rset.getInt("HIT"));
+				b.setRegDate(rset.getDate("REGDATE"));
+				b.setModDate(rset.getDate("MODDATE"));
+				return b;
+			}
+			return null;
+		}, boardNo);
+				
+	}
+	
+	/** 게시글 검색
+	 * 
+	 * @param conn
+	 * @param keyword
+	 * @return list
+	 */
+	public List<Board> listSearchBoard(Object... params) {
+		return selectExecute("listSearchBoard", rset -> {
+			List<Board> list = new ArrayList<>();
+			while(rset.next()) {
+				Board b = new Board();
+				
+				b.setNo(rset.getInt("NO"));
+				b.setTitle(rset.getString("TITLE"));
+				b.setContent(rset.getString("CONTENT"));
+				b.setHit(rset.getInt("HIT"));
+				b.setRegId(rset.getString("REGID"));
+				b.setRegDate(rset.getDate("REGDATE"));
+				
+				list.add(b);
+			}
+			return list;
+		}, params);
+		
+	}
+	
+	/** 검색된 게시물 count
+	 * 
+	 * @param keyword
+	 * @return listCount
+	 */
+	public int selectSearchCount(Object... params) {
+		return selectExecute("selectSearchCount", rset -> {
+			if(rset.next()) {
+				return rset.getInt("COUNT");
+			}
+			return 1;
+		}, params);
+	}
+	
+}
+	/*public List<Board> listBoard(Object... params) {
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -101,11 +234,11 @@ public class BoardDao {
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
-
-//			int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
-//			int endRow = startRow + page.getBoardLimit() - 1;
-//			pstmt.setInt(1, startRow);
-//			pstmt.setInt(2, endRow);
+	
+	//			int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
+	//			int endRow = startRow + page.getBoardLimit() - 1;
+	//			pstmt.setInt(1, startRow);
+	//			pstmt.setInt(2, endRow);
 			for (int i = 0; i < params.length; i++) {
 				pstmt.setObject(i + 1, params[i]);
 			}
@@ -128,27 +261,27 @@ public class BoardDao {
 		} finally {
 			close(rset, pstmt, conn);
 		}
-
-		return list;
-	}
 	
-	/** 게시글 목록 조회 및 페이징 
-	 * 
-	 * @return listCount
-	 */
+		return list;
+	}*/
+	
+	
+	
+	
+	/*
 	public int selectBoardCount() {
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
 		int listCount = 0;
-
+	
 		String sql = prop.getProperty("selectBoardCount");
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rset = pstmt.executeQuery();
-
+	
 			if (rset.next()) {
 				listCount = rset.getInt("COUNT");
 			}
@@ -159,141 +292,59 @@ public class BoardDao {
 		}
 		
 		return listCount;
+	}*/
+	
+	/*public Board detailBoard(int boardNo) {
+	Connection conn = getConnection(true);
+	PreparedStatement pstmt = null;
+	ResultSet rset = null;
+	Board b = new Board();
+	String sql = prop.getProperty("detailBoard");
+	
+	try {
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, boardNo);
+	
+		rset = pstmt.executeQuery();
+	
+		if (rset.next()) {
+			
+			b.setNo(rset.getInt("NO"));
+			b.setTitle(rset.getString("TITLE"));
+			b.setContent(rset.getString("CONTENT"));
+			b.setHit(rset.getInt("HIT"));
+			b.setRegDate(rset.getDate("REGDATE"));
+			b.setModDate(rset.getDate("MODDATE"));
+		}
+		
+	} catch (SQLException e) {
+		logger.error("SQLException 발생 : " + e.getMessage());
+	} finally {
+		close(pstmt, conn, rset);
 	}
 	
-	/** 게시글 상세 조회
-	 * 
-	 * @param conn
-	 * @param boardNo
-	 * @return b
-	 */
-	public Board detailBoard(int boardNo) {
-		Connection conn = getConnection(true);
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		Board b = new Board();
-		String sql = prop.getProperty("detailBoard");
-
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, boardNo);
-
-			rset = pstmt.executeQuery();
-
-			if (rset.next()) {
-				
-				b.setNo(rset.getInt("NO"));
-				b.setTitle(rset.getString("TITLE"));
-				b.setContent(rset.getString("CONTENT"));
-				b.setHit(rset.getInt("HIT"));
-				b.setRegDate(rset.getDate("REGDATE"));
-				b.setModDate(rset.getDate("MODDATE"));
-			}
-			
-		} catch (SQLException e) {
-			logger.error("SQLException 발생 : " + e.getMessage());
-		} finally {
-			close(pstmt, conn, rset);
-		}
-
-		return b;
-	}
-
-	/** 게시글 검색
-	 * 
-	 * @param conn
-	 * @param keyword
-	 * @return list
-	 */
-	public List<Board> listSearchBoard(PageInfo page, String keyword) {
-		Connection conn = getConnection(true);
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		List<Board> list = new ArrayList<>();
-		
-		String sql = prop.getProperty("listSearchBoard");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, keyword);
-			int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
-			int endRow = startRow + page.getBoardLimit() - 1;
-			pstmt.setInt(2, startRow);
-			pstmt.setInt(3, endRow);
-			
-				rset = pstmt.executeQuery();
-				while(rset.next()) {
-					Board b = new Board();
-					
-					b.setNo(rset.getInt("NO"));
-					b.setTitle(rset.getString("TITLE"));
-					b.setContent(rset.getString("CONTENT"));
-					b.setHit(rset.getInt("HIT"));
-					b.setRegId(rset.getString("REGID"));
-					b.setRegDate(rset.getDate("REGDATE"));
-					
-					list.add(b);
-			}
-		} catch (SQLException e) {
-			logger.error("SQLException 발생 : " +  e.getMessage());
-		} finally {
-			close(rset, pstmt, conn);
-		}
-		
-		return list;
-		
-	}
-	
-	/** 검색된 게시물 count
-	 * 
-	 * @param keyword
-	 * @return listCount
-	 */
-	public int selectSearchCount(String keyword) {
-		Connection conn = getConnection();
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		int listCount = 0;
-
-		String sql = prop.getProperty("selectSearchCount");
-
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, keyword);
-
-			rset = pstmt.executeQuery();
-			
-			if (rset.next()) {
-				listCount = rset.getInt("COUNT");
-			}
-		} catch (SQLException e) {
-			logger.error("SQLException 발생 : " + e.getMessage());
-		} finally {
-			close(rset, pstmt, conn);
-		}
-		
-		return listCount;
-	}
+	return b;
+	}*/
 
 	/** 댓글 조회
 	 * 
 	 * @param boardNo
 	 * @return list
 	 */
-	public List<Reply> listReply(int boardNo) {
+	/*public List<Reply> listReply(int boardNo) {
 		Connection conn = getConnection(true);
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		List<Reply> list = new ArrayList<>();
-
+	
 		String sql = prop.getProperty("listReply");
-
+	
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardNo);
-
+	
 			rset = pstmt.executeQuery();
-
+	
 			while (rset.next()) {
 				Reply r = new Reply();
 				
@@ -303,7 +354,7 @@ public class BoardDao {
 				r.setRegDate(rset.getString("REGDATE"));
 				r.setDelYn(rset.getString("DELYN"));
 				r.setBNo(rset.getInt("BNO"));
-
+	
 				list.add(r);
 			}
 		} catch (SQLException e) {
@@ -314,6 +365,69 @@ public class BoardDao {
 		}
 		
 		return list;
-	}
-	
-}
+	}*/
+
+	/*	public List<Board> listSearchBoard(PageInfo page, String keyword) {
+			Connection conn = getConnection(true);
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			List<Board> list = new ArrayList<>();
+			
+			String sql = prop.getProperty("listSearchBoard");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, keyword);
+				int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
+				int endRow = startRow + page.getBoardLimit() - 1;
+				pstmt.setInt(2, startRow);
+				pstmt.setInt(3, endRow);
+				
+					rset = pstmt.executeQuery();
+					while(rset.next()) {
+						Board b = new Board();
+						
+						b.setNo(rset.getInt("NO"));
+						b.setTitle(rset.getString("TITLE"));
+						b.setContent(rset.getString("CONTENT"));
+						b.setHit(rset.getInt("HIT"));
+						b.setRegId(rset.getString("REGID"));
+						b.setRegDate(rset.getDate("REGDATE"));
+						
+						list.add(b);
+				}
+			} catch (SQLException e) {
+				logger.error("SQLException 발생 : " +  e.getMessage());
+			} finally {
+				close(rset, pstmt, conn);
+			}
+			
+			return list;
+			
+		}*/
+
+	/*		public int selectSearchCount(String keyword) {
+				Connection conn = getConnection();
+				PreparedStatement pstmt = null;
+				ResultSet rset = null;
+				int listCount = 0;
+			
+				String sql = prop.getProperty("selectSearchCount");
+			
+				try {
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, keyword);
+			
+					rset = pstmt.executeQuery();
+					
+					if (rset.next()) {
+						listCount = rset.getInt("COUNT");
+					}
+				} catch (SQLException e) {
+					logger.error("SQLException 발생 : " + e.getMessage());
+				} finally {
+					close(rset, pstmt, conn);
+				}
+				
+				return listCount;
+			}*/

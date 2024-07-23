@@ -178,7 +178,9 @@ public class BoardService {
 		int listCount = bDao.selectSearchCount(keyword);
 
 		PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
-		List<Board> list = bDao.listSearchBoard(page, keyword);
+		int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
+		int endRow = startRow + page.getBoardLimit() - 1;
+		List<Board> list = bDao.listSearchBoard(keyword, startRow, endRow);
 
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("list", list);
