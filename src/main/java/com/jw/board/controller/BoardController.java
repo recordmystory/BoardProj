@@ -1,6 +1,7 @@
 package com.jw.board.controller;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
+import com.jw.board.model.service.BoardService;
 import com.jw.common.util.ExceptionHandler;
 import com.jw.common.util.ParameterUtil;
 import com.jw.common.util.UrlMappingUtil;
@@ -28,7 +30,7 @@ public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(BoardController.class);
 	
-//	private BoardService bService = new BoardService();
+	private BoardService bService = new BoardService();
 //	private static UrlMappingUtil urlMapping = new UrlMappingUtil();;
 //    private List<String> urlList = new ArrayList<>();
    
@@ -107,7 +109,7 @@ public class BoardController extends HttpServlet {
 				// 서비스 메서드 호출
 				Map<String, Object> result = (Map<String, Object>) method.invoke(serviceInstance, paramMap);
 
-				logger.info("Service result: " + result);
+//				logger.info("Service result: " + result);
 
 				if ("forward".equals(urlType)) {
 					/* if (result instanceof Map) {

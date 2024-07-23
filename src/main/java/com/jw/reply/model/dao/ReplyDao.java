@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 
 import com.jw.board.model.dao.BoardDao;
 import com.jw.board.model.vo.Reply;
-import com.jw.common.util.BoardConfigUtil;
+import com.jw.common.util.ConfigUtil;
 
 public class ReplyDao {
 	private Properties prop;
@@ -25,10 +25,10 @@ public class ReplyDao {
 
 	
 	public ReplyDao() { 
-		BoardConfigUtil boardConfigUtil = BoardConfigUtil.getInstance();
-		boardConfigUtil.loadXmlFile();
+		ConfigUtil configUtil = ConfigUtil.getInstance();
+        configUtil.loadXmlFile();
 
-        this.prop = boardConfigUtil.getProperties();
+        this.prop = configUtil.getProperties();
 	}
 	
 	/** 댓글 조회

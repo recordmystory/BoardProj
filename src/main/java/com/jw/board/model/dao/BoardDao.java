@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -19,24 +18,19 @@ import org.apache.log4j.Logger;
 import com.jw.board.model.vo.Board;
 import com.jw.board.model.vo.PageInfo;
 import com.jw.board.model.vo.Reply;
-import com.jw.common.util.BoardConfigUtil;
+import com.jw.common.util.ConfigUtil;
 
 public class BoardDao {
 	private Properties prop;
 	private static final Logger logger = Logger.getLogger(BoardDao.class);
 
 	public BoardDao() { 
-		BoardConfigUtil boardConfigUtil = BoardConfigUtil.getInstance();
-        boardConfigUtil.loadXmlFile();
+		ConfigUtil configUtil = ConfigUtil.getInstance();
+        configUtil.loadXmlFile();
 
-        this.prop = boardConfigUtil.getProperties();
-        
-        if (this.prop == null) {
-            logger.info("Properties file not loaded properly.");
-        } else {
-            logger.info("Properties loaded: " + this.prop.toString());
-        }
-    }
+        this.prop = configUtil.getProperties();
+		
+	}
 	
 	/*	static { // 클래스 최초 로드 시만 getProperties() 메서드 호출
 			prop = BoardController.getProperties();
@@ -54,15 +48,12 @@ public class BoardDao {
 	 * @return result : 업데이트된 행 개수
 	 */
 	public int executeUpdate(String sqlKey, Object... params) {
-		logger.info("params : " + params.length);
+//		logger.info("params : " + params.length);
 		
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty(sqlKey);
 		int result = 0;
-		
-		
-		
 		try {
 
 	        pstmt = conn.prepareStatement(sql);
@@ -98,8 +89,6 @@ public class BoardDao {
 	 * @return list
 	 */
 	public List<Board> listBoard(Object... params) {
-		logger.info(Arrays.toString(params));
-		logger.info("dao ListBoard 메서드 호출됨");
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
