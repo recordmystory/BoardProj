@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
-
 import com.google.gson.Gson;
 import com.jw.common.util.ExceptionHandler;
 import com.jw.common.util.ParameterUtil;
@@ -65,12 +63,13 @@ public class BoardController extends HttpServlet {
 			String methodName = UrlMappingUtil.getMethodNameFromAction(action);
 
 			try {
-
+				
 				String serviceClassName = UrlMappingUtil.getServiceClassNameFromAction(action);
 	            Class<?> serviceClass = Class.forName(serviceClassName);
 	            Object serviceInstance = serviceClass.getDeclaredConstructor().newInstance();
 	            Method method = serviceClass.getMethod(methodName, Map.class);
 				
+	            // 파라미터 맵 생성
 				Map<String, String> paramMap = new HashMap<>();
 				Enumeration<String> paramsNames = request.getParameterNames();
 				
@@ -78,7 +77,7 @@ public class BoardController extends HttpServlet {
 					String name = paramsNames.nextElement();
 					String value = request.getParameter(name);
 				
-				// 파라미터 검증
+				// 파라미터 유효성 검사
 				if (ParameterUtil.isNullOrEmpty(request, name)) {
 					throw new IllegalArgumentException("유효하지 않은 파라미터: " + name);
 				//                    ExceptionHandler.processException(request, response, "파라미터가 유효하지 않습니다: " + name, new IllegalArgumentException("IllegalArgumentException 발생 : " + name));
@@ -90,7 +89,8 @@ public class BoardController extends HttpServlet {
 				}
 				paramMap.put(name, value);
 			}
-				
+			
+			// 서비스 메소드 호출
 			Map<String, Object> result = (Map<String, Object>) method.invoke(serviceInstance, paramMap);
 		
 			    
@@ -133,6 +133,7 @@ public class BoardController extends HttpServlet {
 				ExceptionHandler.handleException(request, response, e);
 			}
 		} else {
+			request.getSession().setAttribute("alertMsg", "요청하신 페이지가 없습니다.");
 			response.sendRedirect(contextPath + "/views/board/errorPage.jsp");
 //			request.getRequestDispatcher("/views/board/errorPage.jsp").forward(request, response);
 		}
