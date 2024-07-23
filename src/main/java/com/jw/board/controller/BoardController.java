@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,8 +28,7 @@ import com.jw.common.util.UrlMappingUtil;
 public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(BoardController.class);
-	
-	private BoardService bService = new BoardService();
+
 //	private static UrlMappingUtil urlMapping = new UrlMappingUtil();;
 //    private List<String> urlList = new ArrayList<>();
    
@@ -66,15 +64,35 @@ public class BoardController extends HttpServlet {
 	    String viewName = UrlMappingUtil.getViewName(action);
 
 		if (urlType != null) {
-			
 			String methodName = UrlMappingUtil.getMethodNameFromAction(action);
-			
+
 			try {
-				
+
 				String serviceClassName = UrlMappingUtil.getServiceClassNameFromAction(action);
-			    
-			    Class<?> serviceClass = Class.forName(serviceClassName);
-			    Object serviceInstance = serviceClass.getDeclaredConstructor().newInstance();
+
+				Class<?> serviceClass = Class.forName(serviceClassName);
+				Object serviceInstance = serviceClass.getDeclaredConstructor().newInstance();
+				Method method = serviceClass.getMethod(methodName, Map.class);
+				Map<String, String> paramMap = new HashMap<>();
+				Enumeration<String> paramsNames = request.getParameterNames();
+				while (paramsNames.hasMoreElements()) {
+				String name = paramsNames.nextElement();
+				String value = request.getParameter(name);
+				
+				// 파라미터 검증
+				if (ParameterUtil.isNullOrEmpty(request, name)) {
+					throw new IllegalArgumentException("유효하지 않은 파라미터: " + name);
+//                    ExceptionHandler.processException(request, response, "파라미터가 유효하지 않습니다: " + name, new IllegalArgumentException("IllegalArgumentException 발생 : " + name));
+//                    return;
+                }
+                if (isNumberParameter(name) && !ParameterUtil.isNumber(request, name)) {
+                	throw new IllegalArgumentException("유효하지 않은 숫자 파라미터: " + name);
+//                    ExceptionHandler.processException(request, response, "숫자 파라미터가 유효하지 않습니다: " + name, new IllegalArgumentException("IllegalArgumentException 발생 : " + name));
+                }
+				paramMap.put(name, value);
+			}
+			Map<String, Object> result = (Map<String, Object>) method.invoke(serviceInstance, paramMap);
+		
 			    
 //				 Class<?> serviceClass = Class.forName("com.jw.board.model.service.BoardService");
 
@@ -85,29 +103,10 @@ public class BoardController extends HttpServlet {
 //				Object serviceInstance = Class.forName(UrlMappingUtil.getServiceClassNameFromAction(action)).getDeclaredConstructor().newInstance();
 //                Method method = Class.forName(UrlMappingUtil.getServiceClassNameFromAction(action)).getMethod(methodName, Map.class);
 			    
-				Method method = serviceClass.getMethod(methodName, Map.class);
 				
-				Map<String, String> paramMap = new HashMap<>();
-				Enumeration<String> paramsNames = request.getParameterNames();
-				while (paramsNames.hasMoreElements()) {
-					String name = paramsNames.nextElement();
-					String value = request.getParameter(name);
-					
-					// 파라미터 검증
-					if (ParameterUtil.isNullOrEmpty(request, name)) {
-	                    ExceptionHandler.processException(request, response, "파라미터가 유효하지 않습니다: " + name, new IllegalArgumentException("IllegalArgumentException 발생 : " + name));
-	                    return;
-	                }
-
-	                if (isNumberParameter(name) && !ParameterUtil.isNumber(request, name)) {
-	                    ExceptionHandler.processException(request, response, "숫자 파라미터가 유효하지 않습니다: " + name, new IllegalArgumentException("IllegalArgumentException 발생 : " + name));
-	                    return;
-	                }
-
-					paramMap.put(name, value);
-				}
+		
 				// 서비스 메서드 호출
-				Map<String, Object> result = (Map<String, Object>) method.invoke(serviceInstance, paramMap);
+				
 
 //				logger.info("Service result: " + result);
 
@@ -131,7 +130,7 @@ public class BoardController extends HttpServlet {
 
 			} catch (Exception e) {
 				// 예외처리 util 호출
-				ExceptionHandler.processException(request, response, "처리에 실패했습니다 : " + e.getMessage(), e);
+				ExceptionHandler.handleException(request, response, e);
 			}
 		} else {
 			request.getRequestDispatcher("/views/board/errorPage.jsp").forward(request, response);
