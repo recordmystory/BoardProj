@@ -79,7 +79,7 @@
 				<div class="col-lg-6 offset-lg-3 col-12">
 					<!-- Error Inner -->
 					<div class="error-inner">
-						<h1>처리 실패<span></span></h1>
+						<h1>처리 실패<span>${sessionScope.alertMsg}</span></h1>
 					</div>
 					<!--/ End Error Inner -->
 				</div>
@@ -87,10 +87,13 @@
 		</div>
 	</section>
 	
-	<c:if test="${requestScope.alertMsg ne null}">
+<%-- 	<c:if test="${sessionScope.alertMsg ne null}">
 		<script>
 	    	alert('${alertMsg}');
 	    </script>
 	</c:if>
+	
+	<c:remove var="alertMsg" scope="session" />
+ --%>	
 </body>
 </html>

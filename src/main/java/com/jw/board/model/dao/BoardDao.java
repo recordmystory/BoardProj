@@ -29,6 +29,8 @@ public class BoardDao {
         configUtil.loadXmlFile();
 
         this.prop = configUtil.getProperties();
+        
+//        logger.info("prop : " + prop.toString());
 		
 	}
 	
@@ -47,8 +49,7 @@ public class BoardDao {
 	 * @param params : 쿼리 파라미터
 	 * @return result : 업데이트된 행 개수
 	 */
-	public int executeUpdate(String sqlKey, Object... params) {
-//		logger.info("params : " + params.length);
+	public int updateExecute(String sqlKey, Object... params) {
 		
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
@@ -95,7 +96,7 @@ public class BoardDao {
 		List<Board> list = new ArrayList<>();
 		
 		String sql = prop.getProperty("listBoard");
-
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
 
@@ -107,7 +108,6 @@ public class BoardDao {
 				pstmt.setObject(i + 1, params[i]);
 			}
 			rset = pstmt.executeQuery();
-
 			while (rset.next()) {
 				
 				Board b = new Board();
@@ -119,6 +119,7 @@ public class BoardDao {
 				b.setRegId(rset.getString("REGID"));
 				b.setRegDate(rset.getDate("REGDATE"));
 				list.add(b);
+				
 			}
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 : " + e.getMessage());

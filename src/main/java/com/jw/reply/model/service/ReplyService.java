@@ -34,7 +34,7 @@ public class ReplyService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> insertReply(Map<String, String> paramMap) throws Exception {
-		int result = bDao.executeUpdate("insertReply", paramMap.get("content"), Integer.parseInt(paramMap.get("no")));
+		int result = bDao.updateExecute("insertReply", paramMap.get("content"), Integer.parseInt(paramMap.get("no")));
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("flag", result > 0 ? "success" : "fail");
