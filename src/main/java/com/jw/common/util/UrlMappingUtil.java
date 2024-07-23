@@ -11,9 +11,9 @@ public class UrlMappingUtil {
 
     static {
     	// JSON 파일 로드 및 URL 매핑 정보 설정
-        ConfigUtil configUtil = ConfigUtil.getInstance();
-        configUtil.loadJsonFile();
-        urlMappings = configUtil.getUrlMappings();
+        BoardConfigUtil boardConfigUtil = BoardConfigUtil.getInstance();
+        boardConfigUtil.loadJsonFile();
+        urlMappings = boardConfigUtil.getUrlMappings();
     }
 	
 	/** url을 서비스 메소드명으로 변환

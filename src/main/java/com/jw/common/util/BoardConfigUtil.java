@@ -1,8 +1,6 @@
 package com.jw.common.util;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,17 +9,16 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * mapper 파일 로드 및 Proprties 객체 관리
  */
-public class ConfigUtil {
-    private static final Logger logger = Logger.getLogger(ConfigUtil.class);
+public class BoardConfigUtil {
+    private static final Logger logger = Logger.getLogger(BoardConfigUtil.class.getName());
 	private static Properties prop = new Properties();
-	private static ConfigUtil instance;
+	private static BoardConfigUtil instance;
 	
 	// json 파일 및 xml 파일 로드 상태 확인하는 플래그
 	private static boolean isXmlLoaded = false;
@@ -33,7 +30,7 @@ public class ConfigUtil {
 	/**
 	 * 클래스 로드 시 mapper 파일을 읽고 properties 객체에 저장됨
 	 */
-	private ConfigUtil() {
+	private BoardConfigUtil() {
 		/*try {
 		    String filePath = getClass().getResource("/db/mappers/board-mapper.xml").getPath();
 		    if (filePath == null) {
@@ -51,9 +48,9 @@ public class ConfigUtil {
      * 
      * @return ConfigUtil 인스턴스
      */
-    public static synchronized ConfigUtil getInstance() { 
+    public static synchronized BoardConfigUtil getInstance() { 
         if(instance == null) {
-        	instance = new ConfigUtil();
+        	instance = new BoardConfigUtil();
         }
     	return instance;
     }
@@ -100,6 +97,7 @@ public class ConfigUtil {
 	 * @throws IOException
 	 */
 	private void loadBoardMapperFile(String filePath) throws IOException {
+		 logger.info("Loading XML file from path: " + filePath);
 		 InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
 		    if (inputStream == null) {
 		        logger.error("파일을 찾을 수 없습니다: " + filePath);
@@ -107,6 +105,8 @@ public class ConfigUtil {
 		    }
 		    try {
 		        prop.loadFromXML(inputStream);
+		        logger.info("XML 파일 로드 성공: " + filePath);
+		        logger.info("Properties: " + prop.toString());
 		    } catch (IOException e) {
 		        logger.error("IOException 발생 ==> XML 파일 로드 실패: " + e.getMessage());
 		        throw e;
@@ -175,7 +175,17 @@ public class ConfigUtil {
         return prop;
     }
     
-    
+    public static void main(String[] args) {
+        BoardConfigUtil configUtil = BoardConfigUtil.getInstance();
+        configUtil.loadXmlFile();
+        Properties prop = configUtil.getProperties();
+
+        if (prop.isEmpty()) {
+            logger.info("Properties is empty");
+        } else {
+            logger.info("Properties loaded: " + prop.toString());
+        }
+    }
     /**
      * ConfigUtil 인스턴스 생성 및 관리
      */

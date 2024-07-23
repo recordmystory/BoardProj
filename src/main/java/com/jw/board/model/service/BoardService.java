@@ -1,21 +1,14 @@
 package com.jw.board.model.service;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson;
 import com.jw.board.model.dao.BoardDao;
 import com.jw.board.model.vo.Board;
 import com.jw.board.model.vo.PageInfo;
-import com.jw.board.model.vo.Reply;
 import com.jw.common.util.PagingUtil;
 
 public class BoardService {
@@ -29,6 +22,7 @@ public class BoardService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> listBoard(Map<String, String> paramMap) throws Exception {
+		logger.info("service ListBoard 메서드 호출됨");
 		String nowPage = paramMap.get("page");
 		if (nowPage == null || nowPage.trim().isEmpty())
 			nowPage = "1";
