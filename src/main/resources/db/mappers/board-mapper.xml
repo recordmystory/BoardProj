@@ -8,7 +8,6 @@
              SELECT ROWNUM RNUM, A.*
              FROM (
                      SELECT NO
-                     
                           , TITLE
                           , CONTENT
                           , HIT
@@ -116,7 +115,6 @@
              SELECT ROWNUM RNUM, A.*
              FROM (
                      SELECT NO
-                     
                           , TITLE
                           , CONTENT
                           , HIT

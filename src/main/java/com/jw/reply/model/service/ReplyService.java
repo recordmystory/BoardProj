@@ -10,7 +10,6 @@ import com.jw.reply.model.dao.ReplyDao;
 public class ReplyService {
 	private static ReplyDao rDao = new ReplyDao();
 
-	
 	/** 댓글 조회 (ajax)
 	 * 
 	 * @param paramMap
@@ -18,8 +17,7 @@ public class ReplyService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> listReply(Map<String, String> paramMap) throws Exception {
-		int boardNo = Integer.parseInt(paramMap.get("no"));
-		List<Reply> list = rDao.listReply(boardNo);
+		List<Reply> list = rDao.listReply(Integer.parseInt(paramMap.get("no")));
 
 		Map<String, Object> resultMap = new HashMap<>();
 	    resultMap.put("list", list);

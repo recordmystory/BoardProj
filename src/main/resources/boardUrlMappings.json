@@ -1,52 +1,52 @@
 {
 	"urls" : {
 	
-			"/mav/board/list.bo" : {
+			"/board/list.bo" : {
 				"viewName" : "/board/list.jsp",
 				"type" : "forward"
 			}, 
 		
-			"/mav/board/detail.bo" : {
+			"/board/detail.bo" : {
 				"viewName" : "/board/detail.jsp",
 				"type" : "forward"
 			},
 			
-			 "/re/board/insert.bo" : {
-			 	"viewName" : "/mav/board/list.bo?page=1",	
+			 "/board/insert.bo" : {
+			 	"viewName" : "/board/list.bo?page=1",	
 				"type" : "redirect"
 			},
 			
-			"/mav/board/regist.bo" : {
+			"/board/regist.bo" : {
 				"viewName" : "/board/registForm.jsp",	
 				"type" : "forward"
 			
 			},
 			
-			"/mav/board/updateForm.bo" : {
+			"/board/updateForm.bo" : {
 				"viewName" : "/board/updateForm.jsp",
 				"type" : "forward"
 			},
 			
-			"/re/board/update.bo" : {
-				"viewName" : "/mav/board/list.bo?page=1",
+			"/board/update.bo" : {
+				"viewName" : "/board/list.bo?page=1",
 				"type" : "redirect"
 			
 			},
 			
-			"/re/board/delete.bo" : {
-				"viewName" : "/mav/board/list.bo?page=1",
+			"/board/delete.bo" : {
+				"viewName" : "/board/list.bo?page=1",
 				"type" : "redirect"
 			},
 			
-			"/ajax/board/listSearch.bo" : {
+			"/board/listSearch.bo" : {
 				"type" : "ajax"			
 			},
 			
-			"/ajax/reply/insert.bo" : {
+			"/reply/insert.bo" : {
 				"type" : "ajax"
 			},
 			
-			"/ajax/reply/list.bo" : {
+			"/reply/list.bo" : {
 				"type" : "ajax"
 			
 			}

@@ -3,16 +3,13 @@ package com.jw.board.model.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import com.jw.board.model.dao.BoardDao;
 import com.jw.board.model.vo.Board;
 import com.jw.board.model.vo.PageInfo;
 import com.jw.common.util.PagingUtil;
 
 public class BoardService {
-	private static final Logger logger = Logger.getLogger(BoardService.class);
+//	private static final Logger logger = Logger.getLogger(BoardService.class);
 
 	private static BoardDao bDao = new BoardDao();
 
@@ -23,8 +20,7 @@ public class BoardService {
 	 */
 	public Map<String, Object> listBoard(Map<String, String> paramMap) throws Exception {
 		String nowPage = paramMap.get("page");
-		if (nowPage == null || nowPage.trim().isEmpty())
-			nowPage = "1";
+		if (nowPage == null || nowPage.trim().isEmpty()) nowPage = "1";
 		int currentPage = Integer.parseInt(nowPage);
 		int listCount = bDao.selectBoardCount();
 
@@ -66,6 +62,8 @@ public class BoardService {
 
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("result", result > 0 ? "success" : "fail");
+		resultMap.put("msg", result > 0 ? "success" : "fail");
+		resultMap.put("data", result);
 		
 		return resultMap;
 //		return "/mav/board/list.bo?page=1";
@@ -99,6 +97,8 @@ public class BoardService {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("b", b);
+		
+		
 		
 		return resultMap;
 		/*request.setAttribute("b", b);

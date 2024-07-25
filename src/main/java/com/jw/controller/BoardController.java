@@ -1,4 +1,4 @@
-package com.jw.board.controller;
+package com.jw.controller;
 
 import static com.jw.common.template.JDBCTemplate.close;
 
@@ -16,9 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.jw.common.util.ExceptionHandler;
-import com.jw.common.util.ParameterUtil;
-import com.jw.common.util.UrlMappingUtil;
+import com.jw.common.handler.ExceptionHandler;
+import com.jw.common.util.StringUtil;
 
 /**
  * .bo로 끝나는 모든 요청을 받는 Controller
@@ -54,20 +53,18 @@ public class BoardController extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	 
-		String uri = request.getRequestURI();
 		String contextPath = request.getContextPath();
-		String action = uri.substring(contextPath.length());
+		String action = request.getRequestURI().substring(contextPath.length());
 
-		String urlType = UrlMappingUtil.getUrlType(action);
-	    String viewName = UrlMappingUtil.getViewName(action);
+		String urlType = StringUtil.getUrlType(action);
+	    String viewName = StringUtil.getViewName(action);
 
 		if (urlType != null) {
-			String methodName = UrlMappingUtil.getMethodNameFromAction(action);
+			String methodName = StringUtil.getMethodNameFromAction(action);
 
 			try {
 				
-				String serviceClassName = UrlMappingUtil.getServiceClassNameFromAction(action);
+				String serviceClassName = StringUtil.getServiceClassNameFromAction(action);
 	            Class<?> serviceClass = Class.forName(serviceClassName);
 	            Object serviceInstance = serviceClass.getDeclaredConstructor().newInstance();
 	            Method method = serviceClass.getMethod(methodName, Map.class);
@@ -81,12 +78,12 @@ public class BoardController extends HttpServlet {
 					String value = request.getParameter(name);
 				
 				// 파라미터 유효성 검사
-				if (ParameterUtil.isNullOrEmpty(request, name)) {
+				if (StringUtil.isNullOrEmpty(request, name)) {
 					throw new IllegalArgumentException("유효하지 않은 파라미터: " + name);
 				//                    ExceptionHandler.processException(request, response, "파라미터가 유효하지 않습니다: " + name, new IllegalArgumentException("IllegalArgumentException 발생 : " + name));
 				//                    return;
 				}
-				if (isNumberParameter(name) && !ParameterUtil.isNumber(request, name)) {
+				if (isNumberParameter(name) && !StringUtil.isNumber(request, name)) {
 					throw new IllegalArgumentException("유효하지 않은 숫자 파라미터: " + name);
 				//                    ExceptionHandler.processException(request, response, "숫자 파라미터가 유효하지 않습니다: " + name, new IllegalArgumentException("IllegalArgumentException 발생 : " + name));
 				}
@@ -142,11 +139,15 @@ public class BoardController extends HttpServlet {
 			response.sendRedirect(contextPath + "/views/board/errorPage.jsp");
 //			request.getRequestDispatcher("/views/board/errorPage.jsp").forward(request, response);
 		}
+	}
 		
-			/*catch (NoSuchMethodException e) {
+		
+		
+		
+		/*catch (NoSuchMethodException e) {
 				handleException(request, response, "해당 메서드를 찾을 수 없습니다: " + e.getMessage(), e);
 			} catch (IllegalAccessException e) {
-				handleException(request, response, "메서드 접근 실패: " + e.getMessage(), e);
+				handleException(re equest, response, "메서드 접근 실패: " + e.getMessage(), e);
 			} catch (InvocationTargetException e) {
 				handleException(request, response, "메서드 호출 실패: " + e.getMessage(), e);
 			} catch (IOException e) {
@@ -154,7 +155,7 @@ public class BoardController extends HttpServlet {
 			} catch (ServletException e) {
 				handleException(request, response, "서블릿 오류: " + e.getMessage(), e);*/
 		
-	}
+//	}
 	
 
 	private boolean isNumberParameter(String paramName) {

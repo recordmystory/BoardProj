@@ -54,6 +54,7 @@ public class JDBCTemplate {
 
 		return conn;
 	}
+	// get가여조는 메서드하 
 
 	/**
 	 * commit

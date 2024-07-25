@@ -1,9 +1,6 @@
 package com.jw.board.model.dao;
 
-import static com.jw.common.template.JDBCTemplate.close;
-import static com.jw.common.template.JDBCTemplate.commit;
-import static com.jw.common.template.JDBCTemplate.getConnection;
-import static com.jw.common.template.JDBCTemplate.rollback;
+import static com.jw.common.template.JDBCTemplate.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,9 +22,10 @@ public class BoardDao {
 	public BoardDao() { 
 		ConfigUtil configUtil = ConfigUtil.getInstance();
         configUtil.loadXmlFile();
-
+        
         this.prop = configUtil.getProperties();
         
+        // 여기서 처음에 선
 //        logger.info("prop : " + prop.toString());
 	}
 	

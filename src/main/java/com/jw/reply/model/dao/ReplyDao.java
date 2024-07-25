@@ -89,10 +89,12 @@ public class ReplyDao {
 			result = pstmt.executeUpdate();
 
 			if (result == 0) {
-				logger.debug("result : 0 (insert || update || delete 된 행의 개수 0)");
-			} else if (result == 1) {
-				logger.debug("result : 1 (insert || update || delete 성공)");
-			}
+	            logger.debug("result : 0 (insert || update || delete 된 행의 개수 0)");
+	        } else if (result == -1) {
+	            logger.debug("result : -1 (비정상 결과)");
+	        } else if (result >= 1) {
+	            logger.debug("result : " + result + " (insert || update || delete 성공)");
+	        }
 
 			commit(conn);
 

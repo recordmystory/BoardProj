@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <%@page import="com.jw.board.model.vo.Board"%>
 <% Board b = (Board) request.getAttribute("b"); %>    
@@ -38,7 +37,7 @@
 		<div class="content-title">
 			<h2>게시글 수정</h2>
 		</div>
-		<form action="${contextPath}/re/board/update.bo?no=${b.no}" method="post">
+		<form action="/board/update.bo?no=${b.no}" method="post">
 			<div class="table-area">
 				<table class="table">
 					<tr>

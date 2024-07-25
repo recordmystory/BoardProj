@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <c:set var="alertMsg" value="${requestScope.alertMsg}" />
 
 <!DOCTYPE html>
@@ -61,9 +60,9 @@
 		</table>
 		</div>
 		<div class="btn-area">
-			<a href="${contextPath}/mav/board/list.bo" class="btn btn-primary btn-sm">글 목록</a>	
-			<a href="${contextPath}/mav/board/updateForm.bo?no=${b.no}" class="btn btn-secondary btn-sm">수정</a>
-			<a href="${contextPath}/re/board/delete.bo?no=${b.no}" class="btn btn-danger btn-sm">삭제</a>
+			<a href="/board/list.bo" class="btn btn-primary btn-sm">글 목록</a>	
+			<a href="/board/updateForm.bo?no=${b.no}" class="btn btn-secondary btn-sm">수정</a>
+			<a href="/board/delete.bo?no=${b.no}" class="btn btn-danger btn-sm">삭제</a>
 		</div>
 		<br><br>
 		
@@ -110,21 +109,16 @@
     		let content = '';
     		
     		$.ajax({
-    			url: '${contextPath}/ajax/reply/insert.bo',
+    			url: '/reply/insert.bo',
     			data: { no: ${b.no}, content: $('#reply-content').val() },
     			method: 'post',
     			success: function(result) {
-    				if(result.flag == 'success'){
-    					console.log('ss');
-    					$('#reply-content').val(''); // textarea 초기화
-    					selectReply(); // 갱신된 댓글 목록 조회해 화면에 뿌려주기
-    				} else {
-    					if($('#reply-content').val().trim() == ''){
-    						alert('댓글 내용을 입력해주세요.');
-    					} else {
-    						alert('댓글 작성 실패');
-    					}
-    				}
+    				
+    				if (result.flag === "fail" && $('#reply-content').val().trim() === null || $('#reply-content').val().trim() === "") alert('댓글 내용을 입력해주세요.');   
+    			    				
+   					$('#reply-content').val(''); // textarea 초기화
+   					selectReply(); // 갱신된 댓글 목록 조회해 화면에 뿌려주기
+    					
     			}, error: function(){
     				alert('댓글 작성에 실패했습니다. 잠시후 다시 시도해주세요.');
     			}
@@ -135,27 +129,24 @@
     	// 댓글 조회
     	function selectReply(){
     		$.ajax({
-    			url: '${contextPath}/ajax/reply/list.bo',
+    			url: '/reply/list.bo',
     			data: { no: ${b.no} },
     			success: function(result){
     				console.log(result);
     				let value = '';
     				
-    				if(result.list.length > 0){
-    					for(let i=0; i<result.list.length; i++){
-    						value += '<tr>'
-    							  + '<td>' + result.list[i].regId + '</td>'
-    							  + '<td>' + result.list[i].content + '</td>'
-    							  + '<td>' + result.list[i].regDate + '</td>'
-    							  + '<tr>';
-    							  
-    					}
-    				} else {
-    					value += '<tr><td colspan="3">존재하는 댓글이 없습니다.</td></tr>';
-    				}
+    				if(result.list.length < 0) value += '<tr><td colspan="3">존재하는 댓글이 없습니다.</td></tr>';
     				
-    				// table내에 list값 뿌리기
-    				$('#reply-table tbody').html(value);
+    				for(let i=0; i<result.list.length; i++){
+						value += '<tr>'
+							  + '<td>' + result.list[i].regId + '</td>'
+							  + '<td>' + result.list[i].content + '</td>'
+							  + '<td>' + result.list[i].regDate + '</td>'
+							  + '<tr>';
+					}
+    				
+    				$('#reply-table tbody').html(value); // table내에 list값 뿌리기
+    				
     			},
     			error: function(){
     				alert('댓글 조회에 실패했습니다. 잠시 후 시도해주세요.');

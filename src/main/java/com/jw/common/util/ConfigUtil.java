@@ -29,9 +29,7 @@ public class ConfigUtil {
 	    /**
 	     * 클래스 로드 시 mapper 파일을 읽고 properties 객체에 저장됨
 	     */
-	    private ConfigUtil() {
-	        // 기본 생성자
-	    }
+	    private ConfigUtil() { }
 
 	    /**
 	     * ConfigUtil 인스턴스 반환
