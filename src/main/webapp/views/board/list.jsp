@@ -38,14 +38,14 @@
 <body>
 	<div class="container content-area">
 		<div class="content-title">
-			<h2 onclick="location.href='/bbs/list.bo?page=1';">게시판 목록</h2>
+			<h2 onclick="location.href='/board/list.bo?page=1';">게시판 목록</h2>
 		</div>
 		<div>
 			<div class="table-responsive-xl" style="text-align: right;">
 			  <div style="display: flex;" class="d-flex justify-content-end content-area-header">
 			  	<input type="text" class="form-control" id="keyword" placeholder="글 제목을 입력하세요.">
 			  	<button type="button" id="searchBtn" class="btn btn-primary btn-sm">검색</button>
-	  			<a href="/bbs/regist.bo" class="btn btn-info btn-sm">글작성</a>
+	  			<a href="/board/regist.bo" class="btn btn-info btn-sm">글작성</a>
 			  </div>
 			  <table class="table" id="boardList">
 			  	<thead class="table-active">
@@ -88,7 +88,7 @@
 				  		<li class="page-item disabled"><a class="page-link" href="#">&lt;</a></li>
 				  	</c:when>
 				  	<c:otherwise>
-				  		<li class="page-item"><a class="page-link" href="/bbs/list.bo?page=${page.currentPage -1}">&lt;</a></li>
+				  		<li class="page-item"><a class="page-link" href="/board/list.bo?page=${page.currentPage -1}">&lt;</a></li>
 				  	</c:otherwise>
 				  </c:choose>
 				  
@@ -98,7 +98,7 @@
 					  		<li class="page-item active"><a class="page-link" href="#">${p}</a></li>
 					  	</c:when>
 					  	<c:otherwise>
-					  		<li class="page-item"><a class="page-link" href="/bbs/list.bo?page=${p}">${p}</a></li>
+					  		<li class="page-item"><a class="page-link" href="/board/list.bo?page=${p}">${p}</a></li>
 					  	</c:otherwise>
 					  </c:choose>
 				  </c:forEach>
@@ -108,7 +108,7 @@
 					  	<li class="page-item disabled"><a class="page-link" href="#">&gt;</a></li>
 					  </c:when>
 					  <c:otherwise>
-					  	<li class="page-item"><a class="page-link" href="/bbs/list.bo?page=${page.currentPage + 1}">&gt;</a></li>
+					  	<li class="page-item"><a class="page-link" href="/board/list.bo?page=${page.currentPage + 1}">&gt;</a></li>
 					  </c:otherwise>
 				  </c:choose>
 			  </ul>
@@ -137,7 +137,7 @@
 			$('#boardList>tbody>tr').off('click');
 			
 			$('#boardList>tbody>tr').on('click', function() {
-	            location.href = '/bbs/detail.bo?no=' + $(this).children().eq(0).text();
+	            location.href = '/board/detail.bo?no=' + $(this).children().eq(0).text();
 	        });
 		};
 		
@@ -188,7 +188,7 @@
 				
 				// 검색 버튼 클릭시 ajax 
 				$.ajax({
-					url: '/bbs/listSearch.bo',
+					url: '/board/listSearch.bo',
 					data: { page: 1, keyword: $('#keyword').val() },
 					success: function(resultMap){
 						$('#boardList tbody').empty();
@@ -227,14 +227,14 @@
 			                if(page.currentPage == 1){ // 현재 사용자가 보고 있는 페이지가 1페이지일때
 			                    pageArea += '<li class="page-item disabled"><a class="page-link" href="#">&lt;</a></li>';
 			                } else { // 현재 사용자가 보고 있는 페이지가 1페이지가 아닐 때
-			                    pageArea += '<li class="page-item"><a class="page-link" href="/bbs/list.bo?page=' + (page.currentPage - 1) + '">&lt;</a></li>';
+			                    pageArea += '<li class="page-item"><a class="page-link" href="/mav/board/list.bo?page=' + (page.currentPage - 1) + '">&lt;</a></li>';
 			                }
 
 			                for(let p = page.startPage; p <= page.endPage; p++) {
 			                    if(p == page.currentPage){
 			                        pageArea += '<li class="page-item active"><a class="page-link" href="#">' + p + '</a></li>';
 			                    } else {
-			                        pageArea += '<li class="page-item"><a class="page-link" href="/bbs/list.bo?page=' + p + '">' + p + '</a></li>';
+			                        pageArea += '<li class="page-item"><a class="page-link" href="/mav/board/list.bo?page=' + p + '">' + p + '</a></li>';
 			                    }
 			                }
 
@@ -242,7 +242,7 @@
 			                if(page.currentPage == page.maxPage){ // 현재 사용자가 보고 있는 페이지의 값과 가장 마지막 페이지의 값이 일치할 때
 			                    pageArea += '<li class="page-item disabled"><a class="page-link" href="#">&gt;</a></li>';
 			                } else {
-			                    pageArea += '<li class="page-item"><a class="page-link" href="bbs/list.bo?page=' + (page.currentPage + 1) + '">&gt;</a></li>';
+			                    pageArea += '<li class="page-item"><a class="page-link" href="/mav/board/list.bo?page=' + (page.currentPage + 1) + '">&gt;</a></li>';
 			                }
 			            }
 

@@ -37,7 +37,7 @@
 		<div class="content-title">
 			<h2>게시글 수정</h2>
 		</div>
-		<form action="/bbs/update.bo?no=${b.no}" method="post">
+		<form action="/board/update.bo?no=${b.no}" method="post">
 			<div class="table-area">
 				<table class="table">
 					<tr>
