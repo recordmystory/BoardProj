@@ -1,6 +1,9 @@
 package com.jw.board.model.dao;
 
-import static com.jw.common.template.JDBCTemplate.*;
+import static com.jw.common.template.JDBCTemplate.close;
+import static com.jw.common.template.JDBCTemplate.commit;
+import static com.jw.common.template.JDBCTemplate.getConnection;
+import static com.jw.common.template.JDBCTemplate.rollback;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -119,7 +122,6 @@ public class BoardDao {
 
 		return result;
 	}
-
 	/** 게시글 목록 조회 및 페이징 
 	 * 
 	 * @param page
@@ -141,6 +143,7 @@ public class BoardDao {
 	        return list;
 		}, params);
 	}
+	
 	
 	/** 게시글 목록 조회 및 페이징 
 	 * 
@@ -167,7 +170,6 @@ public class BoardDao {
 			Board b = new Board();
 			
 			if (rset.next()) {
-				
 				b.setNo(rset.getInt("NO"));
 				b.setTitle(rset.getString("TITLE"));
 				b.setContent(rset.getString("CONTENT"));
@@ -192,7 +194,6 @@ public class BoardDao {
 			List<Board> list = new ArrayList<>();
 			while(rset.next()) {
 				Board b = new Board();
-				
 				b.setNo(rset.getInt("NO"));
 				b.setTitle(rset.getString("TITLE"));
 				b.setContent(rset.getString("CONTENT"));
@@ -220,8 +221,67 @@ public class BoardDao {
 			return 1;
 		}, params);
 	}
-	
 }
+
+/*private void setFieldsFromResultSet(Board b, ResultSet rset) throws SQLException {
+    ResultSetMetaData metaData = rset.getMetaData();
+    int columnCount = metaData.getColumnCount();
+    Field[] fields = Board.class.getDeclaredFields();
+    
+    for (int i = 1; i <= columnCount; i++) {
+        String columnName = metaData.getColumnName(i).toLowerCase();
+        for (Field field : fields) {
+            String fieldName = field.getName().toLowerCase();
+            if (columnName.equals(fieldName)) {
+                Logger.getLogger(getClass().getName()).info("columnName : " + columnName + ", fieldName : " + fieldName);
+                try {
+                    field.setAccessible(true);
+                    Object value = rset.getObject(columnName);
+                    if (value != null) {
+                        setFieldValue(field, b, value);
+                    }
+                } catch (IllegalAccessException e) {
+                    Logger.getLogger(getClass().getName()).info("Field access error: " + fieldName);
+                }
+                break;
+            }
+        }
+    }
+}
+
+private void setFieldValue(Field field, Board b, Object value) throws IllegalAccessException {
+	Class<?> fieldType = field.getType();
+
+    if (fieldType == int.class || fieldType == Integer.class) {
+        if (value instanceof BigDecimal) {
+            field.set(b, ((BigDecimal) value).intValue());
+        } else if (value instanceof Number) {
+            field.set(b, ((Number) value).intValue());
+        }
+    } else if (fieldType == long.class || fieldType == Long.class) {
+        if (value instanceof BigDecimal) {
+            field.set(b, ((BigDecimal) value).longValue());
+        } else if (value instanceof Number) {
+            field.set(b, ((Number) value).longValue());
+        }
+    } else if (fieldType == double.class || fieldType == Double.class) {
+        if (value instanceof BigDecimal) {
+            field.set(b, ((BigDecimal) value).doubleValue());
+        } else if (value instanceof Number) {
+            field.set(b, ((Number) value).doubleValue());
+        }
+    } else if (fieldType == Date.class) {
+        if (value instanceof String) {
+            field.set(b, Date.valueOf((String) value));
+        } else if (value instanceof Date) {
+            field.set(b, (Date) value);
+        }
+    } else {
+        field.set(b, value);
+    }
+}
+}*/
+
 	/*public List<Board> listBoard(Object... params) {
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
