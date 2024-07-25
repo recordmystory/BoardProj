@@ -59,7 +59,7 @@ public class BoardService {
 		b.setTitle(title);
 		b.setContent(content);
 
-		int result = bDao.updateExecute("insertBoard", title, content);
+		int result = bDao.dmlQuery("insertBoard", title, content);
 
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("result", result > 0 ? "success" : "fail");
@@ -94,7 +94,7 @@ public class BoardService {
 		int boardNo = Integer.parseInt(paramMap.get("no"));
 //		logger.info("boardNo : " + boardNo);
 		Board b = bDao.detailBoard(boardNo);
-		bDao.updateExecute("updateHit", boardNo);
+		bDao.dmlQuery("updateHit", boardNo);
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("b", b);
@@ -136,7 +136,7 @@ public class BoardService {
 				b.setTitle(request.getParameter("title"));
 				b.setContent(request.getParameter("content"));*/
 
-		int result = bDao.updateExecute("updateBoard", title, content, boardNo);
+		int result = bDao.dmlQuery("updateBoard", title, content, boardNo);
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("result", result > 0 ? "success" : "fail");
@@ -153,7 +153,7 @@ public class BoardService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> deleteBoard(Map<String, String> paramMap) throws Exception {
-		int result = bDao.updateExecute("deleteBoard", Integer.parseInt(paramMap.get("no")));
+		int result = bDao.dmlQuery("deleteBoard", Integer.parseInt(paramMap.get("no")));
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("result", result > 0 ? "success" : "fail");
 		

@@ -1,26 +1,13 @@
 package com.jw.board.model.dao;
 
-import static com.jw.common.template.JDBCTemplate.close;
-import static com.jw.common.template.JDBCTemplate.commit;
-import static com.jw.common.template.JDBCTemplate.getConnection;
-import static com.jw.common.template.JDBCTemplate.rollback;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-
-import org.apache.log4j.Logger;
 
 import com.jw.board.model.vo.Reply;
-import com.jw.common.util.ConfigUtil;
 
 public class ReplyDao extends BaseDao {
 	/*private Properties prop;*/
-	private static final Logger logger = Logger.getLogger(BoardDao.class);
+//	private static final Logger logger = Logger.getLogger(BoardDao.class);
 
 	
 	/*	public ReplyDao() { 
@@ -36,7 +23,7 @@ public class ReplyDao extends BaseDao {
 	 * @return list
 	 */
 	public List<Reply> listReply(int boardNo) {
-		return selectExecute("listReply", rset -> {
+		return dqlQuery("listReply", rset -> {
 			Reply r = new Reply();
 			List<Reply> list = new ArrayList<>();
 			while (rset.next()) {

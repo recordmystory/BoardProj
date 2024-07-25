@@ -115,7 +115,7 @@ public class BoardDao extends BaseDao {
 	 * @return list
 	 */
 	public List<Board> listBoard(Object... params) {
-		return selectExecute("listBoard", rset -> {
+		return dqlQuery("listBoard", rset -> {
 			List<Board> list = new ArrayList<>();
 	        while (rset.next()) {
 	            Board b = new Board();
@@ -137,7 +137,7 @@ public class BoardDao extends BaseDao {
 	 * @return listCount
 	 */
 	public int selectBoardCount() {
-		return selectExecute("selectBoardCount", rset -> {
+		return dqlQuery("selectBoardCount", rset -> {
 			if(rset.next()) {
 				return rset.getInt("COUNT");
 			}
@@ -153,7 +153,7 @@ public class BoardDao extends BaseDao {
 	 * @return b
 	 */
 	public Board detailBoard(int boardNo) {
-		return selectExecute("detailBoard", rset -> {
+		return dqlQuery("detailBoard", rset -> {
 			Board b = new Board();
 			
 			if (rset.next()) {
@@ -177,7 +177,7 @@ public class BoardDao extends BaseDao {
 	 * @return list
 	 */
 	public List<Board> listSearchBoard(Object... params) {
-		return selectExecute("listSearchBoard", rset -> {
+		return dqlQuery("listSearchBoard", rset -> {
 			List<Board> list = new ArrayList<>();
 			while(rset.next()) {
 				Board b = new Board();
@@ -201,7 +201,7 @@ public class BoardDao extends BaseDao {
 	 * @return listCount
 	 */
 	public int selectSearchCount(Object... params) {
-		return selectExecute("selectSearchCount", rset -> {
+		return dqlQuery("selectSearchCount", rset -> {
 			if(rset.next()) {
 				return rset.getInt("COUNT");
 			}

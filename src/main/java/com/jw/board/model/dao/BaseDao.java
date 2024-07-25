@@ -42,7 +42,7 @@ public abstract class BaseDao {
 	 * @param params
 	 * @return result
 	 */
-	public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params){
+	public <T>T dqlQuery(String sqlKey, ResultSetHandler<T> handler, Object... params){
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -74,7 +74,7 @@ public abstract class BaseDao {
 	 * @param params : 쿼리 파라미터
 	 * @return result : 업데이트된 행 개수
 	 */
-	public int updateExecute(String sqlKey, Object... params) {
+	public int dmlQuery(String sqlKey, Object... params) {
 		
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
