@@ -60,9 +60,9 @@
 		</table>
 		</div>
 		<div class="btn-area">
-			<a href="/board/list.bo" class="btn btn-primary btn-sm">글 목록</a>	
-			<a href="/board/updateForm.bo?no=${b.no}" class="btn btn-secondary btn-sm">수정</a>
-			<a href="/board/delete.bo?no=${b.no}" class="btn btn-danger btn-sm">삭제</a>
+			<a href="/bbs/list.bo" class="btn btn-primary btn-sm">글 목록</a>	
+			<a href="/bbs/updateForm.bo?no=${b.no}" class="btn btn-secondary btn-sm">수정</a>
+			<a href="/bbs/delete.bo?no=${b.no}" class="btn btn-danger btn-sm">삭제</a>
 		</div>
 		<br><br>
 		

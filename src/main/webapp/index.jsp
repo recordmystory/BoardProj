@@ -39,7 +39,7 @@
 				<h1>게시판 서비스</h1>
 			</div>
 			<div class="btn-area" style="height: 500px; padding: 160px 0px 160px 0px;">
-				<a href="/board/list.bo" class="btn btn-primary btn-lg">게시판 목록</a>	
+				<a href="/bbs/list.bo" class="btn btn-primary btn-lg">게시판 목록</a>	
 			</div>
 		</div>
 	
