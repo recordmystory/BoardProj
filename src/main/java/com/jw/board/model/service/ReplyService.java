@@ -1,11 +1,11 @@
-package com.jw.reply.model.service;
+package com.jw.board.model.service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jw.board.model.dao.ReplyDao;
 import com.jw.board.model.vo.Reply;
-import com.jw.reply.model.dao.ReplyDao;
 
 public class ReplyService {
 	private static ReplyDao rDao = new ReplyDao();

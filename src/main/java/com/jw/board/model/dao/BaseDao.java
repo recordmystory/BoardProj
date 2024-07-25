@@ -1,4 +1,4 @@
-package com.jw.reply.model.dao;
+package com.jw.board.model.dao;
 
 import static com.jw.common.template.JDBCTemplate.close;
 import static com.jw.common.template.JDBCTemplate.commit;
@@ -9,69 +9,71 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.jw.board.model.dao.BoardDao;
-import com.jw.board.model.vo.Reply;
 import com.jw.common.util.ConfigUtil;
 
-public class ReplyDao {
+public abstract class BaseDao {
+	private static final Logger logger = Logger.getLogger(BaseDao.class);
 	private Properties prop;
-	private static final Logger logger = Logger.getLogger(BoardDao.class);
-
 	
-	public ReplyDao() { 
+	/**
+	 * ConfigUtil 클래스를 통해 mapper 파일 로드 
+	 */
+	public BaseDao() {
 		ConfigUtil configUtil = ConfigUtil.getInstance();
         configUtil.loadXmlFile();
-
+        
         this.prop = configUtil.getProperties();
 	}
 	
-	/** 댓글 조회
+	@FunctionalInterface
+	public interface ResultSetHandler<T> {
+	    T handle(ResultSet rset) throws SQLException;
+	}
+
+	/** select 메서드 통합
 	 * 
-	 * @param boardNo
-	 * @return list
+	 * @param <T>
+	 * @param sqlKey
+	 * @param handler
+	 * @param params
+	 * @return result
 	 */
-	public List<Reply> listReply(int boardNo) {
-		Connection conn = getConnection(true);
+	public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params){
+		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
-		List<Reply> list = new ArrayList<>();
-
-		String sql = prop.getProperty("listReply");
-
+		T result = null;
+		
+		String sql = prop.getProperty(sqlKey);
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, boardNo);
 
-			rset = pstmt.executeQuery();
-
-			while (rset.next()) {
-				Reply r = new Reply();
-				
-				r.setRNo(rset.getInt("RNO"));
-				r.setContent(rset.getString("CONTENT"));
-				r.setRegId(rset.getString("REGID"));
-				r.setRegDate(rset.getString("REGDATE"));
-				r.setDelYn(rset.getString("DELYN"));
-				r.setBNo(rset.getInt("BNO"));
-
-				list.add(r);
+			for (int i = 0; i < params.length; i++) {
+				pstmt.setObject(i + 1, params[i]);
 			}
+			rset = pstmt.executeQuery();
+			result = handler.handle(rset);
 		} catch (SQLException e) {
-			logger.error("SQLException 발생 : " + e.getMessage());
+			
 		} finally {
 			close(rset, pstmt, conn);
-			
 		}
 		
-		return list;
+		return result;
+		
 	}
 	
+	/** SQL 실행 (INSERT, UPDATE, DELETE문)
+	 * 
+	 * @param sql : 실행할 쿼리 key
+	 * @param params : 쿼리 파라미터
+	 * @return result : 업데이트된 행 개수
+	 */
 	public int updateExecute(String sqlKey, Object... params) {
 		
 		Connection conn = getConnection();
@@ -95,7 +97,7 @@ public class ReplyDao {
 	        } else if (result >= 1) {
 	            logger.debug("result : " + result + " (insert || update || delete 성공)");
 	        }
-
+			
 			commit(conn);
 
 		} catch (SQLException | IllegalArgumentException e) {

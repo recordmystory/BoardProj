@@ -23,7 +23,7 @@ import com.jw.common.util.StringUtil;
  * .bo로 끝나는 모든 요청을 받는 Controller
  */
 @WebServlet("*.bo")
-public class BoardController extends HttpServlet {
+public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 //	private static final Logger logger = Logger.getLogger(BoardController.class);
 

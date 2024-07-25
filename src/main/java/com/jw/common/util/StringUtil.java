@@ -4,11 +4,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 /**
  * Parameter 유효성 검사 및 URL 관련 유틸리티
  */
 public class StringUtil {
 	 // URL 매핑 정보를 담은 맵
+//	private static final Logger logger = Logger.getLogger(BoardDao.class);
+
     private static Map<String, Map<String, String>> urlMappings;
 
     static {
@@ -106,6 +109,7 @@ public class StringUtil {
         if (parts.length < 2) {
             return null;
         }
-        return "com.jw." + parts[1] + ".model.service." + convertUrl(parts[1]) + "Service";
+        
+        return "com.jw.board.model.service." + convertUrl(parts[1]) + "Service";
     }
 }

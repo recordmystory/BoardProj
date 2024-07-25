@@ -1,36 +1,23 @@
 package com.jw.board.model.dao;
 
-import static com.jw.common.template.JDBCTemplate.close;
-import static com.jw.common.template.JDBCTemplate.commit;
-import static com.jw.common.template.JDBCTemplate.getConnection;
-import static com.jw.common.template.JDBCTemplate.rollback;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-
-import org.apache.log4j.Logger;
 
 import com.jw.board.model.vo.Board;
-import com.jw.common.util.ConfigUtil;
 
-public class BoardDao {
-	private Properties prop;
-	private static final Logger logger = Logger.getLogger(BoardDao.class);
+public class BoardDao extends BaseDao {
+//	private Properties prop;
+//	private static final Logger logger = Logger.getLogger(BoardDao.class);
 
-	public BoardDao() { 
-		ConfigUtil configUtil = ConfigUtil.getInstance();
-        configUtil.loadXmlFile();
-        
-        this.prop = configUtil.getProperties();
-        
-        // 여기서 처음에 선
-//        logger.info("prop : " + prop.toString());
-	}
+	/*	public BoardDao() { 
+			ConfigUtil configUtil = ConfigUtil.getInstance();
+	    configUtil.loadXmlFile();
+	    
+	    this.prop = configUtil.getProperties();
+	    
+	    // 여기서 처음에 선
+	//        logger.info("prop : " + prop.toString());
+		}*/
 	
 	/*	static { // 클래스 최초 로드 시만 getProperties() 메서드 호출
 			prop = BoardController.getProperties();
@@ -41,10 +28,10 @@ public class BoardDao {
 	}*/
 	
 
-	@FunctionalInterface
+	/*@FunctionalInterface
 	public interface ResultSetHandler<T> {
 	    T handle(ResultSet rset) throws SQLException;
-	}
+	}*/
 
 	/** select 메서드 통합
 	 * 
@@ -54,7 +41,7 @@ public class BoardDao {
 	 * @param params
 	 * @return result
 	 */
-	public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params){
+	/*public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params){
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -64,7 +51,7 @@ public class BoardDao {
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
-
+	
 			for (int i = 0; i < params.length; i++) {
 				pstmt.setObject(i + 1, params[i]);
 			}
@@ -78,7 +65,7 @@ public class BoardDao {
 		
 		return result;
 		
-	}
+	}*/
 	
 	/** SQL 실행 (INSERT, UPDATE, DELETE문)
 	 * 
@@ -86,22 +73,22 @@ public class BoardDao {
 	 * @param params : 쿼리 파라미터
 	 * @return result : 업데이트된 행 개수
 	 */
-	public int updateExecute(String sqlKey, Object... params) {
+	/*public int updateExecute(String sqlKey, Object... params) {
 		
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty(sqlKey);
 		int result = 0;
 		try {
-
+	
 	        pstmt = conn.prepareStatement(sql);
 	        
 			for (int i = 0; i < params.length; i++) {
 				pstmt.setObject(i + 1, params[i]);
 			}
-
+	
 			result = pstmt.executeUpdate();
-
+	
 			if (result == 0) {
 	            logger.debug("result : 0 (insert || update || delete 된 행의 개수 0)");
 	        } else if (result == -1) {
@@ -111,7 +98,7 @@ public class BoardDao {
 	        }
 			
 			commit(conn);
-
+	
 		} catch (SQLException | IllegalArgumentException e) {
 			e.printStackTrace();
 			logger.error(e.getClass().getName() + "발생 : " + e.getMessage());
@@ -119,9 +106,9 @@ public class BoardDao {
 		} finally {
 			close(pstmt, conn);
 		}
-
+	
 		return result;
-	}
+	}*/
 	/** 게시글 목록 조회 및 페이징 
 	 * 
 	 * @param page
