@@ -132,7 +132,6 @@
     			url: '/reply/list.bo',
     			data: { no: ${b.no} },
     			success: function(result){
-    				console.log(result);
     				let value = '';
     				
     				if(result.list.length < 0) value += '<tr><td colspan="3">존재하는 댓글이 없습니다.</td></tr>';
