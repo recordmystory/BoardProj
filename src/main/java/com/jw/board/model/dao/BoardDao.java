@@ -27,88 +27,6 @@ public class BoardDao extends BaseDao {
 	    return prop;
 	}*/
 	
-
-	/*@FunctionalInterface
-	public interface ResultSetHandler<T> {
-	    T handle(ResultSet rset) throws SQLException;
-	}*/
-
-	/** select 메서드 통합
-	 * 
-	 * @param <T>
-	 * @param sqlKey
-	 * @param handler
-	 * @param params
-	 * @return result
-	 */
-	/*public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params){
-		Connection conn = getConnection();
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		T result = null;
-		
-		String sql = prop.getProperty(sqlKey);
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-	
-			for (int i = 0; i < params.length; i++) {
-				pstmt.setObject(i + 1, params[i]);
-			}
-			rset = pstmt.executeQuery();
-			result = handler.handle(rset);
-		} catch (SQLException e) {
-			
-		} finally {
-			close(rset, pstmt, conn);
-		}
-		
-		return result;
-		
-	}*/
-	
-	/** SQL 실행 (INSERT, UPDATE, DELETE문)
-	 * 
-	 * @param sql : 실행할 쿼리 key
-	 * @param params : 쿼리 파라미터
-	 * @return result : 업데이트된 행 개수
-	 */
-	/*public int updateExecute(String sqlKey, Object... params) {
-		
-		Connection conn = getConnection();
-		PreparedStatement pstmt = null;
-		String sql = prop.getProperty(sqlKey);
-		int result = 0;
-		try {
-	
-	        pstmt = conn.prepareStatement(sql);
-	        
-			for (int i = 0; i < params.length; i++) {
-				pstmt.setObject(i + 1, params[i]);
-			}
-	
-			result = pstmt.executeUpdate();
-	
-			if (result == 0) {
-	            logger.debug("result : 0 (insert || update || delete 된 행의 개수 0)");
-	        } else if (result == -1) {
-	            logger.debug("result : -1 (비정상 결과)");
-	        } else if (result >= 1) {
-	            logger.debug("result : " + result + " (insert || update || delete 성공)");
-	        }
-			
-			commit(conn);
-	
-		} catch (SQLException | IllegalArgumentException e) {
-			e.printStackTrace();
-			logger.error(e.getClass().getName() + "발생 : " + e.getMessage());
-			rollback(conn);
-		} finally {
-			close(pstmt, conn);
-		}
-	
-		return result;
-	}*/
 	/** 게시글 목록 조회 및 페이징 
 	 * 
 	 * @param page
@@ -138,10 +56,11 @@ public class BoardDao extends BaseDao {
 	 */
 	public int selectBoardCount() {
 		return dqlQuery("selectBoardCount", rset -> {
+			int count = 0;
 			if(rset.next()) {
-				return rset.getInt("COUNT");
+				count = rset.getInt("COUNT");
 			}
-			return 1;
+			return count;
 		});
 	}
 	
@@ -163,9 +82,8 @@ public class BoardDao extends BaseDao {
 				b.setHit(rset.getInt("HIT"));
 				b.setRegDate(rset.getDate("REGDATE"));
 				b.setModDate(rset.getDate("MODDATE"));
-				return b;
 			}
-			return null;
+			return b;
 		}, boardNo);
 				
 	}
@@ -202,13 +120,97 @@ public class BoardDao extends BaseDao {
 	 */
 	public int selectSearchCount(Object... params) {
 		return dqlQuery("selectSearchCount", rset -> {
+			int count = 0;
 			if(rset.next()) {
-				return rset.getInt("COUNT");
+				count = rset.getInt("COUNT");
 			}
-			return 1;
+			return count;
 		}, params);
 	}
 }
+
+
+/*@FunctionalInterface
+public interface ResultSetHandler<T> {
+    T handle(ResultSet rset) throws SQLException;
+}*/
+
+/** select 메서드 통합
+ * 
+ * @param <T>
+ * @param sqlKey
+ * @param handler
+ * @param params
+ * @return result
+ */
+/*public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params){
+	Connection conn = getConnection();
+	PreparedStatement pstmt = null;
+	ResultSet rset = null;
+	T result = null;
+	
+	String sql = prop.getProperty(sqlKey);
+	
+	try {
+		pstmt = conn.prepareStatement(sql);
+
+		for (int i = 0; i < params.length; i++) {
+			pstmt.setObject(i + 1, params[i]);
+		}
+		rset = pstmt.executeQuery();
+		result = handler.handle(rset);
+	} catch (SQLException e) {
+		
+	} finally {
+		close(rset, pstmt, conn);
+	}
+	
+	return result;
+	
+}*/
+
+/** SQL 실행 (INSERT, UPDATE, DELETE문)
+ * 
+ * @param sql : 실행할 쿼리 key
+ * @param params : 쿼리 파라미터
+ * @return result : 업데이트된 행 개수
+ */
+/*public int updateExecute(String sqlKey, Object... params) {
+	
+	Connection conn = getConnection();
+	PreparedStatement pstmt = null;
+	String sql = prop.getProperty(sqlKey);
+	int result = 0;
+	try {
+
+        pstmt = conn.prepareStatement(sql);
+        
+		for (int i = 0; i < params.length; i++) {
+			pstmt.setObject(i + 1, params[i]);
+		}
+
+		result = pstmt.executeUpdate();
+
+		if (result == 0) {
+            logger.debug("result : 0 (insert || update || delete 된 행의 개수 0)");
+        } else if (result == -1) {
+            logger.debug("result : -1 (비정상 결과)");
+        } else if (result >= 1) {
+            logger.debug("result : " + result + " (insert || update || delete 성공)");
+        }
+		
+		commit(conn);
+
+	} catch (SQLException | IllegalArgumentException e) {
+		e.printStackTrace();
+		logger.error(e.getClass().getName() + "발생 : " + e.getMessage());
+		rollback(conn);
+	} finally {
+		close(pstmt, conn);
+	}
+
+	return result;
+}*/
 
 /*private void setFieldsFromResultSet(Board b, ResultSet rset) throws SQLException {
     ResultSetMetaData metaData = rset.getMetaData();

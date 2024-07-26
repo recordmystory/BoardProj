@@ -6,7 +6,7 @@ import java.util.List;
 import com.jw.board.model.vo.Reply;
 
 public class ReplyDao extends BaseDao {
-	/*private Properties prop;*/
+	// private Properties prop;
 //	private static final Logger logger = Logger.getLogger(BoardDao.class);
 
 	

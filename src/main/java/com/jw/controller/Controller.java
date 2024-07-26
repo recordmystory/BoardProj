@@ -26,121 +26,93 @@ import com.jw.common.util.StringUtil;
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 //	private static final Logger logger = Logger.getLogger(BoardController.class);
-
 //	private static UrlMappingUtil urlMapping = new UrlMappingUtil();;
 //    private List<String> urlList = new ArrayList<>();
-   
-    
 	/*private void initUrlList() {
 	    urlList.add("/board/list.bo");
 	    urlList.add("/board/detail.bo");
 	    urlList.add("/board/insert.bo");
-	    urlList.add("/board/regist.bo");
-	    urlList.add("/board/updateForm.bo");
-	    urlList.add("/board/update.bo");
-	    urlList.add("/board/delete.bo");
-	    urlList.add("/board/listSearch.bo");
-	    urlList.add("/reply/insert.bo");
-	    urlList.add("/reply/list.bo");
+	    .....
 	}*/
     
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-//		initUrlList();
-
-	}
-
+	/*	@Override
+		public void init(ServletConfig config) throws ServletException {
+			super.init(config);
+	//		initUrlList();
+	
+		}
+	*/
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String contextPath = request.getContextPath();
 		String action = request.getRequestURI().substring(contextPath.length());
 
-		String urlType = StringUtil.getUrlType(action);
-	    String viewName = StringUtil.getViewName(action);
+		String urlType = StringUtil.getUrlType(action);  	//(forward, redirect, ajax)
+	    String viewName = StringUtil.getViewName(action);   // viewName
 
-		if (urlType != null) {
-			String methodName = StringUtil.getMethodNameFromAction(action);
+		String methodName = StringUtil.getMethodNameFromAction(action);
 
-			try {
-				
-				String serviceClassName = StringUtil.getServiceClassNameFromAction(action);
-	            Class<?> serviceClass = Class.forName(serviceClassName);
-	            Object serviceInstance = serviceClass.getDeclaredConstructor().newInstance();
-	            Method method = serviceClass.getMethod(methodName, Map.class);
-				
-	            // 파라미터 맵 생성
-				Map<String, String> paramMap = new HashMap<>();
-				Enumeration<String> paramsNames = request.getParameterNames();
-				
-				while (paramsNames.hasMoreElements()) {
-					String name = paramsNames.nextElement();
-					String value = request.getParameter(name);
-				
-				// 파라미터 유효성 검사
-				if (StringUtil.isNullOrEmpty(request, name)) {
+		try {
+
+			String serviceClassName = StringUtil.getServiceClassNameFromAction(action);
+			Class<?> serviceClass = Class.forName(serviceClassName);
+			Object serviceInstance = serviceClass.getDeclaredConstructor().newInstance();
+			Method method = serviceClass.getMethod(methodName, Map.class);
+
+			// 파라미터 맵 생성
+			Map<String, String> paramMap = new HashMap<>();
+			Enumeration<String> paramsNames = request.getParameterNames();
+
+			while (paramsNames.hasMoreElements()) {
+				String name = paramsNames.nextElement();
+				String value = request.getParameter(name);
+
+				// 문자 유효성 검사
+				if (value == null || value.trim().isEmpty())
 					throw new IllegalArgumentException("유효하지 않은 파라미터: " + name);
-				//                    ExceptionHandler.processException(request, response, "파라미터가 유효하지 않습니다: " + name, new IllegalArgumentException("IllegalArgumentException 발생 : " + name));
-				//                    return;
-				}
-				if (isNumberParameter(name) && !StringUtil.isNumber(request, name)) {
-					throw new IllegalArgumentException("유효하지 않은 숫자 파라미터: " + name);
-				//                    ExceptionHandler.processException(request, response, "숫자 파라미터가 유효하지 않습니다: " + name, new IllegalArgumentException("IllegalArgumentException 발생 : " + name));
-				}
+
+//					if (!value.matches("-?\\d+(\\.\\d+)?"))
+//						throw new IllegalArgumentException("유효하지 않은 파라미터: " + name);
+
 				paramMap.put(name, value);
 			}
-			
+
 			// 서비스 메소드 호출
 			Map<String, Object> result = (Map<String, Object>) method.invoke(serviceInstance, paramMap);
-		
-			    
+
 //				 Class<?> serviceClass = Class.forName("com.jw.board.model.service.BoardService");
 
 //				Class<?> serviceClass = Class.forName(serviceClassName);
-				
+
 //				Object serviceInstance = Class.forName("com.jw.board.model.service.BoardService").getDeclaredConstructor().newInstance();
-				// 클래스안에 메서드-> 반환값 
+			// 클래스안에 메서드-> 반환값
 //				Object serviceInstance = Class.forName(UrlMappingUtil.getServiceClassNameFromAction(action)).getDeclaredConstructor().newInstance();
 //                Method method = Class.forName(UrlMappingUtil.getServiceClassNameFromAction(action)).getMethod(methodName, Map.class);
-			    
-				
-		
-				// 서비스 메서드 호출
-				
+
+			// 서비스 메서드 호출
 
 //				logger.info("Service result: " + result);
 
-				if ("forward".equals(urlType)) {
-					/* if (result instanceof Map) {
-					     Map<?, ?> resultMap = (Map<?, ?>) result;
-					     for (Map.Entry<?, ?> entry : resultMap.entrySet()) {
-					         request.setAttribute(entry.getKey().toString(), entry.getValue());
-					     }
-					 }*/
-					for (Map.Entry<String, Object> entry : result.entrySet()) {
-						request.setAttribute(entry.getKey().toString(), entry.getValue());
-					}
-					request.getRequestDispatcher("/views" + viewName).forward(request, response);
-				} else if ("redirect".equals(urlType)) {
-					response.sendRedirect(request.getContextPath() + viewName);
-				} else if ("ajax".equals(urlType)) {
-					response.setContentType("application/json; charset=UTF-8");
-					response.getWriter().write(new Gson().toJson(result));
+			if ("forward".equals(urlType)) {
+				for (Map.Entry<String, Object> entry : result.entrySet()) {
+					request.setAttribute(entry.getKey().toString(), entry.getValue());
 				}
-
-			} catch (Exception e) {
-				// 예외처리 util 호출
-				ExceptionHandler.handleException(request, response, e);
-			} finally {
-				close(response.getWriter());
+				request.getRequestDispatcher("/views" + viewName).forward(request, response);
+			} else if ("redirect".equals(urlType)) {
+				response.sendRedirect(request.getContextPath() + viewName);
+			} else if ("ajax".equals(urlType)) {
+				response.setContentType("application/json; charset=UTF-8");
+				response.getWriter().write(new Gson().toJson(result));
 			}
-		} else {
-			request.getSession().setAttribute("alertMsg", "요청하신 페이지가 없습니다.");
-			response.sendRedirect(contextPath + "/views/board/errorPage.jsp");
-//			request.getRequestDispatcher("/views/board/errorPage.jsp").forward(request, response);
+
+		} catch (Exception e) {
+			// 예외처리 util 호출
+			ExceptionHandler.handleException(request, response, e);
+		} finally {
+			close(response.getWriter()); // writer close
 		}
+
 	}
-		
 		
 		
 		
@@ -158,9 +130,9 @@ public class Controller extends HttpServlet {
 //	}
 	
 
-	private boolean isNumberParameter(String paramName) {
-		return "numberParam".equals(paramName);
-	}
+//	private boolean isNumberParameter(String paramName) {
+//		return "numberParam".equals(paramName);
+//	}
 	
 	/*@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

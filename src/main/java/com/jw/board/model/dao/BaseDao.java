@@ -34,13 +34,13 @@ public abstract class BaseDao {
 	    T handle(ResultSet rset) throws SQLException;
 	}
 
-	/** select 메서드 통합
+	/** SQL 실행 (SELECT)
 	 * 
-	 * @param <T>
-	 * @param sqlKey
-	 * @param handler
-	 * @param params
-	 * @return result
+	 * @param <T> T : 해당 메소드가 반환할 데이터 타입 
+	 * @param sqlKey : 실행할 쿼리 key
+	 * @param handler : ResultSet 처리할 handler
+	 * @param params : 쿼리 파라미터
+	 * @return result : 처리한 결과
 	 */
 	public <T>T dqlQuery(String sqlKey, ResultSetHandler<T> handler, Object... params){
 		Connection conn = getConnection();
@@ -59,7 +59,7 @@ public abstract class BaseDao {
 			rset = pstmt.executeQuery();
 			result = handler.handle(rset);
 		} catch (SQLException e) {
-			
+			logger.error(e.getClass().getName() + "발생 : " + e.getMessage());
 		} finally {
 			close(rset, pstmt, conn);
 		}
@@ -101,7 +101,6 @@ public abstract class BaseDao {
 			commit(conn);
 
 		} catch (SQLException | IllegalArgumentException e) {
-			e.printStackTrace();
 			logger.error(e.getClass().getName() + "발생 : " + e.getMessage());
 			rollback(conn);
 		} finally {

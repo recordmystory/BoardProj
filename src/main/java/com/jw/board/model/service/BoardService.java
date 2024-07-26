@@ -12,7 +12,7 @@ import com.jw.common.util.PagingUtil;
 public class BoardService {
 //	private static final Logger logger = Logger.getLogger(BoardService.class);
 
-	private static BoardDao bDao = new BoardDao();
+	private static final BoardDao bDao = new BoardDao();
 
 	/** 게시글 목록 조회 및 페이징
 	 * @param paramMap

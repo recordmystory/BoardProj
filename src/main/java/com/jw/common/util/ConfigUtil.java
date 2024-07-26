@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * mapper 파일 로드 및 Proprties 객체 관리
+ * XML 및 JSON 파일 설정 정보 로드 및 관리
  */
 public class ConfigUtil {
 	 private static final Logger logger = Logger.getLogger(ConfigUtil.class);
@@ -24,6 +24,7 @@ public class ConfigUtil {
 	    private static boolean isXmlLoaded = false;
 	    private static boolean isJsonLoaded = false;
 	    
+	    // URL 매핑 정보 저장 Map
 	    private static Map<String, Map<String, String>> urlMappings = new HashMap<>();
 	    
 	    /**
@@ -44,7 +45,7 @@ public class ConfigUtil {
 	    }
 	    
 	    /**
-	     * xml 파일 로드
+	     * xml 파일 로드 : XML 파일이 이미 로드된 경우 다시 로드하지 않음
 	     */
 	    public synchronized void loadXmlFile() {
 	        if (!isXmlLoaded) {
@@ -60,7 +61,7 @@ public class ConfigUtil {
 	    }
 	    
 	    /**
-	     * json 파일 로드
+	     * JSON 파일 로드 : JSON 파일이 이미 로드된 경우 다시 로드하지 않음
 	     */
 	    public synchronized void loadJsonFile() {
 	        if (!isJsonLoaded) {
@@ -104,7 +105,7 @@ public class ConfigUtil {
 	    }
 
 	    /**
-	     * json 파일 읽고 property에 저장
+	     * JSON 파일을 읽고 URL 매핑값을 urlMappings라는 map에 저장 
 	     * 
 	     * @param filePath
 	     * @throws IOException
@@ -130,7 +131,7 @@ public class ConfigUtil {
 	        for (String key : urls.keySet()) {
 	            JSONObject urlObject = urls.getJSONObject(key);
 	            Map<String, String> mappingInfo = new HashMap<>();
-	            mappingInfo.put("viewName", urlObject.optString("viewName"));
+	            mappingInfo.put("viewName", urlObject.optString("viewName")); // ajax일 경우 viewName 없음
 	            mappingInfo.put("type", urlObject.getString("type"));
 	            urlMappings.put(key, mappingInfo);
 	        }
