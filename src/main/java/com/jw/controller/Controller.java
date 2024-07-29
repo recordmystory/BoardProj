@@ -40,22 +40,10 @@ public class Controller extends HttpServlet {
 			Class<?> serviceClass = Class.forName(serviceClassName);
 			Object serviceInstance = serviceClass.getDeclaredConstructor().newInstance();
 			Method method = serviceClass.getMethod(methodName, Map.class);
-
-			// 파라미터 맵 생성
-			Map<String, String> paramMap = new HashMap<>();
-			Enumeration<String> paramsNames = request.getParameterNames();
-
-			while (paramsNames.hasMoreElements()) {
-				String name = paramsNames.nextElement();
-				String value = request.getParameter(name);
-
-				// 문자 유효성 검사
-				if (value == null || value.trim().isEmpty())
-					throw new IllegalArgumentException("유효하지 않은 파라미터: " + name);
-
-				paramMap.put(name, value);
-			}
-
+			
+			// 파라미터 맵
+			Map<String, String> paramMap = StringUtil.setMapParameter(request);
+			
 			// 서비스 메소드 호출
 			Map<String, Object> result = (Map<String, Object>) method.invoke(serviceInstance, paramMap);
 

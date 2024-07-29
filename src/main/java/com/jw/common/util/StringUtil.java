@@ -1,18 +1,18 @@
 package com.jw.common.util;
 
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Parameter 유효성 검사 및 URL 관련 유틸리티
  */
 public class StringUtil {
-	// URL 매핑 정보를 담은 맵
-//	private static final Logger logger = Logger.getLogger(BoardDao.class);
-
 	private static Map<String, Map<String, String>> urlMappings;
 
-	static {
-		// JSON 파일 로드 및 URL 매핑 정보 설정
+	static { // JSON 파일 로드 및 URL 매핑 정보 설정
 		ConfigUtil configUtil = ConfigUtil.getInstance();
 		configUtil.loadJsonFile();
 		urlMappings = configUtil.getUrlMappings();
@@ -80,7 +80,24 @@ public class StringUtil {
 		return service != null ? service.get("serviceName") : null;
 	}
 	
+	public static Map<String, String> setMapParameter(HttpServletRequest request){
+		Map<String, String> paramMap = new HashMap<>();
+		Enumeration<String> paramsNames = request.getParameterNames();
 
+		while (paramsNames.hasMoreElements()) {
+			String name = paramsNames.nextElement();
+			String value = request.getParameter(name);
+
+			// 문자 유효성 검사
+			if (value == null || value.trim().isEmpty())
+				throw new IllegalArgumentException("유효하지 않은 파라미터: " + name);
+
+			paramMap.put(name, value);
+		}
+		
+		return paramMap;
+	}
+	
 	/*    *//**
 			 * 파라미터가 null이거나 빈 문자열인지 검증
 			 *
