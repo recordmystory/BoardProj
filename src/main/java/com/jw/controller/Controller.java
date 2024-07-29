@@ -34,7 +34,13 @@ public class Controller extends HttpServlet {
 		String viewName = StringUtil.getViewName(action); // viewName
 
 		String methodName = StringUtil.getMethodNameFromAction(action);
-
+		
+		// methodName null 체크
+		if (methodName == null || methodName.isEmpty())  {
+			ExceptionHandler.handleException(request, response, new NullPointerException("methodName이 null이거나 empty"));
+			return;
+		}
+				
 		try {
 			String serviceClassName = StringUtil.getServiceName(action);
 			Class<?> serviceClass = Class.forName(serviceClassName);
