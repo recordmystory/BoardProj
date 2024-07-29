@@ -50,12 +50,12 @@ public class ConfigUtil {
 	    public synchronized void loadXmlFile() {
 	        if (!isXmlLoaded) {
 	            try {
-	                loadBoardMapperFile("db/mappers/board-mapper.xml");
+	                loadBoardMapperFile("db/mappers/boardMapper.xml");
 	                isXmlLoaded = true;
 	            } catch (IOException e) { // 파일이 존재하지 않거나 읽기에 실패 시 실행
-	                logger.error("IOException 발생 ==> board-mapper.xml 파일 로드 실패: " + e.getMessage());
+	                logger.error("IOException 발생 ==> boardMapper.xml 파일 로드 실패: " + e.getMessage());
 	                // 예외 발생 시 애플리케이션 종료
-	                throw new RuntimeException("board-mapper.xml 파일을 로드할 수 없습니다. 애플리케이션을 종료합니다.", e);
+	                throw new RuntimeException("boardMapper.xml 파일을 로드할 수 없습니다. 애플리케이션을 종료합니다.", e);
 	            }
 	        }
 	    }
