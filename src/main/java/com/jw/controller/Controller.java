@@ -36,7 +36,7 @@ public class Controller extends HttpServlet {
 		String methodName = StringUtil.getMethodNameFromAction(action);
 
 		try {
-			String serviceClassName = StringUtil.getServiceClassNameFromAction(action);
+			String serviceClassName = StringUtil.getServiceName(action);
 			Class<?> serviceClass = Class.forName(serviceClassName);
 			Object serviceInstance = serviceClass.getDeclaredConstructor().newInstance();
 			Method method = serviceClass.getMethod(methodName, Map.class);

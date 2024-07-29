@@ -133,6 +133,7 @@ public class ConfigUtil {
 	            Map<String, String> mappingInfo = new HashMap<>();
 	            mappingInfo.put("viewName", urlObject.optString("viewName")); // ajax일 경우 viewName 없음
 	            mappingInfo.put("type", urlObject.getString("type"));
+	            mappingInfo.put("serviceName", urlObject.getString("serviceName"));
 	            urlMappings.put(key, mappingInfo);
 	        }
 	    }

@@ -3,53 +3,60 @@
 	
 			"/board/list.bo" : {
 				"viewName" : "/board/list.jsp",
-				"type" : "forward"
+				"type" : "forward",
+				"serviceName" : "com.jw.board.model.service.BoardService"
 			}, 
 		
-			"/board/detail.bo" : {
+			"/board/selectDetail.bo" : {
 				"viewName" : "/board/detail.jsp",
-				"type" : "forward"
+				"type" : "forward",
+				"serviceName" : "com.jw.board.model.service.BoardService"
 			},
 			
 			 "/board/insert.bo" : {
 			 	"viewName" : "/board/list.bo?page=1",	
-				"type" : "redirect"
+				"type" : "redirect",
+				"serviceName" : "com.jw.board.model.service.BoardService"
 			},
 			
 			"/board/regist.bo" : {
 				"viewName" : "/board/registForm.jsp",	
-				"type" : "forward"
+				"type" : "forward",
+				"serviceName" : "com.jw.board.model.service.BoardService"
 			
 			},
 			
 			"/board/updateForm.bo" : {
 				"viewName" : "/board/updateForm.jsp",
-				"type" : "forward"
+				"type" : "forward",
+				"serviceName" : "com.jw.board.model.service.BoardService"
 			},
 			
 			"/board/update.bo" : {
 				"viewName" : "/board/list.bo?page=1",
-				"type" : "redirect"
-			
+				"type" : "redirect",
+				"serviceName" : "com.jw.board.model.service.BoardService"
 			},
 			
 			"/board/delete.bo" : {
 				"viewName" : "/board/list.bo?page=1",
-				"type" : "redirect"
+				"type" : "redirect",
+				"serviceName" : "com.jw.board.model.service.BoardService"
 			},
 			
 			"/board/listSearch.bo" : {
-				"type" : "ajax"			
+				"type" : "ajax",
+				"serviceName" : "com.jw.board.model.service.BoardService"			
 			},
 			
 			"/reply/insert.bo" : {
-				"type" : "ajax"
+				"type" : "ajax",
+				"serviceName" : "com.jw.board.model.service.ReplyService"
 			},
 			
 			"/reply/list.bo" : {
-				"type" : "ajax"
-			
+				"type" : "ajax",
+				"serviceName" : "com.jw.board.model.service.ReplyService"
 			}
 		}
-	
 }

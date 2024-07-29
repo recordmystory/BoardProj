@@ -113,7 +113,7 @@
     			data: { no: ${b.no}, content: $('#reply-content').val() },
     			method: 'post',
     			success: function(result) {
-    				
+    				console.log(result);
     				if (result.flag === "fail" && $('#reply-content').val().trim() === null || $('#reply-content').val().trim() === "") alert('댓글 내용을 입력해주세요.');   
     			    				
    					$('#reply-content').val(''); // textarea 초기화
@@ -132,6 +132,7 @@
     			url: '/reply/list.bo',
     			data: { no: ${b.no} },
     			success: function(result){
+    				console.log(result);
     				let value = '';
     				
     				if(result.list.length < 0) 

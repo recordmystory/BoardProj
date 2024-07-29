@@ -137,7 +137,7 @@
 			$('#boardList>tbody>tr').off('click');
 			
 			$('#boardList>tbody>tr').on('click', function() {
-	            location.href = '/board/detail.bo?no=' + $(this).children().eq(0).text();
+	            location.href = '/board/selectDetail.bo?no=' + $(this).children().eq(0).text();
 	        });
 		};
 		

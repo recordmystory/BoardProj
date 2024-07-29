@@ -63,24 +63,21 @@ public class StringUtil {
 	 * 뷰명 반환
 	 *
 	 * @param url : URL 문자열
-	 * @return 뷰 이름
+	 * @return 뷰명
 	 */
 	public static String getViewName(String url) {
 		Map<String, String> view = urlMappings.get(url);
 		return view != null ? view.get("viewName") : null;
 	}
-
-	/**
-	 * URL을 서비스 클래스명으로 변환
-	 *
-	 * @param url : URL 문자열
-	 * @return 서비스 클래스 경로
+	
+	/** 서비스 클래스명 반환
+	 * 
+	 * @param url
+	 * @return 서비스명
 	 */
-	public static String getServiceClassNameFromAction(String url) {
-		String[] parts = url.split("/");
-		if (parts.length < 2) return null;
-
-		return "com.jw.board.model.service." + convertUrl(parts[1]) + "Service";
+	public static String getServiceName(String url) {
+		Map<String, String> service = urlMappings.get(url);
+		return service != null ? service.get("serviceName") : null;
 	}
 	
 
