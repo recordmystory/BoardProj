@@ -142,4 +142,30 @@ public class BoardService {
 		return resultMap;
 		
 	}
+	
+	/** 검색 (ajax)
+	 * 
+	 * @param paramMap
+	 * @return resultMap
+	 * @throws Exception
+	 */
+	public Map<String, Object> listSearchBoard(Map<String, String> paramMap) throws Exception {
+		String nowPage = paramMap.get("page");
+		String keyword = paramMap.get("keyword");
+		if (nowPage == null || nowPage.trim().isEmpty())
+			nowPage = "1";
+		int currentPage = Integer.parseInt(nowPage);
+		int listCount = bDao.selectSearchCount(keyword);
+
+		PageInfoVO page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
+		int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
+		int endRow = startRow + page.getBoardLimit() - 1;
+		List<BoardVO> list = bDao.listSearchBoard(keyword, startRow, endRow);
+
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("list", list);
+		resultMap.put("page", page);
+		return resultMap;
+		
+	}
 }

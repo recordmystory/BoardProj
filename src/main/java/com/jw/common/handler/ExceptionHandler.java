@@ -56,13 +56,11 @@ public class ExceptionHandler {
      * @param errorMessage 
      */
     private static void processException(HttpServletRequest request, HttpServletResponse response, String errorMessage) {
-        try {
-            if (!response.isCommitted()) { // 응답이 커밋되지 않았을 때 오류페이지로 포워딩
-                request.setAttribute("alertMsg", errorMessage);
-                request.getRequestDispatcher("/views/board/errorPage.jsp").forward(request, response);
-            }
-        } catch (IOException | ServletException ex) {
-            logger.error("오류 페이지 이동 실패: " + ex.getMessage(), ex);
-        }
-    }
+		try {
+			request.getSession().setAttribute("alertMsg", errorMessage);
+			request.getRequestDispatcher("/views/errorPage.jsp").forward(request, response);
+		} catch (IOException | ServletException ex) {
+			logger.error("오류 페이지 이동 실패: " + ex.getMessage(), ex);
+		}
+	}
 }
