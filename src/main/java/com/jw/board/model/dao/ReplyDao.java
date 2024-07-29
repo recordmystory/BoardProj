@@ -23,7 +23,7 @@ public class ReplyDao extends BaseDao {
 	 * @return list
 	 */
 	public List<Reply> listReply(int boardNo) {
-		return dqlQuery("listReply", rset -> {
+		return selectExecute("listReply", rset -> {
 			Reply r = new Reply();
 			List<Reply> list = new ArrayList<>();
 			while (rset.next()) {
