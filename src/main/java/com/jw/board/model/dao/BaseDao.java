@@ -42,7 +42,7 @@ public abstract class BaseDao {
 	 * @param params : 쿼리 파라미터
 	 * @return result : 처리한 결과
 	 */
-	public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params){
+	public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params) throws NullPointerException, SQLException, IllegalArgumentException {
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -58,8 +58,9 @@ public abstract class BaseDao {
 			}
 			rset = pstmt.executeQuery();
 			result = handler.handle(rset);
-		} catch (SQLException e) {
+		} catch (NullPointerException | SQLException | IllegalArgumentException e) {
 			logger.error(e.getClass().getName() + "발생 : " + e.getMessage());
+			throw e;
 		} finally {
 			close(rset, pstmt, conn);
 		}
@@ -73,15 +74,16 @@ public abstract class BaseDao {
 	 * @param sql : 실행할 쿼리 key
 	 * @param params : 쿼리 파라미터
 	 * @return result : 업데이트된 행 개수
+	 * @throws SQLException, IllegalArgumentException 
 	 */
-	public int updateExecute(String sqlKey, Object... params) {
+	public int updateExecute(String sqlKey, Object... params) throws SQLException, IllegalArgumentException {
 		
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty(sqlKey);
 		int result = -1;
 		try {
-
+			
 	        pstmt = conn.prepareStatement(sql);
 	        
 			for (int i = 0; i < params.length; i++) {
@@ -100,10 +102,12 @@ public abstract class BaseDao {
 			
 			commit(conn);
 
-		} catch (SQLException | IllegalArgumentException e) {
+		} catch (NullPointerException |SQLException | IllegalArgumentException e) {
 			logger.error(e.getClass().getName() + "발생 : " + e.getMessage());
 			rollback(conn);
-		} finally {
+			throw e; // Exception 던진 후 Controller에서 받아서 처리
+		} 
+		finally {
 			close(pstmt, conn);
 		}
 

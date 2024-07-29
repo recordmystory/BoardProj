@@ -1,5 +1,6 @@
 package com.jw.board.model.dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,11 @@ public class ReplyDao extends BaseDao {
 	 * 
 	 * @param boardNo
 	 * @return list
+	 * @throws SQLException 
+	 * @throws IllegalArgumentException 
+	 * @throws NullPointerException 
 	 */
-	public List<ReplyVO> listReply(int boardNo) {
+	public List<ReplyVO> listReply(int boardNo) throws NullPointerException, IllegalArgumentException, SQLException {
 		return selectExecute("listReply", rset -> {
 			ReplyVO r = new ReplyVO();
 			List<ReplyVO> list = new ArrayList<>();

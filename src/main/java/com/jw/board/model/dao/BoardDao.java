@@ -1,5 +1,6 @@
 package com.jw.board.model.dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +12,11 @@ public class BoardDao extends BaseDao {
 	 * 
 	 * @param page
 	 * @return list
+	 * @throws SQLException 
+	 * @throws IllegalArgumentException 
+	 * @throws NullPointerException 
 	 */
-	public List<BoardVO> listBoard(Object... params) {
+	public List<BoardVO> listBoard(Object... params) throws NullPointerException, IllegalArgumentException, SQLException {
 		return selectExecute("listBoard", rset -> {
 			List<BoardVO> list = new ArrayList<>();
 	        while (rset.next()) {
@@ -33,8 +37,11 @@ public class BoardDao extends BaseDao {
 	/** 게시글 목록 조회 및 페이징 
 	 * 
 	 * @return listCount
+	 * @throws SQLException 
+	 * @throws IllegalArgumentException 
+	 * @throws NullPointerException 
 	 */
-	public int selectBoardCount() {
+	public int selectBoardCount() throws NullPointerException, IllegalArgumentException, SQLException {
 		return selectExecute("selectBoardCount", rset -> {
 			int count = 0;
 			if(rset.next()) {
@@ -50,8 +57,11 @@ public class BoardDao extends BaseDao {
 	 * @param conn
 	 * @param boardNo
 	 * @return b
+	 * @throws SQLException 
+	 * @throws IllegalArgumentException 
+	 * @throws NullPointerException 
 	 */
-	public BoardVO detailBoard(int boardNo) {
+	public BoardVO detailBoard(int boardNo) throws NullPointerException, IllegalArgumentException, SQLException {
 		return selectExecute("detailBoard", rset -> {
 			BoardVO b = new BoardVO();
 			
@@ -73,8 +83,11 @@ public class BoardDao extends BaseDao {
 	 * @param conn
 	 * @param keyword
 	 * @return list
+	 * @throws SQLException 
+	 * @throws IllegalArgumentException 
+	 * @throws NullPointerException 
 	 */
-	public List<BoardVO> listSearchBoard(Object... params) {
+	public List<BoardVO> listSearchBoard(Object... params) throws NullPointerException, IllegalArgumentException, SQLException {
 		return selectExecute("listSearchBoard", rset -> {
 			List<BoardVO> list = new ArrayList<>();
 			while(rset.next()) {
@@ -97,8 +110,11 @@ public class BoardDao extends BaseDao {
 	 * 
 	 * @param keyword
 	 * @return listCount
+	 * @throws SQLException 
+	 * @throws IllegalArgumentException 
+	 * @throws NullPointerException 
 	 */
-	public int selectSearchCount(Object... params) {
+	public int selectSearchCount(Object... params) throws NullPointerException, IllegalArgumentException, SQLException {
 		return selectExecute("selectSearchCount", rset -> {
 			int count = 0;
 			if(rset.next()) {
