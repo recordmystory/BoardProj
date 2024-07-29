@@ -2,6 +2,7 @@ package com.jw.common.handler;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class ExceptionHandler {
 	private static final Logger logger = Logger.getLogger(ExceptionHandler.class);
 	
     /** 에러 메시지 생성 및 로그 기록
+     * 
      * @param request
      * @param response
      * @param e
@@ -43,9 +45,15 @@ public class ExceptionHandler {
          } else if (e instanceof InvocationTargetException) {
              return "메서드 호출 실패: " + e.getMessage();
          } else if (e instanceof IllegalArgumentException) {
-             return "잘못된 인수: " + e.getMessage();
+             return "잘못된 파라미터: " + e.getMessage();
+         } else if (e instanceof NullPointerException) {
+             return "파라미터 누락: " + e.getMessage();
+         } else if (e instanceof NumberFormatException) {
+             return "페이지 번호 및 글번호가 유효하지 않습니다: " + e.getMessage();
+         } else if (e instanceof SQLException) {
+             return "데이터베이스 오류 발생: " + e.getMessage();
          } else {
-             return "처리 실패: " + e.getMessage();
+             return "기타 오류로 인한 처리 실패: " + e.getMessage();
          }
     }
     
