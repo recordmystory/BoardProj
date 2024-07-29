@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jw.board.model.dao.ReplyDao;
-import com.jw.board.model.vo.Reply;
+import com.jw.board.model.vo.ReplyVO;
 
 public class ReplyService {
 	private static ReplyDao rDao = new ReplyDao();
@@ -17,7 +17,7 @@ public class ReplyService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> listReply(Map<String, String> paramMap) throws Exception {
-		List<Reply> list = rDao.listReply(Integer.parseInt(paramMap.get("no")));
+		List<ReplyVO> list = rDao.listReply(Integer.parseInt(paramMap.get("no")));
 
 		Map<String, Object> resultMap = new HashMap<>();
 	    resultMap.put("list", list);

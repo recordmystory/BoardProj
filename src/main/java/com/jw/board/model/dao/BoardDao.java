@@ -3,7 +3,7 @@ package com.jw.board.model.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jw.board.model.vo.Board;
+import com.jw.board.model.vo.BoardVO;
 
 public class BoardDao extends BaseDao {
 	
@@ -12,11 +12,11 @@ public class BoardDao extends BaseDao {
 	 * @param page
 	 * @return list
 	 */
-	public List<Board> listBoard(Object... params) {
+	public List<BoardVO> listBoard(Object... params) {
 		return selectExecute("listBoard", rset -> {
-			List<Board> list = new ArrayList<>();
+			List<BoardVO> list = new ArrayList<>();
 	        while (rset.next()) {
-	            Board b = new Board();
+	            BoardVO b = new BoardVO();
 	            b.setNo(rset.getInt("NO"));
 	            b.setTitle(rset.getString("TITLE"));
 	            b.setContent(rset.getString("CONTENT"));
@@ -51,9 +51,9 @@ public class BoardDao extends BaseDao {
 	 * @param boardNo
 	 * @return b
 	 */
-	public Board detailBoard(int boardNo) {
+	public BoardVO detailBoard(int boardNo) {
 		return selectExecute("detailBoard", rset -> {
-			Board b = new Board();
+			BoardVO b = new BoardVO();
 			
 			if (rset.next()) {
 				b.setNo(rset.getInt("NO"));
@@ -74,11 +74,11 @@ public class BoardDao extends BaseDao {
 	 * @param keyword
 	 * @return list
 	 */
-	public List<Board> listSearchBoard(Object... params) {
+	public List<BoardVO> listSearchBoard(Object... params) {
 		return selectExecute("listSearchBoard", rset -> {
-			List<Board> list = new ArrayList<>();
+			List<BoardVO> list = new ArrayList<>();
 			while(rset.next()) {
-				Board b = new Board();
+				BoardVO b = new BoardVO();
 				b.setNo(rset.getInt("NO"));
 				b.setTitle(rset.getString("TITLE"));
 				b.setContent(rset.getString("CONTENT"));

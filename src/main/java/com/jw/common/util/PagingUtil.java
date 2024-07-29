@@ -1,6 +1,6 @@
 package com.jw.common.util;
 
-import com.jw.board.model.vo.PageInfo;
+import com.jw.board.model.vo.PageInfoVO;
 
 public class PagingUtil {
 
@@ -13,7 +13,7 @@ public class PagingUtil {
 	 * 
 	 * @return PageInfo(listCount, currentPage, pageLimit, boardLimit, maxPage, startPage, endPage)
 	 */
-	public static PageInfo getPageInfo(int listCount, int currentPage, int pageLimit, int boardLimit) {
+	public static PageInfoVO getPageInfo(int listCount, int currentPage, int pageLimit, int boardLimit) {
 
 		int maxPage = (int) Math.ceil((double) listCount / boardLimit) == 0 ? 1
 				: (int) Math.ceil((double) listCount / boardLimit);
@@ -22,6 +22,6 @@ public class PagingUtil {
 		if (endPage > maxPage) {
 			endPage = maxPage;
 		}
-		return new PageInfo(listCount, currentPage, pageLimit, boardLimit, maxPage, startPage, endPage);
+		return new PageInfoVO(listCount, currentPage, pageLimit, boardLimit, maxPage, startPage, endPage);
 	}
 }

@@ -18,7 +18,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class Board {
+public class BoardVO {
 	/**
 	 * 게시글 번호
 	 */

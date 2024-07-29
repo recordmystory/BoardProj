@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.jw.board.model.dao.BoardDao;
-import com.jw.board.model.vo.Board;
-import com.jw.board.model.vo.PageInfo;
+import com.jw.board.model.vo.BoardVO;
+import com.jw.board.model.vo.PageInfoVO;
 import com.jw.common.util.PagingUtil;
 
 public class BoardService {
@@ -24,10 +24,10 @@ public class BoardService {
 		int currentPage = Integer.parseInt(nowPage);
 		int listCount = bDao.selectBoardCount();
 
-		PageInfo page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
+		PageInfoVO page = PagingUtil.getPageInfo(listCount, currentPage, 10, 10);
 		int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
 		int endRow = startRow + page.getBoardLimit() - 1;
-		List<Board> list = bDao.listBoard(startRow, endRow);
+		List<BoardVO> list = bDao.listBoard(startRow, endRow);
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("list", list);
@@ -53,7 +53,7 @@ public class BoardService {
 			throw new IllegalArgumentException("내용을 입력해주세요.");
 		}
 
-		Board b = new Board();
+		BoardVO b = new BoardVO();
 		b.setTitle(title);
 		b.setContent(content);
 
@@ -85,7 +85,7 @@ public class BoardService {
 	 */
 	public Map<String, Object> detailBoard(Map<String, String> paramMap) throws Exception {
 		int boardNo = Integer.parseInt(paramMap.get("no"));
-		Board b = bDao.detailBoard(boardNo);
+		BoardVO b = bDao.detailBoard(boardNo);
 		bDao.updateExecute("updateHit", boardNo);
 		
 		Map<String, Object> resultMap = new HashMap<>();
@@ -103,7 +103,7 @@ public class BoardService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> updateFormBoard(Map<String, String> paramMap) throws Exception {
-		Board b = bDao.detailBoard(Integer.parseInt(paramMap.get("no")));
+		BoardVO b = bDao.detailBoard(Integer.parseInt(paramMap.get("no")));
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("b", b);
 		

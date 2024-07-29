@@ -79,7 +79,7 @@ public abstract class BaseDao {
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty(sqlKey);
-		int result = 0;
+		int result = -1;
 		try {
 
 	        pstmt = conn.prepareStatement(sql);

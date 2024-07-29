@@ -2,8 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@page import="com.jw.board.model.vo.Board"%>
-<% Board b = (Board) request.getAttribute("b"); %>    
+<%@page import="com.jw.board.model.vo.BoardVO"%>
+<%
+BoardVO b = (BoardVO) request.getAttribute("b");
+%>    
 
 <!DOCTYPE html>
 <html>

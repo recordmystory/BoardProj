@@ -16,7 +16,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class PageInfo {
+public class PageInfoVO {
 	/**
 	 * 현재 게시글의 총 개수
 	 */

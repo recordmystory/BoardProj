@@ -13,7 +13,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class Reply {
+public class ReplyVO {
 	
 	/**
 	 * 댓글 번호

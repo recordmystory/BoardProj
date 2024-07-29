@@ -3,7 +3,7 @@ package com.jw.board.model.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jw.board.model.vo.Reply;
+import com.jw.board.model.vo.ReplyVO;
 
 public class ReplyDao extends BaseDao {
 	// private Properties prop;
@@ -22,10 +22,10 @@ public class ReplyDao extends BaseDao {
 	 * @param boardNo
 	 * @return list
 	 */
-	public List<Reply> listReply(int boardNo) {
+	public List<ReplyVO> listReply(int boardNo) {
 		return selectExecute("listReply", rset -> {
-			Reply r = new Reply();
-			List<Reply> list = new ArrayList<>();
+			ReplyVO r = new ReplyVO();
+			List<ReplyVO> list = new ArrayList<>();
 			while (rset.next()) {
 				
 				r.setRNo(rset.getInt("RNO"));
