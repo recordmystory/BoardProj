@@ -7,6 +7,7 @@ import java.util.Map;
 import com.jw.board.model.dao.BoardDao;
 import com.jw.board.model.vo.BoardVO;
 import com.jw.board.model.vo.PageInfoVO;
+import com.jw.common.util.MapUtil;
 import com.jw.common.util.PagingUtil;
 
 public class BoardService {
@@ -29,11 +30,8 @@ public class BoardService {
 		int endRow = startRow + page.getBoardLimit() - 1;
 		List<BoardVO> list = bDao.listBoard(startRow, endRow);
 		
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("list", list);
-		resultMap.put("page", page);
-		
-		return resultMap;
+		return MapUtil.createResultMap("list", list, "page", page);
+
 	}
 
 	/** 게시글 등록
@@ -58,13 +56,8 @@ public class BoardService {
 		b.setContent(content);
 
 		int result = bDao.updateExecute("insertBoard", title, content);
-
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("result", result > 0 ? "success" : "fail");
-		resultMap.put("msg", result > 0 ? "success" : "fail");
-		resultMap.put("data", result);
 		
-		return resultMap;
+		return MapUtil.createResultMap("result", result > 0 ? "success" : "fail");
 	}
 
 	/** 글 작성 페이지 포워딩
@@ -88,12 +81,7 @@ public class BoardService {
 		BoardVO b = bDao.detailBoard(boardNo);
 		bDao.updateExecute("updateHit", boardNo);
 		
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("b", b);
-		
-		
-		
-		return resultMap;
+		return MapUtil.createResultMap("b", b);
 	}
 
 	/** 게시글 수정
@@ -104,10 +92,8 @@ public class BoardService {
 	 */
 	public Map<String, Object> updateFormBoard(Map<String, String> paramMap) throws Exception {
 		BoardVO b = bDao.detailBoard(Integer.parseInt(paramMap.get("no")));
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("b", b);
-		
-		return resultMap;
+
+		return MapUtil.createResultMap("b", b);
 	}
 
 	/** 게시글 수정
@@ -122,10 +108,7 @@ public class BoardService {
 									, paramMap.get("content")
 									, Integer.parseInt(paramMap.get("no")) );
 		
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("result", result > 0 ? "success" : "fail");
-		
-		return resultMap;
+		return MapUtil.createResultMap("result", result > 0 ? "success" : "fail");
 	}
 	
 	/** 게시글 삭제 (delete문이 아닌 del_yn 컬럼 update)
@@ -136,11 +119,8 @@ public class BoardService {
 	 */
 	public Map<String, Object> deleteBoard(Map<String, String> paramMap) throws Exception {
 		int result = bDao.updateExecute("deleteBoard", Integer.parseInt(paramMap.get("no")));
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("result", result > 0 ? "success" : "fail");
 		
-		return resultMap;
-		
+		return MapUtil.createResultMap("result", result > 0 ? "success" : "fail");
 	}
 	
 	/** 검색 (ajax)
@@ -152,8 +132,7 @@ public class BoardService {
 	public Map<String, Object> listSearchBoard(Map<String, String> paramMap) throws Exception {
 		String nowPage = paramMap.get("page");
 		String keyword = paramMap.get("keyword");
-		if (nowPage == null || nowPage.trim().isEmpty())
-			nowPage = "1";
+		if (nowPage == null || nowPage.trim().isEmpty()) nowPage = "1";
 		int currentPage = Integer.parseInt(nowPage);
 		int listCount = bDao.selectSearchCount(keyword);
 
@@ -161,11 +140,8 @@ public class BoardService {
 		int startRow = (page.getCurrentPage() - 1) * page.getBoardLimit() + 1;
 		int endRow = startRow + page.getBoardLimit() - 1;
 		List<BoardVO> list = bDao.listSearchBoard(keyword, startRow, endRow);
-
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("list", list);
-		resultMap.put("page", page);
-		return resultMap;
 		
+		return MapUtil.createResultMap("list", list, "page", page);
 	}
+	
 }
