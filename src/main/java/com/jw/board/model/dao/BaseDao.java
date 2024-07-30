@@ -13,7 +13,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.jw.common.util.ConfigUtil;
+import com.jw.common.util.Configuration;
 
 public abstract class BaseDao {
 	private static final Logger logger = Logger.getLogger(BaseDao.class);
@@ -23,7 +23,7 @@ public abstract class BaseDao {
 	 * ConfigUtil 클래스를 통해 mapper 파일 로드 
 	 */
 	public BaseDao() {
-		ConfigUtil configUtil = ConfigUtil.getInstance();
+		Configuration configUtil = Configuration.getInstance();
         configUtil.loadXmlFile();
         
         this.prop = configUtil.getProperties();
@@ -33,15 +33,21 @@ public abstract class BaseDao {
 	public interface ResultSetHandler<T> {
 	    T handle(ResultSet rset) throws SQLException;
 	}
-
-	/** SQL 실행 (SELECT)
+	
+	/**
+	 * SQL 실행 메서드 (SELECT 문)
 	 * 
-	 * @param <T> T : 해당 메소드가 반환할 데이터 타입 
-	 * @param sqlKey : 실행할 쿼리 key
-	 * @param handler : ResultSet 처리할 handler
-	 * @param params : 쿼리 파라미터
-	 * @return result : 처리한 결과
-	 */
+     * SQL key를 사용해 SELECT 쿼리를 실행하고, 결과를 ResultSetHandler을 통해 처리
+     * 
+     * @param <T> : 해당 메소드가 반환할 데이터 타입
+     * @param sqlKey : 실행할 쿼리의 키 (프로퍼티 파일에 저장된 SQL문의 key값을 식별)
+     * @param handler : ResultSet 처리 핸들러
+     * @param params : 쿼리 파라미터 (가변 인자)
+     * @return result : 처리된 결과
+     * @throws NullPointerException : SQL 문이나 핸들러가 null인 경우 발생
+     * @throws SQLException : SQL 실행 중 발생할 수 있는 예외
+     * @throws IllegalArgumentException : 부적절한 파라미터가 전달된 경우 발생
+     */
 	public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params) throws NullPointerException, SQLException, IllegalArgumentException {
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
@@ -69,12 +75,16 @@ public abstract class BaseDao {
 		
 	}
 	
-	/** SQL 실행 (INSERT, UPDATE, DELETE문)
+	/**
+	 * SQL 실행 메서드 (INSERT, UPDATE, DELETE 문)
 	 * 
-	 * @param sql : 실행할 쿼리 key
-	 * @param params : 쿼리 파라미터
-	 * @return result : 업데이트된 행 개수
-	 * @throws SQLException, IllegalArgumentException 
+     * SQL key를 사용해 INSERT, UPDATE, DELETE 쿼리를 실행
+     * 
+     * @param sqlKey : 실행할 쿼리의 키 (프로퍼티 파일에 저장된 SQL문의 key값을 식별)
+     * @param params : 쿼리 파라미터 (가변 인자)
+     * @return result : 업데이트된 행의 개수
+     * @throws SQLException : SQL 실행 중 발생할 수 있는 예외
+     * @throws IllegalArgumentException : 잘못된 파라미터가 전달된 경우 발생
 	 */
 	public int updateExecute(String sqlKey, Object... params) throws SQLException, IllegalArgumentException {
 		

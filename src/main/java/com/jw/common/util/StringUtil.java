@@ -13,7 +13,7 @@ public class StringUtil {
 	private static Map<String, Map<String, String>> urlMappings;
 
 	static { // JSON 파일 로드 및 URL 매핑 정보 설정
-		ConfigUtil configUtil = ConfigUtil.getInstance();
+		Configuration configUtil = Configuration.getInstance();
 		configUtil.loadJsonFile();
 		urlMappings = configUtil.getUrlMappings();
 	}
@@ -27,7 +27,7 @@ public class StringUtil {
 	public static String getMethodNameFromAction(String url) {
 		String[] parts = url.split("/");
 		if (parts.length < 3) {
-			return null;
+			return "";
 		}
 
 		String category = parts[1];
@@ -56,7 +56,7 @@ public class StringUtil {
 	 */
 	public static String getUrlType(String url) {
 		Map<String, String> type = urlMappings.get(url);
-		return type != null ? type.get("type") : null;
+		return type != null ? type.get("type") : "";
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class StringUtil {
 	 */
 	public static String getViewName(String url) {
 		Map<String, String> view = urlMappings.get(url);
-		return view != null ? view.get("viewName") : null;
+		return view != null ? view.get("viewName") : "";
 	}
 	
 	/** 서비스 클래스명 반환
@@ -77,9 +77,14 @@ public class StringUtil {
 	 */
 	public static String getServiceName(String url) {
 		Map<String, String> service = urlMappings.get(url);
-		return service != null ? service.get("serviceName") : null;
+		return service != null ? service.get("serviceName") : "";
 	}
 	
+	/** 파라미터명과 파라미터 값을 map에 담아줌
+	 * 
+	 * @param request
+	 * @return paramMap : 파라미터가 담긴 map
+	 */
 	public static Map<String, String> setMapParameter(HttpServletRequest request){
 		Map<String, String> paramMap = new HashMap<>();
 		Enumeration<String> paramsNames = request.getParameterNames();
