@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -53,27 +54,28 @@ public class FileLoaderUtil {
      * @throws JSONException : JSON 형식이 잘못됐거나 JSON 파싱 중 오류가 발생했을 때
      */
 	public static Map<String, Map<String, String>> loadBoardUrlFile(String filePath) throws IOException, JSONException {
-		 Map<String, Map<String, String>> urlMappings = new HashMap<>();
-		    try (InputStream inputStream = FileLoaderUtil.class.getClassLoader().getResourceAsStream(filePath)) {
-		        if (inputStream == null) {
-		            logger.error("파일을 찾을 수 없습니다: " + filePath);
-		            throw new IOException("파일을 찾을 수 없습니다: " + filePath);
-		        }
-		        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-		            Gson gson = new Gson();
-		            JsonObject jsonObject = gson.fromJson(reader, JsonObject.class);
-		            JsonObject urls = jsonObject.getAsJsonObject("urls");
+		Map<String, Map<String, String>> urlMappings = new HashMap<>();
+		
+		try (InputStream inputStream = FileLoaderUtil.class.getClassLoader().getResourceAsStream(filePath)) {
+			if (inputStream == null) {
+				logger.error("파일을 찾을 수 없습니다: " + filePath);
+				throw new IOException("파일을 찾을 수 없습니다: " + filePath);
+			}
 
-		            for (Map.Entry<String, JsonElement> entry : urls.entrySet()) {
-		                JsonObject urlObject = entry.getValue().getAsJsonObject();
-		                Map<String, String> mappingInfo = new HashMap<>();
-		                mappingInfo.put("viewName", urlObject.has("viewName") ? urlObject.get("viewName").getAsString() : "");
-		                mappingInfo.put("type", urlObject.get("type").getAsString());
-		                mappingInfo.put("serviceName", urlObject.get("serviceName").getAsString());
-		                urlMappings.put(entry.getKey(), mappingInfo);
-		            }
-		        }
-		    }
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+				JsonObject urls = new Gson().fromJson(reader, JsonObject.class).getAsJsonObject("urls");
+
+				urls.entrySet().forEach(entry -> {
+					JsonObject urlObject = entry.getValue().getAsJsonObject();
+					Map<String, String> mappingInfo = new HashMap<>();
+					mappingInfo.put("viewName", urlObject.has("viewName") ? urlObject.get("viewName").getAsString() : "");
+					mappingInfo.put("type", urlObject.get("type").getAsString());
+					mappingInfo.put("serviceName", urlObject.get("serviceName").getAsString());
+					urlMappings.put(entry.getKey(), mappingInfo);
+				});
+			}
+		}
+
 		return urlMappings;
 	}
 }
