@@ -78,7 +78,7 @@ public class BoardService {
 	 */
 	public Map<String, Object> selectDetailBoard(Map<String, String> paramMap) throws Exception {
 		int boardNo = Integer.parseInt(paramMap.get("no"));
-		BoardVO b = bDao.detailBoard(boardNo);
+		BoardVO b = bDao.selectDetailBoard(boardNo);
 		bDao.updateExecute("updateHit", boardNo);
 		
 		return MapUtil.createResultMap("b", b);
@@ -91,7 +91,7 @@ public class BoardService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> updateFormBoard(Map<String, String> paramMap) throws Exception {
-		BoardVO b = bDao.detailBoard(Integer.parseInt(paramMap.get("no")));
+		BoardVO b = bDao.selectDetailBoard(Integer.parseInt(paramMap.get("no")));
 
 		return MapUtil.createResultMap("b", b);
 	}

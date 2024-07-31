@@ -61,7 +61,7 @@ public class BoardDao extends BaseDao {
 	 * @throws IllegalArgumentException 
 	 * @throws NullPointerException 
 	 */
-	public BoardVO detailBoard(int boardNo) throws NullPointerException, IllegalArgumentException, SQLException {
+	public BoardVO selectDetailBoard(int boardNo) throws NullPointerException, IllegalArgumentException, SQLException {
 		return selectExecute("detailBoard", rset -> {
 			BoardVO b = new BoardVO();
 			

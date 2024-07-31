@@ -12,7 +12,7 @@ import org.json.JSONException;
  * XML 및 JSON 파일 설정 정보 로드 및 관리
  */
 public class Configuration {
-	private static final Logger logger = Logger.getLogger(Configuration.class);
+	private static Logger logger = Logger.getLogger(Configuration.class);
 	private static Properties prop = new Properties();
 	private static Configuration instance;
 

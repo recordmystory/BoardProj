@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import com.jw.common.util.Configuration;
 
 public abstract class BaseDao {
-	private static final Logger logger = Logger.getLogger(BaseDao.class);
+	private static Logger logger = Logger.getLogger(BaseDao.class);
 	private Properties prop;
 	
 	/**

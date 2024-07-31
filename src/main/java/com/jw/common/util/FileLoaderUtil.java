@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class FileLoaderUtil {
-	private static final Logger logger = Logger.getLogger(FileLoaderUtil.class);
+	private static Logger logger = Logger.getLogger(FileLoaderUtil.class);
 	
 	 /**
      * mapper 파일 읽고 property에 저장

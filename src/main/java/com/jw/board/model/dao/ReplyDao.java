@@ -7,16 +7,6 @@ import java.util.List;
 import com.jw.board.model.vo.ReplyVO;
 
 public class ReplyDao extends BaseDao {
-	// private Properties prop;
-//	private static final Logger logger = Logger.getLogger(BoardDao.class);
-
-	
-	/*	public ReplyDao() { 
-			ConfigUtil configUtil = ConfigUtil.getInstance();
-	    configUtil.loadXmlFile();
-	
-	    this.prop = configUtil.getProperties();
-		}*/
 	
 	/** 댓글 조회
 	 * 

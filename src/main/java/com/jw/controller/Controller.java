@@ -51,10 +51,13 @@ public class Controller extends HttpServlet {
 			Map<String, Object> result = (Map<String, Object>) method.invoke(serviceInstance, paramMap);
 
 			if ("forward".equals(urlType)) {
-				for (Map.Entry<String, Object> entry : result.entrySet()) {
-					request.setAttribute(entry.getKey().toString(), entry.getValue());
-				}
+				result.entrySet().forEach( entry -> { request.setAttribute(entry.getKey().toString(), entry.getValue()); } );
 				request.getRequestDispatcher("/views" + viewName).forward(request, response);
+				
+				/*	for (Map.Entry<String, Object> entry : result.entrySet()) {
+						request.setAttribute(entry.getKey().toString(), entry.getValue());
+					}
+				*/
 			} else if ("redirect".equals(urlType)) {
 				response.sendRedirect(contextPath + viewName);
 			} else if ("ajax".equals(urlType)) {

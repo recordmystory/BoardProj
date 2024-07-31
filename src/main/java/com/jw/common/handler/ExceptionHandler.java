@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
  * 예외처리 Util
  */
 public class ExceptionHandler {
-	private static final Logger logger = Logger.getLogger(ExceptionHandler.class);
+	private static Logger logger = Logger.getLogger(ExceptionHandler.class);
 	
     /** 에러 메시지 생성 및 로그 기록
      * 

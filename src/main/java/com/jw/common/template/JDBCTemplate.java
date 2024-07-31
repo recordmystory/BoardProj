@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 
 public class JDBCTemplate {
-	private static final Logger logger = Logger.getLogger(JDBCTemplate.class);
+	private static Logger logger = Logger.getLogger(JDBCTemplate.class);
 
 	/** Connection 객체 생성 ( 기본값 : autoCommit(false) )
 	 * 
