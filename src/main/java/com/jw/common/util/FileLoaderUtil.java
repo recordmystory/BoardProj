@@ -12,8 +12,6 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class FileLoaderUtil {
@@ -47,7 +45,7 @@ public class FileLoaderUtil {
     }
 
     /**
-     * JSON 파일을 읽고 URL 매핑값을 urlMappings라는 map에 저장 
+     * JSON 파일을 읽고 각 URL마다 존재하는 viewName, type, serviceName 속성을 urlMappings map에 저장 
      * 
      * @param filePath : 파일 경로
      * @throws IOException : 파일이 존재하지 않을 때, 파일 읽기 중 오류가 발생했을 때, 스트림을 닫는 중 오류가 발생했을 때 
