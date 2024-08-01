@@ -80,7 +80,8 @@ public class StringUtil {
 		return service != null ? service.get("serviceName") : "";
 	}
 	
-	/** 파라미터명과 파라미터 값을 map에 담아줌
+	/** 파라미터명과 파라미터 값을 유효성 검사 진행 후 map에 담아줌
+	 * <p>파라미터가 숫자 및 문자가 아닐 경우엔 Excetion 발생 및 에러 페이지로 포워딩됨</p>
 	 * 
 	 * @param request HTTP 요청
 	 * @return paramMap 파라미터가 담긴 map
