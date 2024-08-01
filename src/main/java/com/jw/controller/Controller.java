@@ -31,10 +31,6 @@ public class Controller extends HttpServlet {
 		String contextPath = request.getContextPath();
 		String action = request.getRequestURI().substring(contextPath.length());
 		
-//		String[] actionArr = action.split("/");
-//		String convertActionArr = Character.toUpperCase(actionArr[actionArr.length - 2].charAt(0)) + actionArr[actionArr.length - 2].substring(1) + "Service";
-//		System.out.println("action split" + convertActionArr);
-		
 		// URL 타입과 뷰 이름 가져오기
 		String urlType = StringUtil.getUrlType(action); // (forward, redirect, ajax)
 		String viewName = StringUtil.getViewName(action); // viewName
@@ -44,7 +40,7 @@ public class Controller extends HttpServlet {
 		
 		// methodName null 혹은 비어있는지 확인
 		if (methodName == null || methodName.isEmpty())  {
-			ExceptionHandler.handleException(request, response, new NullPointerException("methodName이 null이거나 empty"));
+			ExceptionHandler.handleException(request, response, new NullPointerException("methodName이 null 혹은 비어있음"));
 			return;
 		}
 				

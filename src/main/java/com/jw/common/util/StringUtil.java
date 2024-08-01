@@ -26,9 +26,7 @@ public class StringUtil {
 	 */
 	public static String getMethodNameFromAction(String url) {
 		String[] parts = url.split("/");
-		if (parts.length < 3) {
-			return "";
-		}
+		if (parts.length < 3) return "";
 
 		String category = parts[1];
 		String pageName = parts[2].split("\\.")[0];

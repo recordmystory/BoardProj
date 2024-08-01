@@ -40,9 +40,7 @@ public class FileLoaderUtil {
             logger.error("IOException 발생 ==> XML 파일 로드 실패: " + e.getMessage());
             throw e;
         } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
+            if (inputStream != null) inputStream.close();
         }
         return prop;
     }
