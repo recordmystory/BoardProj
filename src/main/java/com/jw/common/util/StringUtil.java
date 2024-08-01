@@ -21,7 +21,7 @@ public class StringUtil {
 	/**
 	 * URL을 서비스 메소드명으로 변환
 	 *
-	 * @param url : URL 액션 문자열
+	 * @param url URL 액션 문자열
 	 * @return 메소드명
 	 */
 	public static String getMethodNameFromAction(String url) {
@@ -39,7 +39,7 @@ public class StringUtil {
 	/**
 	 * 문자열의 첫 글자를 대문자로 변환
 	 *
-	 * @param str : 변환할 문자열
+	 * @param str 변환할 문자열
 	 * @return 변환된 문자열
 	 */
 	public static String convertUrl(String str) {
@@ -51,7 +51,7 @@ public class StringUtil {
 	/**
 	 * URL 타입 반환
 	 *
-	 * @param url : URL 문자열
+	 * @param url URL 문자열
 	 * @return URL 타입 (forward, redirect, ajax)
 	 */
 	public static String getUrlType(String url) {
@@ -62,7 +62,7 @@ public class StringUtil {
 	/**
 	 * 뷰명 반환
 	 *
-	 * @param url : URL 문자열
+	 * @param url URL 문자열
 	 * @return 뷰명
 	 */
 	public static String getViewName(String url) {
@@ -72,7 +72,7 @@ public class StringUtil {
 	
 	/** 서비스 클래스명 반환
 	 * 
-	 * @param url
+	 * @param url URL 문자열
 	 * @return 서비스명
 	 */
 	public static String getServiceName(String url) {
@@ -82,8 +82,8 @@ public class StringUtil {
 	
 	/** 파라미터명과 파라미터 값을 map에 담아줌
 	 * 
-	 * @param request
-	 * @return paramMap : 파라미터가 담긴 map
+	 * @param request HTTP 요청
+	 * @return paramMap 파라미터가 담긴 map
 	 */
 	public static Map<String, String> setMapParameter(HttpServletRequest request){
 		Map<String, String> paramMap = new HashMap<>();
@@ -97,7 +97,7 @@ public class StringUtil {
 			if (value == null || value.trim().isEmpty())
 				throw new IllegalArgumentException("유효하지 않은 파라미터: " + name);
 
-			paramMap.put(name, value);
+			paramMap.put(name, value); // map에는 파라미터 name과 그에 해당하는 값이 담겨있음
 		}
 		
 		return paramMap;

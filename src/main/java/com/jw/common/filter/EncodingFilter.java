@@ -13,7 +13,7 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet Filter implementation class EncodingFilter
+ * Encoding Filter 
  */
 @SuppressWarnings("serial")
 @WebFilter(filterName="encodingFilter", urlPatterns="/*")

@@ -79,6 +79,7 @@ public abstract class BaseDao {
 	 * SQL 실행 메서드 (INSERT, UPDATE, DELETE 문)
 	 * 
      * SQL key를 사용해 INSERT, UPDATE, DELETE 쿼리를 실행
+     * 정상적으로 처리됐을 때는 commit, 예외 발생 시 rollback
      * 
      * @param sqlKey : 실행할 쿼리의 키 (프로퍼티 파일에 저장된 SQL문의 key값을 식별)
      * @param params : 쿼리 파라미터 (가변 인자)

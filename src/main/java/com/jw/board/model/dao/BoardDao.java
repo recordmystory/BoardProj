@@ -6,6 +6,9 @@ import java.util.List;
 
 import com.jw.board.model.vo.BoardVO;
 
+/**
+ * @Description 게시판 DAO
+ */
 public class BoardDao extends BaseDao {
 	
 	/** 게시글 목록 조회 및 페이징 

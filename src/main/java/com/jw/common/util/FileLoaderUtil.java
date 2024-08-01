@@ -14,6 +14,9 @@ import org.json.JSONException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+/**
+ * 파일 로드 Util
+ */
 public class FileLoaderUtil {
 	private static Logger logger = Logger.getLogger(FileLoaderUtil.class);
 	

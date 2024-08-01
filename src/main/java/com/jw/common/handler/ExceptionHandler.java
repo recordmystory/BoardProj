@@ -18,9 +18,9 @@ public class ExceptionHandler {
 	
     /** 에러 메시지 생성 및 로그 기록
      * 
-     * @param request
-     * @param response
-     * @param e
+     * @param request HTTP 요청
+     * @param response HTTP 응답
+     * @param e Exception 유형
      */
     public static void handleException(HttpServletRequest request, HttpServletResponse response, Exception e) {
     	logger.error(getErrorMessage(e), e);
@@ -28,9 +28,13 @@ public class ExceptionHandler {
         
     }
     
-    /** 예외 유형에 따른 메시지 반환
+    /** 예외 유형에 따른 에러 메시지 반환
      * 
-     * @param e
+     * <p>
+     * ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | IllegalArgumentException | NullPointerException | SQLException 외에는 default 메시지 반환 
+     * </p>
+     * 
+     * @param e Exception 유형
      * @return 에러 메시지
      */
     private static String getErrorMessage(Exception e) {
@@ -59,9 +63,9 @@ public class ExceptionHandler {
     
     /** 예외 발생 시 error 페이지 이동 
      * 
-     * @param request
-     * @param response
-     * @param errorMessage 
+     * @param request HTTP 요청
+     * @param response HTTP 응답
+     * @param errorMessage 에러 메시지
      */
     private static void processException(HttpServletRequest request, HttpServletResponse response, String errorMessage) {
 		try {

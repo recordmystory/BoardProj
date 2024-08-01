@@ -23,11 +23,7 @@ public class Configuration {
 	// URL 매핑 정보 저장 Map
 	private static Map<String, Map<String, String>> urlMappings = new HashMap<>();
 
-	/**
-	 * 클래스 로드 시 mapper 파일을 읽고 properties 객체에 저장됨
-	 */
-	private Configuration() {
-	}
+	private Configuration() { }
 
 	/**
 	 * ConfigUtil 인스턴스 반환
@@ -42,7 +38,7 @@ public class Configuration {
 	}
 
 	/**
-	 * xml 파일 로드 : XML 파일이 이미 로드된 경우 다시 로드하지 않음
+	 *  Mapper 파일 로드 : Mapper 파일이 이미 로드된 경우 다시 로드하지 않음
 	 */
 	public void loadXmlFile() {
 		if (!isXmlLoaded) {
@@ -79,7 +75,6 @@ public class Configuration {
 	
 	/**
 	 * URL 매핑 정보 반환
-	 * 
 	 * @return URL 매핑 정보 Map
 	 */
 	public Map<String, Map<String, String>> getUrlMappings() {
@@ -88,7 +83,6 @@ public class Configuration {
 
 	/**
 	 * property 객체 반환
-	 * 
 	 * @return prop
 	 */
 	public Properties getProperties() {

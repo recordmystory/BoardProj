@@ -26,7 +26,8 @@ public class JDBCTemplate {
 	 * 
 	 * 파라미터로 commit (true | false) 를 받아 autoCommit 설정
 	 * 
-	 * @return conn
+	 * @param autoCommit 커밋여부
+	 * @return conn Connection 객체
 	 */
 	public static Connection getConnection(boolean autoCommit) {
 		Connection conn = null;
@@ -45,11 +46,11 @@ public class JDBCTemplate {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("IOException 발생 ==> " + e.getMessage());
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			logger.error("ClassNotFoundException 발생 ==> " + e.getMessage());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQLException 발생 ==> " + e.getMessage());
 		}
 
 		return conn;
@@ -59,7 +60,7 @@ public class JDBCTemplate {
 	/**
 	 * commit
 	 * 
-	 * @param conn
+	 * @param conn Connection 객체
 	 */
 	public static void commit(Connection conn) {
 		try {
@@ -67,14 +68,14 @@ public class JDBCTemplate {
 				conn.commit();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQLException 발생 ==> " + e.getMessage());
 		}
 	}
 
 	/**
 	 * rollback
 	 * 
-	 * @param conn
+	 * @param conn Connection 객체
 	 */
 	public static void rollback(Connection conn) {
 		try {
@@ -82,14 +83,14 @@ public class JDBCTemplate {
 				conn.rollback();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQLException 발생 ==> " + e.getMessage());
 		}
 	}
 
 	/**
 	 * resource close
 	 * 
-	 * @param resources : connection || Statement || ResultSet 
+	 * @param resources : connection || Statement || ResultSet || PrintWriter || etc ...
 	 */
 	public static void close(AutoCloseable... resources) {
 		for (AutoCloseable resource : resources) {
