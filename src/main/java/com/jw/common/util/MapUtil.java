@@ -11,9 +11,6 @@ public class MapUtil {
 	 * @return resultMap 처리 결과가 담긴 map 
 	 */
 	public static Map<String, Object> createResultMap(Object... obj) {
-		for(Object object : obj) {
-			System.out.println(object);
-		}
 		Map<String, Object> resultMap = new HashMap<>();
 		for (int i = 0; i < obj.length; i += 2) {
 			resultMap.put((String) obj[i], obj[i + 1]);

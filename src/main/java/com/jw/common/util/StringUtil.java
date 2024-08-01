@@ -93,43 +93,13 @@ public class StringUtil {
 			String name = paramsNames.nextElement();
 			String value = request.getParameter(name);
 
-			// 문자 유효성 검사
-			if (value == null || value.trim().isEmpty())
-				throw new IllegalArgumentException("유효하지 않은 파라미터: " + name);
-
+			if (value == null || value.trim().isEmpty()) throw new IllegalArgumentException("유효하지 않은 문자 : " + name); // 문자 유효성 검사
+			if (!value.matches("\\d+")) throw new IllegalArgumentException("유효하지 않은 숫자 : " + name); // 숫자 유효성 검사
+			
 			paramMap.put(name, value); // map에는 파라미터 name과 그에 해당하는 값이 담겨있음
 		}
 		
 		return paramMap;
 	}
 	
-	/*    *//**
-			 * 파라미터가 null이거나 빈 문자열인지 검증
-			 *
-			 * @param request   HttpServletRequest 객체
-			 * @param paramName 파라미터명
-			 * @return 파라미터가 null이거나 빈 문자열이면 true, 그렇지 않으면 false
-			 */
-	/*
-	
-	
-	
-	
-	public static boolean isNullOrEmpty(HttpServletRequest request, String paramName) {
-	 String paramValue = request.getParameter(paramName);
-	 return paramName == null || paramValue.trim().isEmpty();
-	}
-	
-	*//**
-		 * 파라미터가 숫자인지 검증
-		 *
-		 * @param request   HttpServletRequest 객체
-		 * @param paramName 파라미터명
-		 * @return 파라미터가 숫자 형식이면 true, 그렇지 않으면 false
-		 *//*
-			public static boolean isNumber(HttpServletRequest request, String paramName) {
-			 String paramValue = request.getParameter(paramName);
-			 return paramValue != null && paramValue.matches("-?\\d+(\\.\\d+)?");
-			}
-			*/
 }
