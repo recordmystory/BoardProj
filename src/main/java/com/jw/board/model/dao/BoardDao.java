@@ -1,8 +1,11 @@
 package com.jw.board.model.dao;
 
+import static com.jw.common.template.JDBCTemplate.*;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 import com.jw.board.model.vo.BoardVO;
 
@@ -54,7 +57,6 @@ public class BoardDao extends BaseDao {
 		});
 	}
 	
-	
 	/** 게시글 상세 조회
 	 * 
 	 * @param conn
@@ -64,7 +66,39 @@ public class BoardDao extends BaseDao {
 	 * @throws IllegalArgumentException 
 	 * @throws NullPointerException 
 	 */
-	public BoardVO selectDetailBoard(int boardNo) throws NullPointerException, IllegalArgumentException, SQLException {
+	public BoardVO selectDetailBoard(Object... params) throws NullPointerException, IllegalArgumentException, SQLException {
+		Connection conn = getConnection();
+		
+		BoardVO board = null;
+		try {			
+			board = selectExecute("detailBoard", rset -> {	
+				BoardVO b = null;
+				if (rset.next()) {
+					b = new BoardVO();
+					b.setNo(rset.getInt("NO"));
+					b.setTitle(rset.getString("TITLE"));
+					b.setContent(rset.getString("CONTENT"));
+					b.setHit(rset.getInt("HIT"));
+					b.setRegDate(rset.getDate("REGDATE"));
+					b.setModDate(rset.getDate("MODDATE"));
+				}
+				return b;
+			}, params);
+			
+			updateExecute("updateHit", params);
+			
+			commit(conn);
+		} catch (SQLException e) {
+			if (conn != null) rollback(conn);
+			throw e;
+		} finally {
+			close(conn);
+		}
+		return board;
+		
+	}
+
+	/*public BoardVO selectDetailBoard(int boardNo) throws NullPointerException, IllegalArgumentException, SQLException {
 		return selectExecute("detailBoard", rset -> {
 			BoardVO b = new BoardVO();
 			
@@ -79,7 +113,7 @@ public class BoardDao extends BaseDao {
 			return b;
 		}, boardNo);
 				
-	}
+	}*/
 	
 	/** 게시글 검색
 	 * 

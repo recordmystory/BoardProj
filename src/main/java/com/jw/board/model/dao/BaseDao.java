@@ -49,7 +49,7 @@ public abstract class BaseDao {
      * @throws IllegalArgumentException : 부적절한 파라미터가 전달된 경우 발생
      */
 	public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params) throws NullPointerException, SQLException, IllegalArgumentException {
-		Connection conn = getConnection();
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		T result = null;
@@ -57,6 +57,7 @@ public abstract class BaseDao {
 		String sql = prop.getProperty(sqlKey);
 		
 		try {
+			conn = getConnection();
 			pstmt = conn.prepareStatement(sql);
 
 			for (int i = 0; i < params.length; i++) {

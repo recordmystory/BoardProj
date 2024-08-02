@@ -79,7 +79,7 @@ public class BoardService {
 	public Map<String, Object> selectDetailBoard(Map<String, String> paramMap) throws Exception {
 		int boardNo = Integer.parseInt(paramMap.get("no"));
 		BoardVO b = bDao.selectDetailBoard(boardNo);
-		bDao.updateExecute("updateHit", boardNo);
+//		bDao.updateExecute("updateHit", boardNo);
 		
 		return MapUtil.createResultMap("b", b);
 	}
