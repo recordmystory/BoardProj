@@ -140,8 +140,8 @@
     				
     				for(let i=0; i<result.list.length; i++){
 						value += '<tr>'
-							  + '<td>' + result.list[i].regId + '</td>'
-							  + '<td>' + result.list[i].content + '</td>'
+							  + '<td style="width: 300px;">' + result.list[i].regId + '</td>'
+							  + '<td style="white-space: pre; text-align: left;">' + result.list[i].content + '</td>'
 							  + '<td>' + result.list[i].regDate + '</td>'
 							  + '<tr>';
 					}

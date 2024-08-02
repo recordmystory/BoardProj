@@ -21,10 +21,9 @@ public class ReplyDao extends BaseDao {
 	 */
 	public List<ReplyVO> listReply(int boardNo) throws NullPointerException, IllegalArgumentException, SQLException {
 		return selectExecute("listReply", rset -> {
-			ReplyVO r = new ReplyVO();
 			List<ReplyVO> list = new ArrayList<>();
 			while (rset.next()) {
-				
+				ReplyVO r = new ReplyVO();				
 				r.setRNo(rset.getInt("RNO"));
 				r.setContent(rset.getString("CONTENT"));
 				r.setRegId(rset.getString("REGID"));
