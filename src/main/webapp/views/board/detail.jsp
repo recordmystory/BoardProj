@@ -135,17 +135,16 @@
     				console.log(result);
     				let value = '';
     				
-    				if(result.list.length < 0) {
+    				if(result.list.length < 0) 
     					value += '<tr><td colspan="3">존재하는 댓글이 없습니다.</td></tr>';
-    				} else {
-	    				for(let i=0; i<result.list.length; i++){
-							value += '<tr>'
-								  + '<td>' + result.list[i].regId + '</td>'
-								  + '<td>' + result.list[i].content + '</td>'
-								  + '<td>' + result.list[i].regDate + '</td>'
-								  + '<tr>';
-						}
-    				}
+    				
+    				for(let i=0; i<result.list.length; i++){
+						value += '<tr>'
+							  + '<td>' + result.list[i].regId + '</td>'
+							  + '<td>' + result.list[i].content + '</td>'
+							  + '<td>' + result.list[i].regDate + '</td>'
+							  + '<tr>';
+					}
     				
     				$('#reply-table tbody').html(value); // table내에 list값 뿌리기
     				
