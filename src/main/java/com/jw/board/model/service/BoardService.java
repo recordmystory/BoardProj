@@ -10,6 +10,9 @@ import com.jw.board.model.vo.PageInfoVO;
 import com.jw.common.util.MapUtil;
 import com.jw.common.util.PagingUtil;
 
+/**
+ * 게시판 Service
+ */
 public class BoardService {
 	private static final BoardDao bDao = new BoardDao();
 
@@ -17,7 +20,7 @@ public class BoardService {
 	 * 
 	 * @param paramMap : 파라미터가 담긴 map
 	 * @return resultMap : 결과 map
-	 * @throws Exception
+	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
 	public Map<String, Object> listBoard(Map<String, String> paramMap) throws Exception {
 		String nowPage = paramMap.get("page");
@@ -38,7 +41,7 @@ public class BoardService {
 	 * 
 	 * @param paramMap : 파라미터가 담긴 map
 	 * @return resultMap : 결과 map
-	 * @throws Exception
+	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
 	public Map<String, Object> insertBoard(Map<String, String> paramMap) throws Exception {
 		String title = paramMap.get("title");
@@ -63,8 +66,8 @@ public class BoardService {
 	/** 글 작성 페이지 포워딩
 	 * 
 	 * @param paramMap : 파라미터가 담긴 map
-	 * @return
-	 * @throws Exception
+	 * @return new HashMap
+	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
 	public Map<String, Object> registBoard(Map<String, String> paramMap) throws Exception {
 		return new HashMap<>();
@@ -72,13 +75,12 @@ public class BoardService {
 
 	/** 게시글 상세 조회
 	 * 
-	 *@param paramMap : 파라미터가 담긴 map
+	 * @param paramMap : 파라미터가 담긴 map
 	 * @return resultMap : 결과 map
-	 * @throws Exception
+	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
 	public Map<String, Object> selectDetailBoard(Map<String, String> paramMap) throws Exception {
-		int boardNo = Integer.parseInt(paramMap.get("no"));
-		BoardVO b = bDao.selectDetailBoard(boardNo);
+		BoardVO b = bDao.selectDetailBoard(Integer.parseInt(paramMap.get("no")));
 //		bDao.updateExecute("updateHit", boardNo);
 		
 		return MapUtil.createResultMap("b", b);
@@ -88,7 +90,7 @@ public class BoardService {
 	 * 
 	 * @param paramMap : 파라미터가 담긴 map
 	 * @return resultMap : 결과 map
-	 * @throws Exception
+	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
 	public Map<String, Object> updateFormBoard(Map<String, String> paramMap) throws Exception {
 		BoardVO b = bDao.selectDetailBoard(Integer.parseInt(paramMap.get("no")));
@@ -100,7 +102,7 @@ public class BoardService {
 	 * 
 	 * @param paramMap : 파라미터가 담긴 map
 	 * @return resultMap : 결과 map
-	 * @throws Exception
+	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
 	public Map<String, Object> updateBoard(Map<String, String> paramMap) throws Exception {
 		int result = bDao.updateExecute("updateBoard"
@@ -113,9 +115,9 @@ public class BoardService {
 	
 	/** 게시글 삭제 (delete문이 아닌 del_yn 컬럼 update)
 	 * 
-	 *@param paramMap : 파라미터가 담긴 map
+	 * @param paramMap : 파라미터가 담긴 map
 	 * @return resultMap : 결과 map
-	 * @throws Exception
+	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
 	public Map<String, Object> deleteBoard(Map<String, String> paramMap) throws Exception {
 		int result = bDao.updateExecute("deleteBoard", Integer.parseInt(paramMap.get("no")));
@@ -125,9 +127,9 @@ public class BoardService {
 	
 	/** 검색 (ajax)
 	 * 
-	 * @param paramMap
-	 * @return resultMap
-	 * @throws Exception
+	 * @param paramMap : 파라미터가 담긴 map
+	 * @return resultMap : 결과 map
+	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
 	public Map<String, Object> listSearchBoard(Map<String, String> paramMap) throws Exception {
 		String nowPage = paramMap.get("page");

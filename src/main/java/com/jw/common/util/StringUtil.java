@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import com.jw.common.handler.ExceptionHandler;
 
 /**
- * Parameter 유효성 검사 및 URL 관련 유틸리티
+ * Parameter 유효성 검사 및 URL 관련 Util
  */
 public class StringUtil {
 	private static Map<String, Map<String, String>> urlMappings;

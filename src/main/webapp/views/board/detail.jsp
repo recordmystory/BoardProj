@@ -114,7 +114,7 @@
     			method: 'post',
     			success: function(result) {
     				console.log(result);
-    				if (result.flag === "fail" && $('#reply-content').val().trim() === null || $('#reply-content').val().trim() === "") alert('댓글 내용을 입력해주세요.');   
+    				if (result.flag === 'fail' && $('#reply-content').val().trim() === null || $('#reply-content').val().trim() === '') alert('댓글 내용을 입력해주세요.');   
     			    				
    					$('#reply-content').val(''); // textarea 초기화
    					selectReply(); // 갱신된 댓글 목록 조회해 화면에 뿌려주기
@@ -135,8 +135,7 @@
     				console.log(result);
     				let value = '';
     				
-    				if(result.list.length < 0) 
-    					value += '<tr><td colspan="3">존재하는 댓글이 없습니다.</td></tr>';
+    				if(result.list.length < 0) value += '<tr><td colspan="3">존재하는 댓글이 없습니다.</td></tr>';
     				
     				for(let i=0; i<result.list.length; i++){
 						value += '<tr>'
@@ -147,12 +146,10 @@
 					}
     				
     				$('#reply-table tbody').html(value); // table내에 list값 뿌리기
-    				
     			},
     			error: function(){
     				alert('댓글 조회에 실패했습니다. 잠시 후 시도해주세요.');
     			}
-    			
     		});
     	}
     </script>

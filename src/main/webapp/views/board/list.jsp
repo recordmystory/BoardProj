@@ -21,8 +21,7 @@
 	input[id='keyword'] { width: 200px; }
 	.content-area-header > * { margin: 20px 10px 15px 0px; }
 	tr { cursor: pointer; }
-	#boardList > thead > tr  { text-align: center; }
-	#boardList > tbody > tr  { text-align: center; }
+	#boardList > thead > tr, #boardList > tbody > tr  { text-align: center; }
 	.table { border: 1px solid lightgray !important; }
 </style>
 
@@ -247,12 +246,10 @@
 			            }
 
 			            $('.pagination').html(pageArea);
-						
 					},
 					error: function(){
 						alert('검색에 실패했습니다. 잠시후 다시 시도해주세요.');
 					}
-					
 				});
 			});
 		});

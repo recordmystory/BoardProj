@@ -44,9 +44,9 @@ public abstract class BaseDao {
      * @param handler : ResultSet 처리 핸들러
      * @param params : 쿼리 파라미터 (가변 인자)
      * @return result : 처리된 결과
-     * @throws NullPointerException : SQL 문이나 핸들러가 null인 경우 발생
-     * @throws SQLException : SQL 실행 중 발생할 수 있는 예외
-     * @throws IllegalArgumentException : 부적절한 파라미터가 전달된 경우 발생
+     * @throws NullPointerException SQL 문이나 핸들러가 null인 경우 발생
+     * @throws SQLException SQL 실행 중 발생할 수 있는 예외
+     * @throws IllegalArgumentException 부적절한 파라미터가 전달된 경우 발생
      */
 	public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params) throws NullPointerException, SQLException, IllegalArgumentException {
 		Connection conn = null;
@@ -85,8 +85,8 @@ public abstract class BaseDao {
      * @param sqlKey : 실행할 쿼리의 키 (프로퍼티 파일에 저장된 SQL문의 key값을 식별)
      * @param params : 쿼리 파라미터 (가변 인자)
      * @return result : 업데이트된 행의 개수
-     * @throws SQLException : SQL 실행 중 발생할 수 있는 예외
-     * @throws IllegalArgumentException : 잘못된 파라미터가 전달된 경우 발생
+     * @throws SQLException SQL 실행 중 발생할 수 있는 예외
+     * @throws IllegalArgumentException 잘못된 파라미터가 전달된 경우 발생
 	 */
 	public int updateExecute(String sqlKey, Object... params) throws SQLException, IllegalArgumentException {
 		
