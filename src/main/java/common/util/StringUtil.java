@@ -1,25 +1,15 @@
 package common.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.log4j.Logger;
 
 /**
  * Parameter 유효성 검사 및 URL 관련 Util
  */
 public class StringUtil {
-	private static Logger logger = Logger.getLogger(StringUtil.class);
 
 	private static Map<String, Map<String, String>> urlMappings;
 
@@ -114,26 +104,27 @@ public class StringUtil {
 		return parts[1] + ".model.service." + parts[1].substring(0, 1).toUpperCase() + parts[1].substring(1) + "Service";
 	}
 	
-	private static List<Class<?>> getClassesForPackage(String path, String packageName) throws IOException, ClassNotFoundException {
-		  File directory = new File(path);
-	        if (!directory.exists()) {
-	            throw new IOException("디렉토리가 존재하지 않습니다: " + path);
-	        }
-
-	        List<Class<?>> classes = new ArrayList<>();
-	        URL[] urls = {directory.toURI().toURL()};
-	        URLClassLoader classLoader = new URLClassLoader(urls);
-
-	        for (File file : directory.listFiles()) {
-	            if (file.getName().endsWith(".class")) {
-	                String className = packageName + '.' + file.getName().replace(".class", "");
-	                Class<?> clazz = classLoader.loadClass(className);
-	                classes.add(clazz);
-	            }
-	        }
-
-	        return classes;
-	    }
+	/*	private static List<Class<?>> getClassesForPackage(String path, String packageName)
+				throws IOException, ClassNotFoundException {
+			File directory = new File(path);
+			if (!directory.exists()) {
+				throw new IOException("디렉토리가 존재하지 않습니다: " + path);
+			}
+	
+			List<Class<?>> classes = new ArrayList<>();
+			URL[] urls = { directory.toURI().toURL() };
+			URLClassLoader classLoader = new URLClassLoader(urls);
+	
+			for (File file : directory.listFiles()) {
+				if (file.getName().endsWith(".class")) {
+					String className = packageName + '.' + file.getName().replace(".class", "");
+					Class<?> clazz = classLoader.loadClass(className);
+					classes.add(clazz);
+				}
+			}
+	
+			return classes;
+		}*/
 	
 
 	/** 파라미터명과 파라미터 값을 유효성 검사 진행 후 map에 담아줌

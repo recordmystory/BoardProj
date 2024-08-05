@@ -3,10 +3,8 @@ package controller;
 import static common.template.JDBCTemplate.close;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,12 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.reflections.Reflections;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
@@ -27,7 +19,7 @@ import common.handler.ExceptionHandler;
 import common.util.StringUtil;
 
 /**
- * @Description .bo로 끝나는 모든 요청을 받는 Controller
+ * .bo로 끝나는 모든 요청을 받는 Controller
  */
 @WebServlet("*.bo")
 public class Controller extends HttpServlet {
@@ -39,8 +31,6 @@ public class Controller extends HttpServlet {
 	 */
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-//		String contextPath = ;
 		String action = request.getRequestURI().substring(request.getContextPath().length());
 		
 		// URL 타입과 뷰 이름 가져오기
