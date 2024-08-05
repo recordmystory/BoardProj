@@ -53,7 +53,7 @@ public class ExceptionHandler {
          } else if (e instanceof NullPointerException) {
              return "파라미터 누락: " + e.getMessage();
          } else if (e instanceof NumberFormatException) {
-             return "페이지 번호 및 글번호가 유효하지 않습니다: " + e.getMessage();
+             return "숫자 형식 오류 발생 : " + e.getMessage();
          } else if (e instanceof SQLException) {
              return "데이터베이스 오류 발생: " + e.getMessage();
          } else {

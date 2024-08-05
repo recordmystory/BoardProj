@@ -6,6 +6,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
+import com.jw.common.handler.ExceptionHandler;
+
 /**
  * Parameter 유효성 검사 및 URL 관련 유틸리티
  */
@@ -91,9 +95,8 @@ public class StringUtil {
 		while (paramsNames.hasMoreElements()) {
 			String name = paramsNames.nextElement();
 			String value = request.getParameter(name);
-
-//			if (value == null || value.trim().isEmpty()) throw new IllegalArgumentException("유효하지 않은 문자 : " + name); // 문자 유효성 검사
-//			if (!value.matches("\\d+")) throw new IllegalArgumentException("유효하지 않은 숫자 : " + name); // 숫자 유효성 검사
+			
+			if(value == null || value.trim().isEmpty()) throw new IllegalArgumentException("유효하지 않은 문자 : " + name); 
 			
 			paramMap.put(name, value); // map에는 파라미터 name과 그에 해당하는 값이 담겨있음
 		}
