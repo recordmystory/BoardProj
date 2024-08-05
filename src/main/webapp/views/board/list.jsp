@@ -194,13 +194,12 @@
 						
 						let value = '';
 						
-						if(resultMap.list.length < 0) {
+						if(resultMap.list.length <= 0) {
 							value += '<tr><td colspan="6" style="text-align: center;">존재하는 게시글이 없습니다.</td></tr>';
-							$('.pagination').empty();
+							$('.pagination').remove();
 						}
 						
 						for(let i=0; i<resultMap.list.length; i++){
-							
 				            // YYYY-MM-DD 형식으로 변환
 				            let formatRegDate = parseDate(resultMap.list[i].regDate).toISOString().split('T')[0];
 							
@@ -216,8 +215,9 @@
 						$('#boardList tbody').append(value);
 
 						clickTableRow();
+						$('.pagination').remove();
 						
-						// page 영역 다시 그리기
+						/* // page 영역 다시 그리기
 						let pageArea = '';
 			            if (resultMap.page) {
 			                let page = resultMap.page;
@@ -226,14 +226,14 @@
 			                if(page.currentPage == 1){ // 현재 사용자가 보고 있는 페이지가 1페이지일때
 			                    pageArea += '<li class="page-item disabled"><a class="page-link" href="#">&lt;</a></li>';
 			                } else { // 현재 사용자가 보고 있는 페이지가 1페이지가 아닐 때
-			                    pageArea += '<li class="page-item"><a class="page-link" href="/mav/board/list.bo?page=' + (page.currentPage - 1) + '">&lt;</a></li>';
+			                    pageArea += '<li class="page-item"><a class="page-link" href="/board/list.bo?page=' + (page.currentPage - 1) + '&keyword=' + resultMap.keyword + '">&lt;</a></li>';
 			                }
 
 			                for(let p = page.startPage; p <= page.endPage; p++) {
 			                    if(p == page.currentPage){
 			                        pageArea += '<li class="page-item active"><a class="page-link" href="#">' + p + '</a></li>';
 			                    } else {
-			                        pageArea += '<li class="page-item"><a class="page-link" href="/mav/board/list.bo?page=' + p + '">' + p + '</a></li>';
+			                        pageArea += '<li class="page-item"><a class="page-link" href="/board/list.bo?page=' + p + '&keyword=' + resultMap.keyword + '">' + p + '</a></li>';
 			                    }
 			                }
 
@@ -241,11 +241,11 @@
 			                if(page.currentPage == page.maxPage){ // 현재 사용자가 보고 있는 페이지의 값과 가장 마지막 페이지의 값이 일치할 때
 			                    pageArea += '<li class="page-item disabled"><a class="page-link" href="#">&gt;</a></li>';
 			                } else {
-			                    pageArea += '<li class="page-item"><a class="page-link" href="/mav/board/list.bo?page=' + (page.currentPage + 1) + '">&gt;</a></li>';
+			                    pageArea += '<li class="page-item"><a class="page-link" href="/board/list.bo?page=' + (page.currentPage + 1) + '&keyword=' + resultMap.keyword + '">&gt;</a></li>';
 			                }
 			            }
-
-			            $('.pagination').html(pageArea);
+ */
+			            
 					},
 					error: function(){
 						alert('검색에 실패했습니다. 잠시후 다시 시도해주세요.');

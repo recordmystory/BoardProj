@@ -15,6 +15,7 @@ import com.jw.board.model.vo.BoardVO;
 public class BoardDao extends BaseDao {
 	
 	/** 게시글 목록 조회 및 페이징 
+	 * 
 	 * @param params : 페이지 시작수, 페이지 끝수
 	 * @return list : 조회 결과가 담긴 list
 	 * @throws NullPointerException : 파라미터가 null일 경우, rset이 null일 경우, selectExecute 반환값이 null일 경우 발생 
@@ -95,7 +96,7 @@ public class BoardDao extends BaseDao {
 		
 	}
 	
-	/** 게시글 검색 (AJAX)
+	/** 검색된 게시글 조회 (AJAX)
 	 * 
 	 * @param params : 검색어, 페이지 시작수, 페이지 끝수 
 	 * @return list : 검색결과가 담긴 list
@@ -122,7 +123,8 @@ public class BoardDao extends BaseDao {
 		
 	}
 	
-	/** 검색된 게시물 count
+	/** 검색된 게시물 개수 조회
+	 * 
 	 * @param params : 검색어
 	 * @return listCount : 게시글 총 개수
 	 * @throws NullPointerException : : 파라미터가 null일 경우, rset이 null일 경우, selectExecute 반환값이 null일 경우 발생

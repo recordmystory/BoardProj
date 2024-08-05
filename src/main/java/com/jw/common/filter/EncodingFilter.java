@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Encoding Filter 
  */
-@SuppressWarnings("serial")
 @WebFilter(filterName="encodingFilter", urlPatterns="/*")
 public class EncodingFilter extends HttpFilter implements Filter {
        
@@ -40,7 +39,7 @@ public class EncodingFilter extends HttpFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		  // 모든 요청에 대해 인코딩 설정
         request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
+//        response.setCharacterEncoding("UTF-8");
 
         // 응답 헤더에 Content-Type 설정 추가
         if(response instanceof HttpServletResponse) {

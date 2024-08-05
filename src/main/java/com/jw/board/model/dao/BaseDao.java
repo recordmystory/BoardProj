@@ -88,7 +88,7 @@ public abstract class BaseDao {
      * @throws SQLException SQL 실행 중 발생할 수 있는 예외
      * @throws IllegalArgumentException 잘못된 파라미터가 전달된 경우 발생
 	 */
-	public int updateExecute(String sqlKey, Object... params) throws SQLException, IllegalArgumentException {
+	public int updateExecute(String sqlKey, Object... params) throws NullPointerException, SQLException, IllegalArgumentException {
 		
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
@@ -107,7 +107,7 @@ public abstract class BaseDao {
 			if (result == 0) {
 	            logger.debug("result : 0 (insert || update || delete 된 행의 개수 0)");
 	        } else if (result == -1) {
-	            logger.debug("result : -1 (비정상 결과)");
+	            logger.debug("result : -1");
 	        } else if (result >= 1) {
 	            logger.debug("result : " + result + " (insert || update || delete 성공)");
 	        }

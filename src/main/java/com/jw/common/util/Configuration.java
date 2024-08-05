@@ -26,7 +26,7 @@ public class Configuration {
 	private Configuration() { }
 
 	/**
-	 * ConfigUtil 인스턴스 반환
+	 * Configuration 인스턴스 반환
 	 * 
 	 * @return ConfigUtil 인스턴스
 	 */
