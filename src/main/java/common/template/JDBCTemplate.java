@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -55,7 +56,6 @@ public class JDBCTemplate {
 
 		return conn;
 	}
-	// get가여조는 메서드하 
 
 	/**
 	 * commit
@@ -82,9 +82,26 @@ public class JDBCTemplate {
 			if (conn != null && !conn.isClosed()) {
 				conn.rollback();
 			}
+			
 		} catch (SQLException e) {
 			logger.error("SQLException 발생 ==> " + e.getMessage());
 		}
+	}
+	
+	public static void rollback(Connection conn, Savepoint savePoint) {
+	    try {
+	        if (conn != null && !conn.isClosed()) {
+	            if (savePoint != null) {
+	                conn.rollback(savePoint); 
+	                logger.info("세이브포인트까지 롤백");
+	            } else {
+	                conn.rollback(); 
+	                logger.info("롤백");
+	            }
+	        }
+	    } catch (SQLException e) {
+	        logger.error("SQLException 발생 ==> " + e.getMessage());
+	    }
 	}
 
 	/**

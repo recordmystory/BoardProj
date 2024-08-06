@@ -17,7 +17,7 @@ public class ReplyService {
 	 * @return resultMap : 결과 map
 	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
-	public Map<String, Object> listReply(Map<String, String> paramMap) throws NullPointerException, IllegalArgumentException, SQLException {
+	public Map<String, Object> listReply(Map<String, String> paramMap) throws NullPointerException, IllegalArgumentException, SQLException, ReflectiveOperationException {
 		List<ReplyVO> list = rDao.listReply(Integer.parseInt(paramMap.get("no")));
 
 		return MapUtil.createResultMap("list", list);

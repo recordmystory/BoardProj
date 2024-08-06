@@ -23,7 +23,7 @@ public class BoardService {
 	 * @return resultMap : 결과 map
 	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
-	public Map<String, Object> listBoard(Map<String, String> paramMap) throws NullPointerException, SQLException, IllegalArgumentException {
+	public Map<String, Object> listBoard(Map<String, String> paramMap) throws NullPointerException, IllegalArgumentException, SQLException, ReflectiveOperationException {
 		String nowPage = paramMap.get("page");
 		if (nowPage == null || nowPage.trim().isEmpty()) nowPage = "1";
 		int currentPage = Integer.parseInt(nowPage);
@@ -44,7 +44,7 @@ public class BoardService {
 	 * @return resultMap : 결과 map
 	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
-	public Map<String, Object> insertBoard(Map<String, String> paramMap) throws NullPointerException, SQLException, IllegalArgumentException {
+	public Map<String, Object> insertBoard(Map<String, String> paramMap) throws NullPointerException, IllegalArgumentException, SQLException, ReflectiveOperationException {
 		String title = paramMap.get("title");
 		String content = paramMap.get("content");
 		if (title == null || title.trim().isEmpty()) {
@@ -69,7 +69,7 @@ public class BoardService {
 	 * @return new HashMap
 	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
-	public Map<String, Object> registBoard(Map<String, String> paramMap) throws NullPointerException, SQLException, IllegalArgumentException {
+	public Map<String, Object> registBoard(Map<String, String> paramMap) throws NullPointerException, IllegalArgumentException, SQLException, ReflectiveOperationException {
 		return new HashMap<>();
 	}
 
@@ -79,7 +79,7 @@ public class BoardService {
 	 * @return resultMap : 결과 map
 	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
-	public Map<String, Object> selectDetailBoard(Map<String, String> paramMap) throws NullPointerException, SQLException, IllegalArgumentException {
+	public Map<String, Object> selectDetailBoard(Map<String, String> paramMap) throws NullPointerException, IllegalArgumentException, SQLException, ReflectiveOperationException {
 		BoardVO b = bDao.selectDetailBoard(Integer.parseInt(paramMap.get("no")));
 //		bDao.updateExecute("updateHit", boardNo);
 		
@@ -92,7 +92,7 @@ public class BoardService {
 	 * @return resultMap : 결과 map
 	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
-	public Map<String, Object> updateFormBoard(Map<String, String> paramMap) throws NullPointerException, SQLException, IllegalArgumentException {
+	public Map<String, Object> updateFormBoard(Map<String, String> paramMap) throws NullPointerException, IllegalArgumentException, SQLException, ReflectiveOperationException {
 		BoardVO b = bDao.selectDetailBoard(Integer.parseInt(paramMap.get("no")));
 		
 		return MapUtil.createResultMap("b", b);
@@ -104,7 +104,7 @@ public class BoardService {
 	 * @return resultMap : 결과 map
 	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
-	public Map<String, Object> updateBoard(Map<String, String> paramMap) throws NullPointerException, SQLException, IllegalArgumentException {
+	public Map<String, Object> updateBoard(Map<String, String> paramMap) throws NullPointerException, IllegalArgumentException, SQLException, ReflectiveOperationException {
 		int result = bDao.updateExecute("updateBoard"
 									, paramMap.get("title")
 									, paramMap.get("content")
@@ -131,7 +131,7 @@ public class BoardService {
 	 * @return resultMap : 결과 map
 	 * @throws Exception 예외 발생 시 발생한 예외를 Controller에서 처리
 	 */
-	public Map<String, Object> listSearchBoard(Map<String, String> paramMap) throws NullPointerException, IllegalArgumentException, SQLException {
+	public Map<String, Object> listSearchBoard(Map<String, String> paramMap) throws NullPointerException, IllegalArgumentException, SQLException, ReflectiveOperationException {
 		String currentPage = paramMap.get("page");
 		String keyword = paramMap.get("keyword");
 		if (currentPage == null || currentPage.trim().isEmpty()) currentPage = "1";

@@ -39,9 +39,9 @@ public class ExceptionHandler {
      */
     private static String getErrorMessage(Exception e) {
     	 if (e instanceof ClassNotFoundException) {
-             return "서비스 클래스를 찾을 수 없습니다: " + e.getMessage();
+             return "서비스 클래스를 찾을 수 없음: " + e.getMessage();
          } else if (e instanceof NoSuchMethodException) {
-             return "메서드를 찾을 수 없습니다: " + e.getMessage();
+             return "메서드를 찾을 수 없음: " + e.getMessage();
          } else if (e instanceof InstantiationException) {
              return "인스턴스화 실패: " + e.getMessage();
          } else if (e instanceof IllegalAccessException) {
@@ -54,6 +54,8 @@ public class ExceptionHandler {
              return "파라미터 누락: " + e.getMessage();
          } else if (e instanceof NumberFormatException) {
              return "숫자 형식 오류 발생 : " + e.getMessage();
+         } else if(e instanceof NoSuchFieldException) {
+        	 return "필드를 찾을 수 없음 : " + e.getMessage();
          } else if (e instanceof SQLException) {
              return "데이터베이스 오류 발생: " + e.getMessage();
          } else {

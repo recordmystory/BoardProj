@@ -5,11 +5,15 @@ import static common.template.JDBCTemplate.commit;
 import static common.template.JDBCTemplate.getConnection;
 import static common.template.JDBCTemplate.rollback;
 
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
@@ -63,6 +67,7 @@ public abstract class BaseDao {
 			for (int i = 0; i < params.length; i++) {
 				pstmt.setObject(i + 1, params[i]);
 			}
+			
 			rset = pstmt.executeQuery();
 			result = handler.handle(rset);
 		} catch (NullPointerException | SQLException | IllegalArgumentException e) {
@@ -94,6 +99,7 @@ public abstract class BaseDao {
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty(sqlKey);
 		int result = -1;
+		
 		try {
 			
 	        pstmt = conn.prepareStatement(sql);
@@ -101,7 +107,11 @@ public abstract class BaseDao {
 			for (int i = 0; i < params.length; i++) {
 				pstmt.setObject(i + 1, params[i]);
 			}
-
+			
+			/*
+			 * executeUpdate() : insert / update / delete => 즉, DML문에서는 반영된 행 수를 반환하고,
+			 * 					 CREATE, DROP문에서는 -1 반환
+			 */
 			result = pstmt.executeUpdate();
 
 			if (result == 0) {
@@ -114,7 +124,7 @@ public abstract class BaseDao {
 			
 			commit(conn);
 
-		} catch (NullPointerException |SQLException | IllegalArgumentException e) {
+		} catch (NullPointerException | SQLException | IllegalArgumentException e) {
 			logger.error(e.getClass().getName() + "발생 : " + e.getMessage());
 			rollback(conn);
 			throw e; // Exception 던진 후 Controller에서 받아서 처리
@@ -125,4 +135,47 @@ public abstract class BaseDao {
 
 		return result;
 	}
+	
+	/** 클래스의 모든 필드 이름을 가져옴
+	 * 
+	 * @param <T> 클래스의 타입
+	 * @param clazz 필드명을 가져올 클래스
+	 * @return DTO의 필드명이 담긴 List
+	 */
+	protected static <T> List<String> getFieldNames(Class<T> clazz) {
+		return Arrays.stream(clazz.getDeclaredFields())
+						          .map(Field::getName)
+						          .collect(Collectors.toList()); 
+	}
+	
+	/** 객체의 필드에 ResultSet 값을 담음
+	 * 
+	 * @param <T> 객체 타입
+	 * @param instance 값을 담을 객체
+	 * @param rset ResultSet
+	 * @throws SQLException SQL문 실행 중 예외가 발생하면 상위 클래스로 예외를 던짐
+	 */
+	protected <T> void setFieldValue(T instance, ResultSet rset) throws SQLException/*, IllegalAccessException, ReflectiveOperationException, NoSuchFieldException*/ {
+		List<String> filedNames = getFieldNames(instance.getClass());
+		for (String fieldName : filedNames) {
+			try {
+
+				Field field = instance.getClass().getDeclaredField(fieldName);
+				field.setAccessible(true); // private 필드에 접근
+				
+				// 필드 타입에 맞게 set
+				if (field.getType() == int.class) {
+					field.setInt(instance, rset.getInt(fieldName));
+				} else if (field.getType() == String.class) {
+					field.set(instance, rset.getString(fieldName));
+				} else if (field.getType() == java.sql.Date.class) {
+					field.set(instance, rset.getDate(fieldName));
+				}
+
+			} catch (NoSuchFieldException | IllegalAccessException e) {
+				logger.error(e.getClass().getName() + "발생 ==> " + e.getMessage());
+			}
+		}
+	}
 }
+

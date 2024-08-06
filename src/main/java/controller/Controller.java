@@ -23,7 +23,6 @@ import common.util.StringUtil;
  */
 @WebServlet("*.bo")
 public class Controller extends HttpServlet {
-
 	private static final long serialVersionUID = 1L;
 	
 	/**
@@ -31,6 +30,8 @@ public class Controller extends HttpServlet {
 	 */
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		
 		String action = request.getRequestURI().substring(request.getContextPath().length());
 		
 		// URL 타입과 뷰 이름 가져오기
@@ -71,7 +72,7 @@ public class Controller extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-			ExceptionHandler.handleException(request, response, e); // 예외처리 util 호출
+			 ExceptionHandler.handleException(request, response, e); // 예외처리 util 호출
 		}
 	}
 }

@@ -7,14 +7,18 @@
          FROM(
              SELECT ROWNUM RNUM, A.*
              FROM (
-                     SELECT NO
+                     SELECT 
+                    		NO
                           , TITLE
                           , CONTENT
                           , HIT
-                          , REGID
-                          , TO_CHAR(REGDATE, 'YYYY-MM-DD') AS REGDATE
+                          , REG_ID AS REGID
+                          , MOD_ID AS MODID
+                          , TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS REGDATE
+                          , TO_CHAR(MOD_DATE, 'YYYY-MM-DD') AS MODDATE
+                          , DEL_YN AS DELYN
                      FROM TB_BOARD
-                     WHERE DELYN = 'N'
+                     WHERE DEL_YN = 'N'
                      ORDER BY NO DESC
              ) A
          )
@@ -25,7 +29,7 @@
 	<entry key="selectBoardCount">
 		SELECT COUNT(*) AS COUNT
         FROM TB_BOARD
-        WHERE DELYN = 'N'
+        WHERE DEL_YN = 'N'
 	</entry>
 	
 	
@@ -37,11 +41,11 @@
                          , TITLE
                          , CONTENT
                          , HIT
-                         , REGID
-                         , MODID
-                         , REGDATE
-                         , MODDATE
-                         , DELYN
+                         , REG_ID
+                         , MOD_ID
+                         , REG_DATE
+                         , MOD_DATE
+                         , DEL_YN
                      )
                      VALUES
                      (
@@ -63,21 +67,24 @@
 				TB_BOARD
 		SET HIT = HIT + 1
 		WHERE NO = ?
-			AND DELYN = 'N'
+			AND DEL_YN = 'N'
 	</entry>
 	
 	<!-- 게시글 상세 조회 -->
-	<entry key="detailBoard">
+	<entry key="selectDetailBoard">
 		SELECT 
-				NO
-			  , TITLE
-			  , CONTENT
-			  , HIT
-			  , TO_CHAR(REGDATE, 'YYYY-MM-DD') AS REGDATE
-			  , TO_CHAR(MODDATE, 'YYYY-MM-DD') AS MODDATE
+			   NO
+             , TITLE
+             , CONTENT
+             , HIT
+             , REG_ID AS REGID
+             , MOD_ID AS MODID
+             , TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS REGDATE
+             , TO_CHAR(MOD_DATE, 'YYYY-MM-DD') AS MODDATE
+             , DEL_YN AS DELYN
 		FROM TB_BOARD
 		WHERE NO = ?
-			AND DELYN = 'N'
+			AND DEL_YN = 'N'
 	</entry>
 	
 	<!-- 게시글 상세 조회 -->
@@ -86,17 +93,17 @@
 	           TB_BOARD
        SET TITLE = ?
          , CONTENT = ?
-         , MODDATE = SYSDATE
+         , MOD_DATE = SYSDATE
        WHERE NO = ?
-           AND DELYN = 'N'
+           AND DEL_YN = 'N'
 	</entry>
 	
 	<!-- 게시글 삭제 -->
 	<entry key="deleteBoard">
 		UPDATE
                TB_BOARD
-        SET DELYN = 'Y'
-          , MODDATE = SYSDATE
+        SET DEL_YN = 'Y'
+          , MOD_DATE = SYSDATE
         WHERE NO = ?
 	</entry>
 	
@@ -104,7 +111,7 @@
 	<entry key="selectSearchCount">
 		SELECT COUNT(*) AS COUNT
         FROM TB_BOARD
-        WHERE DELYN = 'N'
+        WHERE DEL_YN = 'N'
             AND TITLE LIKE '%' || ? || '%'
 	</entry>
 	
@@ -114,14 +121,18 @@
          FROM(
              SELECT ROWNUM RNUM, A.*
              FROM (
-                     SELECT NO
+                     SELECT 
+                     		NO
                           , TITLE
                           , CONTENT
                           , HIT
-                          , REGID
-                          , TO_CHAR(REGDATE, 'YYYY-MM-DD') AS REGDATE
+                          , REG_ID AS REGID
+                          , MOD_ID AS MODID
+                          , TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS REGDATE
+                          , TO_CHAR(MOD_DATE, 'YYYY-MM-DD') AS MODDATE
+                          , DEL_YN AS DELYN
                      FROM TB_BOARD
-                     WHERE DELYN = 'N'
+                     WHERE DEL_YN = 'N'
                          AND TITLE LIKE '%' || ? || '%'
                      ORDER BY NO DESC
              ) A
@@ -131,16 +142,17 @@
 	
 	<!-- 댓글 조회 -->
 	<entry key="listReply">
-		SELECT RNO
+		SELECT 
+			   R_NO AS RNO
 		     , CONTENT
-		     , REGID
-		     , TO_CHAR(REGDATE, 'YYYY-MM-DD HH24:MI') AS REGDATE
-		     , DELYN
-		     , BNO
+		     , REG_ID AS REGID
+		     , TO_CHAR(REG_DATE, 'YYYY-MM-DD HH24:MI') AS REGDATE
+		     , DEL_YN AS DELYN
+		     , B_NO AS BNO
 		FROM TB_REPLY
-		WHERE DELYN = 'N'
-			AND BNO = ?
-		ORDER BY RNO DESC
+		WHERE DEL_YN = 'N'
+			AND B_NO = ?
+		ORDER BY R_NO DESC
 	</entry>
 	
 	<!-- 댓글 등록 -->
@@ -148,12 +160,12 @@
 		INSERT INTO
 		            TB_REPLY
 		            (
-		                RNO
+		                R_NO
 		              , CONTENT
-		              , REGID
-		              , REGDATE
-		              , DELYN
-		              , BNO
+		              , REG_ID
+		              , REG_DATE
+		              , DEL_YN
+		              , B_NO
 		            )
 		            VALUES
 		            (

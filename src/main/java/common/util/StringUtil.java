@@ -75,56 +75,11 @@ public class StringUtil {
 	 * @return 서비스명
 	 */
 	public static String getServiceName(String url) {
-		/*// 클래스 이름을 직접 사용하는 경우
-		String className = "BoardService";
-		
-		try {
-		    // 클래스 직접 로드 (일반적으로 필요하지 않음)
-		    Class<?> clazz = Class.forName(className);
-		    System.out.println("로딩된 클래스 이름: " + clazz.getName());
-		
-		    // 인스턴스 생성
-		    Object instance = clazz.getDeclaredConstructor().newInstance();
-		    System.out.println("인스턴스: " + instance.toString());
-		} catch (ClassNotFoundException e) {
-		    e.printStackTrace();
-		} catch (InstantiationException e) {
-		    e.printStackTrace();
-		} catch (IllegalAccessException e) {
-		    e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-		    e.printStackTrace();
-		} catch (InvocationTargetException e) {
-		    e.printStackTrace();
-		}*/
-	        
-	    // ==================================================================================
-		
 		String[] parts = url.split("/");
-		return parts[1] + ".model.service." + parts[1].substring(0, 1).toUpperCase() + parts[1].substring(1) + "Service";
+		String serviceNm = parts[1];
+		
+		return serviceNm + ".model.service." + serviceNm.substring(0, 1).toUpperCase() + serviceNm.substring(1) + "Service";
 	}
-	
-	/*	private static List<Class<?>> getClassesForPackage(String path, String packageName)
-				throws IOException, ClassNotFoundException {
-			File directory = new File(path);
-			if (!directory.exists()) {
-				throw new IOException("디렉토리가 존재하지 않습니다: " + path);
-			}
-	
-			List<Class<?>> classes = new ArrayList<>();
-			URL[] urls = { directory.toURI().toURL() };
-			URLClassLoader classLoader = new URLClassLoader(urls);
-	
-			for (File file : directory.listFiles()) {
-				if (file.getName().endsWith(".class")) {
-					String className = packageName + '.' + file.getName().replace(".class", "");
-					Class<?> clazz = classLoader.loadClass(className);
-					classes.add(clazz);
-				}
-			}
-	
-			return classes;
-		}*/
 	
 
 	/** 파라미터명과 파라미터 값을 유효성 검사 진행 후 map에 담아줌
@@ -148,5 +103,5 @@ public class StringUtil {
 		
 		return paramMap;
 	}
-	
+
 }
