@@ -20,19 +20,21 @@ public class ReplyDao extends BaseDao {
 	 * @throws IllegalArgumentException 부적절한 파라미터가 전달된 경우 발생
 	 * @throws NullPointerException 파라미터가 null일 경우, 부적절한 파라미터가 전달된 경우 발생
 	 */
-	public List<ReplyVO> listReply(Object... params) throws NullPointerException, IllegalArgumentException, SQLException, ReflectiveOperationException {
+	public List<ReplyVO> listReply(Object... params) throws NullPointerException, SQLException, ReflectiveOperationException {
 		return selectExecute("listReply", rset -> {
+			
 			List<ReplyVO> list = new ArrayList<>();
 			while (rset.next()) {
-				ReplyVO r = new ReplyVO();				
-				/*r.setRNo(rset.getInt("RNO"));
-				r.setContent(rset.getString("CONTENT"));
-				r.setRegId(rset.getString("REGID"));
-				r.setRegDate(rset.getString("REGDATE"));
-				r.setDelYn(rset.getString("DELYN"));
-				r.setBNo(rset.getInt("BNO"));*/
-				setFieldValue(r, rset);
-				
+				/* 
+					ReplyVO r = new ReplyVO();				
+					r.setRNo(rset.getInt("RNO"));
+					r.setContent(rset.getString("CONTENT"));
+					r.setRegId(rset.getString("REGID"));
+					r.setRegDate(rset.getString("REGDATE"));
+					r.setDelYn(rset.getString("DELYN"));
+					r.setBNo(rset.getInt("BNO"));
+				*/
+				ReplyVO r = setFieldValue(ReplyVO.class, rset);
 				list.add(r);
 			}
 			return list;

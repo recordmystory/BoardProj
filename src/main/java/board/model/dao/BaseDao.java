@@ -6,6 +6,7 @@ import static common.template.JDBCTemplate.getConnection;
 import static common.template.JDBCTemplate.rollback;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +25,7 @@ public abstract class BaseDao {
 	private Properties prop;
 	
 	/**
-	 * ConfigUtil 클래스를 통해 mapper 파일 로드 
+	 * Configuration 클래스를 통해 mapper 파일 로드 
 	 */
 	public BaseDao() {
 		Configuration configUtil = Configuration.getInstance();
@@ -35,7 +36,7 @@ public abstract class BaseDao {
 	
 	@FunctionalInterface
 	public interface ResultSetHandler<T> {
-	    T handle(ResultSet rset) throws SQLException;
+	    T handle(ResultSet rset) throws NullPointerException, IllegalArgumentException, SQLException, ReflectiveOperationException;
 	}
 	
 	/**
@@ -52,7 +53,7 @@ public abstract class BaseDao {
      * @throws SQLException SQL 실행 중 발생할 수 있는 예외
      * @throws IllegalArgumentException 부적절한 파라미터가 전달된 경우 발생
      */
-	public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params) throws NullPointerException, SQLException, IllegalArgumentException {
+	public <T>T selectExecute(String sqlKey, ResultSetHandler<T> handler, Object... params) throws NullPointerException, SQLException, ReflectiveOperationException {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -136,7 +137,7 @@ public abstract class BaseDao {
 		return result;
 	}
 	
-	/** 클래스의 모든 필드 이름을 가져옴
+	/** 클래스의 모든 필드명을 가져옴
 	 * 
 	 * @param <T> 클래스의 타입
 	 * @param clazz 필드명을 가져올 클래스
@@ -148,15 +149,18 @@ public abstract class BaseDao {
 						          .collect(Collectors.toList()); 
 	}
 	
-	/** 객체의 필드에 ResultSet 값을 담음
+	/** 객체의 정보를 가져와 필드의 타입에 맞게 ResultSet 값을 담음 
 	 * 
 	 * @param <T> 객체 타입
 	 * @param instance 값을 담을 객체
 	 * @param rset ResultSet
 	 * @throws SQLException SQL문 실행 중 예외가 발생하면 상위 클래스로 예외를 던짐
+	 * @throws ReflectiveOperationException 리플렉션 동작 중 예외가 발생하면 상위 클래스로 예외를 던짐
 	 */
-	protected <T> void setFieldValue(T instance, ResultSet rset) throws SQLException/*, IllegalAccessException, ReflectiveOperationException, NoSuchFieldException*/ {
+	protected <T> T setFieldValue(Class<T> clazz, ResultSet rset) throws SQLException, ReflectiveOperationException {
+		T instance = clazz.getDeclaredConstructor().newInstance();
 		List<String> filedNames = getFieldNames(instance.getClass());
+		
 		for (String fieldName : filedNames) {
 			try {
 
@@ -174,8 +178,10 @@ public abstract class BaseDao {
 
 			} catch (NoSuchFieldException | IllegalAccessException e) {
 				logger.error(e.getClass().getName() + "발생 ==> " + e.getMessage());
+				throw e;
 			}
 		}
+		return instance;
 	}
 }
 

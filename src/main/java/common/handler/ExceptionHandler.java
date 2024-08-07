@@ -30,16 +30,12 @@ public class ExceptionHandler {
     
     /** 예외 유형에 따른 에러 메시지 반환
      * 
-     * <p>
-     * ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | IllegalArgumentException | NullPointerException | SQLException 외에는 default 메시지 반환 
-     * </p>
-     * 
      * @param e Exception 유형
      * @return 에러 메시지
      */
     private static String getErrorMessage(Exception e) {
     	 if (e instanceof ClassNotFoundException) {
-             return "서비스 클래스를 찾을 수 없음: " + e.getMessage();
+             return "클래스를 찾을 수 없음: " + e.getMessage();
          } else if (e instanceof NoSuchMethodException) {
              return "메서드를 찾을 수 없음: " + e.getMessage();
          } else if (e instanceof InstantiationException) {
