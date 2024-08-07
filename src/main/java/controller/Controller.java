@@ -56,13 +56,14 @@ public class Controller extends HttpServlet {
 			Map<String, String> paramMap = StringUtil.setMapParameter(request); // 파라미터 맵 생성
 			
 			Map<String, Object> result = (Map<String, Object>) method.invoke(serviceInstance, paramMap); // 서비스 메소드 호출
+			String actionResult = String.valueOf(result.get("result"));
 			
 			// URL에 따라 요청 처리
 			if ("forward".equals(urlType)) {
 				result.entrySet().forEach( entry -> { request.setAttribute(entry.getKey().toString(), entry.getValue()); } );
 				request.getRequestDispatcher("/views" + viewName).forward(request, response);
 			} else if ("redirect".equals(urlType)) {
-				response.sendRedirect(viewName);
+				response.sendRedirect("success".equals(actionResult) ? viewName : "/views/errorPage.jsp");
 			} else if ("ajax".equals(urlType)) {
 				response.setContentType("application/json; charset=UTF-8");
 				response.getWriter().write(new Gson().toJson(result));

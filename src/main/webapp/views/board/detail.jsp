@@ -114,7 +114,7 @@
     			method: 'post',
     			success: function(result) {
     				console.log(result);
-    				if (result.flag === 'fail' && $('#reply-content').val().trim() === null || $('#reply-content').val().trim() === '') alert('댓글 내용을 입력해주세요.');   
+    				if (result === 'fail' && $('#reply-content').val().trim() === null || $('#reply-content').val().trim() === '') alert('댓글 내용을 입력해주세요.');   
     			    				
    					$('#reply-content').val(''); // textarea 초기화
    					selectReply(); // 갱신된 댓글 목록 조회해 화면에 뿌려주기

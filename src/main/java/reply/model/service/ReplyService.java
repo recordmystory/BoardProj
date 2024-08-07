@@ -46,7 +46,7 @@ public class ReplyService {
 	public Map<String, Object> insertReply(Map<String, String> paramMap) throws NullPointerException, SQLException, IllegalArgumentException {
 		int result = rDao.updateExecute("insertReply", paramMap.get("content"), Integer.parseInt(paramMap.get("no")));
 		
-		return MapUtil.createResultMap("flag", result > 0 ? "success" : "fail");
+		return MapUtil.createResultMap("result", result > 0 ? "success" : "fail");
 	}
 	
 	
