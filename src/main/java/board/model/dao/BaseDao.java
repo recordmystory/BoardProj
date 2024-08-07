@@ -149,12 +149,13 @@ public abstract class BaseDao {
 						          .collect(Collectors.toList()); 
 	}
 	
-	/** 객체의 정보를 가져와 필드의 타입에 맞게 ResultSet 값을 담음 
+	/** 클래스의 타입에 맞게 객체를 생성하고,
+	 *  객체의 정보를 가져와 필드의 타입에 맞게 ResultSet 값을 담음 
 	 * 
 	 * @param <T> 객체 타입
-	 * @param clazz 데이터를 set할 객체의 클래스 타입
+	 * @param clazz 데이터를 넣을 객체의 클래스 타입
 	 * @param rset ResultSet
-	 * @return instance ResultSet 값이 set된 객체
+	 * @return instance ResultSet 값이 담겨있는 객체
 	 * @throws SQLException SQL문 실행 중 예외가 발생하면 상위 클래스로 예외를 던짐
 	 * @throws ReflectiveOperationException 리플렉션 동작 중 예외가 발생하면 상위 클래스로 예외를 던짐
 	 */
