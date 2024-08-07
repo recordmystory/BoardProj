@@ -152,8 +152,9 @@ public abstract class BaseDao {
 	/** 객체의 정보를 가져와 필드의 타입에 맞게 ResultSet 값을 담음 
 	 * 
 	 * @param <T> 객체 타입
-	 * @param instance 값을 담을 객체
+	 * @param clazz 데이터를 set할 객체의 클래스 타입
 	 * @param rset ResultSet
+	 * @return instance ResultSet 값이 set된 객체
 	 * @throws SQLException SQL문 실행 중 예외가 발생하면 상위 클래스로 예외를 던짐
 	 * @throws ReflectiveOperationException 리플렉션 동작 중 예외가 발생하면 상위 클래스로 예외를 던짐
 	 */
@@ -178,7 +179,7 @@ public abstract class BaseDao {
 
 			} catch (NoSuchFieldException | IllegalAccessException e) {
 				logger.error(e.getClass().getName() + "발생 ==> " + e.getMessage());
-				throw e;
+				throw e; // 예외를 상위 클래스로 던짐
 			}
 		}
 		return instance;
