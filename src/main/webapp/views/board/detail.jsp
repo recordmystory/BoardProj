@@ -105,7 +105,7 @@
     	});
     	
     	// 댓글 등록
-    	function insertReply(){
+    	let insertReply = () => {
     		let content = '';
     		
     		$.ajax({
@@ -113,7 +113,6 @@
     			data: { no: ${b.no}, content: $('#reply-content').val() },
     			method: 'post',
     			success: function(result) {
-    				console.log(result);
     				if (result === 'fail' && $('#reply-content').val().trim() === null || $('#reply-content').val().trim() === '') alert('댓글 내용을 입력해주세요.');   
     			    				
    					$('#reply-content').val(''); // textarea 초기화
@@ -127,12 +126,11 @@
     	};
     	
     	// 댓글 조회
-    	function selectReply(){
+    	let selectReply = () => {
     		$.ajax({
     			url: '/reply/list.bo',
     			data: { no: ${b.no} },
     			success: function(result){
-    				console.log(result);
     				let value = '';
     				
     				if(result.list.length < 0) value += '<tr><td colspan="3">존재하는 댓글이 없습니다.</td></tr>';

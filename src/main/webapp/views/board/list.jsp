@@ -132,7 +132,7 @@
     
 	<script>
 		// 각 행 클릭시 상세 페이지 이동
-		function clickTableRow(){
+		let clickTableRow = () => {
 			$('#boardList>tbody>tr').off('click');
 			
 			$('#boardList>tbody>tr').on('click', function() {
@@ -155,14 +155,11 @@
 		           '12월': 'December'
 		       };
 				 
-	   // 월(한글) -> 월(영문)으로 변환
-       function convertKorMonthToEng(month) {
-           return monthMap[month];
-       }
+       let convertKorMonthToEng = month =>  monthMap[month]; // 월(한글) -> 월(영문)으로 변환
 	   
        // 리터럴에서 월과 일을 추출해 Date 객체로 변환
        // 넘어오는 문자열 : ex) 7월 15일, 2024
-       function parseDate(dateString) {
+       let parseDate = dateString => {
     	   var parts = dateString.split(' '); // ["7월", "15,", "2024"]
            var month = convertKorMonthToEng(parts[0]); // 7월 -> July로 변환
            var day = parseInt(parts[1].replace(',', '')) + 1; // 날짜에서 쉼표 제거 후 정수형으로 변환
